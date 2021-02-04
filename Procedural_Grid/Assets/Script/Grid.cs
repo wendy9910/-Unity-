@@ -50,7 +50,7 @@ public class Grid : MonoBehaviour
                 triangles[ti + 5] = vi + xSize + 2;
             }
         }
-        mesh.triangles = triangles;
+        mesh.triangles = triangles;//抓點以三角形生成網格
         mesh.RecalculateNormals();//三角形計算法線
     }
     private void OnDrawGizmos () 
