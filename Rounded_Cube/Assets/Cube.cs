@@ -51,7 +51,7 @@ public class Cube : MonoBehaviour
                     yield return wait;
                 }
             }
-           /* for (int z = 1; z < zSize; z++)
+           for (int z = 1; z < zSize; z++)//有問題
             {
                 for (int x = 1; x < xSize; x++)
                 {
@@ -66,7 +66,7 @@ public class Cube : MonoBehaviour
                     vertices[v++] = new Vector3(x, 0, z);
                     yield return wait;
                 }
-            }*/
+            }
         }
         
     }
