@@ -31,24 +31,54 @@ public class Cube : MonoBehaviour
         
         for (int y = 0; y <= ySize; y++)///高
         {
-            for (int x = 0; x <= xSize; x++) {
+            for (int x = 0; x <= xSize; x++) {//X軸座標設點 正
                 vertices[v++] = new Vector3(x, y, 0);
                 yield return wait;
             }
-            for (int z = 1; z <= zSize; z++) {
+            for (int z = 1; z <= zSize; z++) {//Z軸座標設點 正
                 vertices[v++] = new Vector3(xSize , y, z);
                 yield return wait;
             }
-            for (int x = xSize - 1; x >= 0; x--) {
-                vertices[v++] = new Vector3(xSize, y,zSize);
+            for (int x = xSize - 1; x >= 0; x--) {//X軸座標設點 反
+                vertices[v++] = new Vector3(x, y,zSize);
                 yield return wait;
             }
-            for (int z = zSize - 1; z > 0; z--) {
+            for (int z = zSize - 1; z > 0; z--) {//X軸座標設點 反
                 vertices[v++] = new Vector3(0, y ,z);
                 yield return wait;
             }
+            for (int z = 0; z < zSize; z++)
+            {
+                for (int x = 0; x < xSize; x++)
+                {
+                    vertices[v++] = new Vector3(x, y, z);
+                    yield return wait;
+                }
+            }
+
         }
-        
+        /*for (int y = 0; y <=zSize; y++)///高
+        {
+            for (int z = 1; z < zSize; z++)
+            {
+                for (int x = 1; x < xSize; x++)
+                {
+                    vertices[v++] = new Vector3(x, y, z);
+                    yield return wait;
+                }
+            }
+        }
+        /*for (int z = 1; z < zSize; z++)
+        {
+            for (int x = 1; x < xSize; x++)
+            {
+                vertices[v++] = new Vector3(x, 0, z);
+                yield return wait;
+            }
+        }*/
+
+
+
     }
 
     private void OnDrawGizmos()
