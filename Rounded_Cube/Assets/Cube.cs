@@ -96,7 +96,10 @@ public class Cube : MonoBehaviour
         for (int x = 0;x <xSize - 1; x++,v++) {
             t = SetQuad(triangles, t, v, v+1, v+ring-1, v+ ring);
         }
-        t = SetQuad(triangles , t, v, v+1 , v+ring-1, v+2);
+        int vMin = ring * (ySize + 1) - 1;
+        int vMid = vMin + 1;
+
+        t = SetQuad(triangles , t, vMin, vMid , vMin-1, vMid + xSize - 1);
         return t;
     }
 
