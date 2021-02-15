@@ -25,38 +25,39 @@ public class RoundedCube : MonoBehaviour {
 	}
 
 	private void CreateVertices () {
-		int cornerVertices = 8;
-		int edgeVertices = (xSize + ySize + zSize - 3) * 4;
+		int cornerVertices = 8;//所有角的點
+		int edgeVertices = (xSize + ySize + zSize - 3) * 4;//邊的所有點
 		int faceVertices = (
 			(xSize - 1) * (ySize - 1) +
 			(xSize - 1) * (zSize - 1) +
-			(ySize - 1) * (zSize - 1)) * 2;
-		vertices = new Vector3[cornerVertices + edgeVertices + faceVertices];
+			(ySize - 1) * (zSize - 1)) * 2;//面的所有的點
+		vertices = new Vector3[cornerVertices + edgeVertices + faceVertices];//total所有點
 		normals = new Vector3[vertices.Length];
 		cubeUV = new Color32[vertices.Length];
 
 		int v = 0;
-		for (int y = 0; y <= ySize; y++) {
-			for (int x = 0; x <= xSize; x++) {
+		for (int y = 0; y <= ySize; y++) {//y軸
+			//繞一圈
+			for (int x = 0; x <= xSize; x++) {//(x = 0 ~ x = xSize)
 				SetVertex(v++, x, y, 0);
 			}
-			for (int z = 1; z <= zSize; z++) {
+			for (int z = 1; z <= zSize; z++) {//(z = 1 ~ z = zSize)
 				SetVertex(v++, xSize, y, z);
 			}
-			for (int x = xSize - 1; x >= 0; x--) {
+			for (int x = xSize - 1; x >= 0; x--) {//(xSize = xSize-1 ~ x = 0)
 				SetVertex(v++, x, y, zSize);
 			}
-			for (int z = zSize - 1; z > 0; z--) {
+			for (int z = zSize - 1; z > 0; z--) {//(z = zSize-1 ~ z = 0)
 				SetVertex(v++, 0, y, z);
 			}
 		}
 		for (int z = 1; z < zSize; z++) {
-			for (int x = 1; x < xSize; x++) {
+			for (int x = 1; x < xSize; x++) {//Top
 				SetVertex(v++, x, ySize, z);
 			}
 		}
 		for (int z = 1; z < zSize; z++) {
-			for (int x = 1; x < xSize; x++) {
+			for (int x = 1; x < xSize; x++) {//Bottom
 				SetVertex(v++, x, 0, z);
 			}
 		}
@@ -66,7 +67,7 @@ public class RoundedCube : MonoBehaviour {
 		mesh.colors32 = cubeUV;
 	}
 
-	private void SetVertex (int i, int x, int y, int z) {
+	private void SetVertex (int i, int x, int y, int z) { 
 		Vector3 inner = vertices[i] = new Vector3(x, y, z);
 
 		if (x < roundness) {
