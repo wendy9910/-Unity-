@@ -99,7 +99,7 @@ public class RoundedCube : MonoBehaviour {
 		int[] trianglesX = new int[(ySize * zSize) * 12];
 		int[] trianglesY = new int[(xSize * zSize) * 12];
 
-		int quads = (xSize * ySize + xSize * zSize + ySize * zSize) * 2;
+		int quads = (xSize * ySize + xSize * zSize + ySize * zSize) * 2;//全部的三角形點
 		int[] triangles = new int[quads * 6];
 		int ring = (xSize + zSize) * 2;
 		int tZ = 0, tX = 0, tY = 0, v = 0;
