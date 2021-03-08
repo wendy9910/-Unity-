@@ -27,10 +27,10 @@ public class drawLine : MonoBehaviour
             LengthmousePos++;
             drawer.SetVertexCount(LengthmousePos);
         }
-        if (Input.GetMouseButtonUp(0)){
+        /*if (Input.GetMouseButtonUp(0)){
             drawer.Clear();
 
-        }
+        }*/
         while (index < LengthmousePos)
         {
             //两点确定一条直线，所以我们依次绘制点就可以形成线段了
