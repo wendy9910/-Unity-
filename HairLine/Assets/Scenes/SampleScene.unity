@@ -368,7 +368,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b5801077b861ee4884d6caa324d14f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PointPos: []
+  MousePointPos: []
+  SpherePos: []
+  SphereGroup: []
 --- !u!4 &1561034343
 Transform:
   m_ObjectHideFlags: 0
