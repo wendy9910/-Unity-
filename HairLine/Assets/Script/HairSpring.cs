@@ -10,7 +10,7 @@ public class HairSpring : MonoBehaviour
     private Vector3 LastPos, MousePos;
     private bool Down;
     int number0 = 1, number1 = 0;
-    private Vector3 g = new Vector3(0.0f, 0.098f, 0.0f);
+    private Vector3 g = new Vector3(0.0f, 9.8f, 0.0f);
     private Vector3 n1 = new Vector3(0.0f, 0.0f, 0.0f);
     private Vector3 n = new Vector3(0.0f, 0.0f, 0.0f);
     public List<Vector3> Vec = new List<Vector3>(); 
@@ -87,45 +87,49 @@ public class HairSpring : MonoBehaviour
     }
     void Spring() 
     {
-        for (int i = 1; i < MousePointPos.Count; i++) {
+        for (int i = 1; i < MousePointPos.Count; i++)
+        {
             Vector3 Vec1 = Vec[i];
             Vector3 pt1 = MousePointPos[i];
-            Vector3 d = new Vector3(0.0f , 0.045f, 0.0f);
+            Vector3 d = new Vector3(0.0f, 0.045f, 0.0f);
 
             Vec1 += g;
             pt1 += Vec1;
 
-            if (i != MousePointPos.Count - 1) {
+            if (i != MousePointPos.Count - 1)
+            {
                 Vector3 pt0 = MousePointPos[i + 1];
                 float d2 = Vector3.Distance(pt1, pt0);
-                Vector3 dist2 = new Vector3(d2,d2,0);
-                if (d2 > 0.045f) {
+                Vector3 dist2 = new Vector3(d2, d2, 0);
+                if (d2 > 0.045f)
+                {
                     n1 = (pt0 - pt1).normalized;
                     dist2 -= d;
                     n1.y *= dist2.y;
                     n1.x *= dist2.x;
                     pt1.y += n1.y;
                     pt1.x += n1.x;
-                    
+
                 }
                 Debug.Log(d2);
                 MousePointPos[i] = pt1;
             }
 
-            Vector3 pt2 = MousePointPos[i-1];
+            Vector3 pt2 = MousePointPos[i - 1];
             float d1 = Vector3.Distance(pt1, pt2);
             Vector3 dist1 = new Vector3(d1, d1, 0);
-            if (d1 > 0.045f) {
+            if (d1 > 0.045f)
+            {
                 n = (pt2 - pt1).normalized;
                 dist1 -= d;
                 n.y *= dist1.y;
                 n.x *= dist1.x;
                 pt1.y += n.y;
-                pt1.x += n.x;   
+                pt1.x += n.x;
             }
             MousePointPos[i] = pt1;
 
         }
-    
+
     }
 }
