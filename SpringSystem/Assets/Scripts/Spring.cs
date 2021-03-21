@@ -5,9 +5,9 @@ using UnityEngine;
 [RequireComponent(typeof(SpringJoint), typeof(Rigidbody), typeof(BoxCollider))]
 public class Spring : MonoBehaviour
 {
-    public Vector3 p1= new Vector3(0.5f,0.0f,0.0f);
-    public Vector3 p2 = new Vector3(1.0f,2.0f, 0.0f);
-    public Vector3 p3 = new Vector3(1.5f, 4.0f, 0.0f);
+    public Vector3 p1= new Vector3(0.5f,4.0f,0.0f);
+    public Vector3 p2 = new Vector3(1.0f,6.0f, 0.0f);
+    public Vector3 p3 = new Vector3(1.5f, 8.0f, 0.0f);
     public float mass1 = 3;
 
     // Start is called before the first frame update

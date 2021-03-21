@@ -98,7 +98,13 @@ public class SpringGroup : MonoBehaviour
 
         for (int i=0;i< SphereGroup.Count-1;i++) {
             Springlist.Add(SphereGroup[i].AddComponent<SpringJoint>());
-            Springlist[i].connectedBody = SphereGroup[i+1].GetComponent<Rigidbody>();
+            Rigidbody otherRG = SphereGroup[i + 1].GetComponent<Rigidbody>();
+            
+            Springlist[i].connectedBody = otherRG;
+            Springlist[i].transform.position = MousePointPos[i];
+
+            otherRG.isKinematic = false;
+            //otherRG.useGravity = true;
         }
     
     }
