@@ -37,15 +37,15 @@ public class LineSpring : MonoBehaviour
             float x = 10 * Mathf.Tan(Mathf.Deg2Rad * 30) * x0 * Screen.width / Screen.height; //加上 Screen.width/Screen.height 控制螢幕寬變動
 
             MousePos = new Vector3(x, y, 0.0f);
+            MousePointPos.Add(MousePos);
 
             player.numCapVertices = 2;//端點圓度
             player.numCornerVertices = 2;//拐彎圓滑度
 
+            LastPos = new Vector3(x, y, 0.0f);
+
             player.positionCount = MousePointPos.Count;
             player.SetPositions(MousePointPos.ToArray());
-
-            LastPos = new Vector3(x, y, 0.0f);
-            MousePointPos.Add(LastPos);
 
             SphereGroup.Add(sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere));
             sphere.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
@@ -119,6 +119,8 @@ public class LineSpring : MonoBehaviour
                 otherRG.isKinematic = false;
                 otherRG.mass = mass1;
                 MainSpring.connectedBody = otherRG;
+
+                MousePointPos[i] = SphereGroup[i].transform.position;
             }
 
 

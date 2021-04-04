@@ -10,7 +10,8 @@ public class Spring2 : MonoBehaviour
     GameObject sphere;
     private bool Down;
     public float mass1 = 1f;
-    
+    int count = 0;
+    int v = 5;
 
     // Start is called before the first frame update
     void Start()
@@ -25,10 +26,8 @@ public class Spring2 : MonoBehaviour
         {
 
             Vector3 mousePos = Input.mousePosition;
-
             float x0 = (mousePos.x - Screen.width / 2) / (Screen.width / 2);
             float y0 = (mousePos.y - Screen.height / 2) / (Screen.height / 2);
-
             float y = 10 * Mathf.Tan(Mathf.Deg2Rad * 30) * y0;// 求tan(30);
             float x = 10 * Mathf.Tan(Mathf.Deg2Rad * 30) * x0 * Screen.width / Screen.height; //加上 Screen.width/Screen.height 控制螢幕寬變動
 
@@ -82,6 +81,11 @@ public class Spring2 : MonoBehaviour
             //MousePointPos.Clear();
         }
 
+        void drawLine()
+        { 
+        
+        }
+
         void spring() 
         {
             Rigidbody fristRG = SphereGroup[0].GetComponent<Rigidbody>();
@@ -90,11 +94,12 @@ public class Spring2 : MonoBehaviour
 
             for (int i = 0; i < SphereGroup.Count - 1; i++)
             {
-
+                count = SphereGroup.Count;
                 SpringJoint MainSpring = SphereGroup[i].AddComponent<SpringJoint>();
                 //MainSpring.maxDistance = 0.05f;
-                MainSpring.spring = 20.0f;
-                MainSpring.damper = 5.0f;
+                MainSpring.spring = v*count;
+                count--;
+                MainSpring.damper = 10.0f;
 
                 SphereGroup[i].transform.position = MousePointPos[i];
                 SphereGroup[i+1].transform.position = MousePointPos[i+1];
