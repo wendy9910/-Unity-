@@ -18,16 +18,27 @@ public class LineSpring : MonoBehaviour
     {
         player = gameObject.AddComponent<LineRenderer>();
         player.material = new Material(Shader.Find("Sprites/Default"));
-        player.SetColors(Color.green, Color.gray);
+        player.SetColors(Color.gray, Color.gray);
         player.SetWidth(0.1f, 0.1f);
+        
+
     }
 
     void Update()
     {
-        player = GetComponent<LineRenderer>();
+        MouseGet();
+        
+        /*if (Down == false) {
+            spring();
+            drawer();
+        }*/        
+
+    }
+
+    public void MouseGet()
+    {
         if (Input.GetMouseButtonDown(0))
         {
-
             Vector3 mousePos = Input.mousePosition;
 
             float x0 = (mousePos.x - Screen.width / 2) / (Screen.width / 2);
@@ -39,13 +50,7 @@ public class LineSpring : MonoBehaviour
             MousePos = new Vector3(x, y, 0.0f);
             MousePointPos.Add(MousePos);
 
-            player.numCapVertices = 2;//端點圓度
-            player.numCornerVertices = 2;//拐彎圓滑度
-
             LastPos = new Vector3(x, y, 0.0f);
-
-            player.positionCount = MousePointPos.Count;
-            player.SetPositions(MousePointPos.ToArray());
 
             SphereGroup.Add(sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere));
             sphere.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
@@ -68,14 +73,12 @@ public class LineSpring : MonoBehaviour
 
             MousePos = new Vector3(x, y, 0.0f);
             float dist = Vector3.Distance(LastPos, MousePos);
+
             if (dist > 1f)
             {//更新座標
                 MousePos = new Vector3(x, y, 0.0f);
                 MousePointPos.Add(MousePos);
                 LastPos = new Vector3(x, y, 0.0f);
-
-                player.positionCount = MousePointPos.Count;
-                player.SetPositions(MousePointPos.ToArray());
 
                 SphereGroup.Add(sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere));
                 sphere.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
@@ -84,48 +87,55 @@ public class LineSpring : MonoBehaviour
                 RG.isKinematic = true;
                 RG.mass = mass1;
             }
-        }
 
+        }
         if (Input.GetMouseButtonUp(0))
         {
             Down = false;
-            if (Down == false)
-            {
-                spring();
-            }
             //MousePointPos.Clear();
         }
-
-        void spring()
+        if (Down == false)
         {
+            Drawer();
+            //if(SphereGroup != null)Spring();
+        }
+
+    }
+
+    void Drawer()
+    {
+        player.numCapVertices = 2;//端點圓度
+        player.numCornerVertices = 2;//拐彎圓滑度
+        player = GetComponent<LineRenderer>();
+        player.positionCount = MousePointPos.Count;
+        player.SetPositions(MousePointPos.ToArray());
+
+    }
+
+    void Spring()
+    {
+        
             Rigidbody fristRG = SphereGroup[0].GetComponent<Rigidbody>();
             fristRG.isKinematic = true;
             fristRG.mass = mass1;
+        
 
-            for (int i = 0; i < SphereGroup.Count - 1; i++)
-            {
+        for (int i = 0; i < SphereGroup.Count - 1; i++)
+        {
+            SpringJoint MainSpring = SphereGroup[i].AddComponent<SpringJoint>();
+            //MainSpring.maxDistance = 0.05f;
+            MainSpring.spring = 20.0f;
+            MainSpring.damper = 5.0f;
 
-                SpringJoint MainSpring = SphereGroup[i].AddComponent<SpringJoint>();
-                //MainSpring.maxDistance = 0.05f;
-                MainSpring.spring = 20.0f;
-                MainSpring.damper = 5.0f;
+            SphereGroup[i].transform.position = MousePointPos[i];
+            SphereGroup[i + 1].transform.position = MousePointPos[i + 1];
 
-                SphereGroup[i].transform.position = MousePointPos[i];
-                SphereGroup[i + 1].transform.position = MousePointPos[i + 1];
+            Rigidbody otherRG = SphereGroup[i + 1].GetComponent<Rigidbody>();
 
-
-                Rigidbody otherRG = SphereGroup[i + 1].GetComponent<Rigidbody>();
-
-                otherRG.isKinematic = false;
-                otherRG.mass = mass1;
-                MainSpring.connectedBody = otherRG;
-
-                MousePointPos[i] = SphereGroup[i].transform.position;
-            }
-
-
+            otherRG.isKinematic = false;
+            otherRG.mass = mass1;
+            MainSpring.connectedBody = otherRG;
         }
-
 
     }
 }
