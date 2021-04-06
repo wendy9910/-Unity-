@@ -115,10 +115,12 @@ public class LineSpring : MonoBehaviour
 
             for (int i = 0; i < SphereGroup.Count - 1; i++)
             {
-
+                count = SphereGroup.Count;
                 SpringJoint MainSpring = SphereGroup[i].AddComponent<SpringJoint>();
-                MainSpring.spring = 20.0f;
-                MainSpring.damper = 5.0f;
+
+                MainSpring.spring = v * count;
+                count--;
+                MainSpring.damper = 10.0f;
 
                 SphereGroup[i].transform.position = MousePointPos[i];
                 SphereGroup[i + 1].transform.position = MousePointPos[i + 1];
