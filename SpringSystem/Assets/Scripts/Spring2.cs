@@ -9,9 +9,11 @@ public class Spring2 : MonoBehaviour
     private Vector3 MousePos,LastPos;
     GameObject sphere;
     private bool Down;
-    public float mass1 = 1f;
+    public float mass1 = 0.8f;
     int count = 0;
-    int v = 5;
+    int v = 20;
+    public float maxDistance = 1.5f;
+    public float minDistance = 1f;
 
     // Start is called before the first frame update
     void Start()
@@ -100,6 +102,8 @@ public class Spring2 : MonoBehaviour
                 MainSpring.spring = v*count;
                 count--;
                 MainSpring.damper = 10.0f;
+                MainSpring.maxDistance = maxDistance;
+                MainSpring.minDistance = minDistance;
 
                 SphereGroup[i].transform.position = MousePointPos[i];
                 SphereGroup[i+1].transform.position = MousePointPos[i+1];
