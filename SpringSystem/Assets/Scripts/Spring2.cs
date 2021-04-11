@@ -11,9 +11,7 @@ public class Spring2 : MonoBehaviour
     private bool Down;
     public float mass1 = 0.8f;
     int count = 0;
-    int v = 20;
-    public float maxDistance = 1.5f;
-    public float minDistance = 1f;
+    
 
     // Start is called before the first frame update
     void Start()
@@ -94,16 +92,17 @@ public class Spring2 : MonoBehaviour
             fristRG.isKinematic = true;
             fristRG.mass = mass1;
 
+            float v = 4;         
+
             for (int i = 0; i < SphereGroup.Count - 1; i++)
             {
                 count = SphereGroup.Count;
                 SpringJoint MainSpring = SphereGroup[i].AddComponent<SpringJoint>();
-                //MainSpring.maxDistance = 0.05f;
+             
                 MainSpring.spring = v*count;
                 count--;
-                MainSpring.damper = 10.0f;
-                MainSpring.maxDistance = maxDistance;
-                MainSpring.minDistance = minDistance;
+                MainSpring.damper = 20.0f;
+              
 
                 SphereGroup[i].transform.position = MousePointPos[i];
                 SphereGroup[i+1].transform.position = MousePointPos[i+1];
