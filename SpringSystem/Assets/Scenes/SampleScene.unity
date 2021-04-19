@@ -509,7 +509,7 @@ MonoBehaviour:
   MousePointPos: []
   SpherePos: []
   SphereGroup: []
-  mass1: 1
+  mass1: 0.5
 --- !u!4 &1318535419
 Transform:
   m_ObjectHideFlags: 0

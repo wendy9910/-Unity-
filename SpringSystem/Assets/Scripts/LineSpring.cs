@@ -11,12 +11,11 @@ public class LineSpring : MonoBehaviour
     private Vector3 MousePos, LastPos;
     GameObject sphere;
     Rigidbody RG;
-    public float mass1 = 1f;
+    SpringJoint MainSpring;
+    public float mass1 = 0.5f;
     int count = 0;
-    int v = 5;
+    float v = 10f;
     int d = 0;
-    
-
 
     // Start is called before the first frame update
     void Start()
@@ -30,9 +29,9 @@ public class LineSpring : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
 
-            MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+            MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));
             MousePointPos.Add(MousePos);
-            LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+            LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));
 
             Draw();
 
@@ -51,27 +50,25 @@ public class LineSpring : MonoBehaviour
         }
         if (d==1)
         {
-           
-            MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+            MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));
             float dist = Vector3.Distance(LastPos, MousePos);
-            if (dist > 1f)
+            if (dist > 1.0f)
             {//更新座標
-                MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));
                 MousePointPos.Add(MousePos);
-                LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));
 
                 Draw();
-
-                
+                                
                 SphereGroup.Add(sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere));
                 sphere.transform.localScale = new Vector3(0.3f, 0.3f, 0.3f);
                 sphere.transform.position = MousePos;
                 var sphereRenderer = sphere.GetComponent<Renderer>();
                 sphereRenderer.material.SetColor("_Color", Color.red);
                 SpherePos.Add(sphere.transform.position);
-
                 
                 RG = sphere.AddComponent<Rigidbody>();
+                RG.drag = 0.2f;
                 RG.isKinematic = true;
                 RG.mass = mass1;
             }
@@ -84,13 +81,11 @@ public class LineSpring : MonoBehaviour
             player = null;
             SphereGroup.Clear();
             MousePointPos.Clear();
-            SpherePos.Clear();
-            
+            SpherePos.Clear();   
         }
 
         if (d==2)
-        {
-           
+        {  
             Spring();
             Draw();
         }  
@@ -105,11 +100,22 @@ public class LineSpring : MonoBehaviour
         for (int i = 0; i < SphereGroup.Count - 1; i++)
         {
             count = SphereGroup.Count;
-            SpringJoint MainSpring = SphereGroup[i].AddComponent<SpringJoint>();
+            if (SphereGroup[i].GetComponent<SpringJoint>() != true)
+            {
+                MainSpring = SphereGroup[i].AddComponent<SpringJoint>();
+                Debug.Log("Add");
+            }
+            else
+            {
+                MainSpring = SphereGroup[i].GetComponent<SpringJoint>();
+                Debug.Log("Get");
+            }
 
+
+            MainSpring.spring = Mathf.Pow(count,v);
             MainSpring.spring = v * count;
             count--;
-            MainSpring.damper = 10.0f;
+            MainSpring.damper = 10f;
             Rigidbody otherRG = SphereGroup[i + 1].GetComponent<Rigidbody>();
 
             otherRG.isKinematic = false;
