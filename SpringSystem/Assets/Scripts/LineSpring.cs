@@ -12,7 +12,7 @@ public class LineSpring : MonoBehaviour
     GameObject sphere;
     Rigidbody RG;
     SpringJoint MainSpring;
-    public float mass1 = 0.5f;
+    public float mass1 = 1.0f;
     int count = 0;
     float v = 10f;
     int d = 0;
@@ -112,7 +112,7 @@ public class LineSpring : MonoBehaviour
             }
 
 
-            MainSpring.spring = Mathf.Pow(count,v);
+            //MainSpring.spring = Mathf.Pow(count,v);
             MainSpring.spring = v * count;
             count--;
             MainSpring.damper = 10f;
