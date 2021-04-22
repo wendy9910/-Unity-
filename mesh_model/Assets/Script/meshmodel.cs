@@ -8,6 +8,7 @@ public class meshmodel : MonoBehaviour
     public List<Vector3> MousePointPos = new List<Vector3>();
     private Vector3 MousePos, LastPos;
     private Mesh mesh;
+    private Vector3[] vertices;
 
     int down = 0;//滑鼠判定
     // Start is called before the first frame update
@@ -24,7 +25,7 @@ public class meshmodel : MonoBehaviour
         {
             down = 1;
             MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-            MousePointPos.Add(MousePos);
+            //MousePointPos.Add(MousePos);
             LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
 
         }
@@ -54,8 +55,11 @@ public class meshmodel : MonoBehaviour
             GetComponent<MeshFilter>().mesh = mesh = new Mesh();
             mesh.name = "Hair Grid";
 
-            mesh.vertices = MousePointPos.ToArray();
+            //if(MousePointPos != null) vertices = new Vector3[(MousePointPos.Count / 2 - 1) * 6];
 
+            //vertices = new Vector3[MousePointPos.Count* 6];
+            //mesh.vertices = MousePointPos.ToArray();
+            mesh.vertices = MousePointPos.ToArray();
             /*int[] triangles = new int[6];
             triangles[0] = 0;
             triangles[1] = 2;
@@ -66,21 +70,40 @@ public class meshmodel : MonoBehaviour
         
             mesh.triangles = triangles;*/
 
-            
+            /*
             int [] triangles = new int[MousePointPos.Count*6];
-            for (int ti = 0, vi = 0, x = 1; x < MousePointPos.Count; x++, ti += 6, vi++)
+            for (int ti = 0, vi = 0, x = 1; x < triangles.Length; x++, ti += 6, vi++)
             {
-                triangles[ti] = vi;
-                triangles[ti + 1] = vi + 2;
-                triangles[ti + 2] = vi + 1;
+                triangles[ti] = vi; 
+                triangles[ti + 1] = vi + 2; 
+                triangles[ti + 2] = vi + 1; 
                 triangles[ti + 3] = vi + 1;
                 triangles[ti + 4] = vi + 2;
                 triangles[ti + 5] = vi + 3;
 
                 mesh.triangles = triangles;
-            }
-      
 
+                triangles[ti] = vi;
+                triangles[ti + 1] = vi + 1;
+                triangles[ti + 2] = vi + 2;
+                triangles[ti + 3] = vi + 2;
+                triangles[ti + 4] = vi + 1;
+                triangles[ti + 5] = vi + 3;
+            }
+            */
+            //int[] triangles = new int[(MousePointPos.Count / 2 -1) * 6];
+            int[] triangles = new int[MousePointPos.Count * 6];
+            for (int ti = 0, vi = 0, x = 0; x < triangles.Length; x++, ti += 6, vi+=2)
+            {
+                triangles[ti] = vi;
+                triangles[ti + 1] = vi + 1;
+                triangles[ti + 2] = vi + 2;
+                triangles[ti + 3] = vi + 2;
+                triangles[ti + 4] = vi + 1;
+                triangles[ti + 5] = vi + 3;
+
+            }
+            mesh.triangles = triangles;
         }
         
     }
