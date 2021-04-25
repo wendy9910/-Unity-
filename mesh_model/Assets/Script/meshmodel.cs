@@ -67,6 +67,8 @@ public class meshmodel : MonoBehaviour
 
             }
             mesh.triangles = triangles;
+            mesh.RecalculateBounds();
+
         }
         
     }

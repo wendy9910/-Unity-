@@ -8,7 +8,7 @@ public class LineSpring : MonoBehaviour
     public List<Vector3> MousePointPos = new List<Vector3>();
     public List<Vector3> SpherePos = new List<Vector3>();
     public List<GameObject> SphereGroup = new List<GameObject>();
-    private Vector3 MousePos, LastPos;
+    private Vector3 MousePos, LastPos,gravity;
     GameObject sphere;
     Rigidbody RG;
     SpringJoint MainSpring;
@@ -20,6 +20,7 @@ public class LineSpring : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        gravity =new Vector3(0.0f,0.098f,0.0f);
         RendererSet();
     }
 
@@ -74,8 +75,10 @@ public class LineSpring : MonoBehaviour
             }
         }
 
-        if (Input.GetMouseButtonUp(0)) d = 2;
-
+        if (Input.GetMouseButtonUp(0))
+        {
+            d = 2;
+        }
         if (Input.GetKeyDown(KeyCode.Space))
         {
             player = null;
@@ -96,10 +99,10 @@ public class LineSpring : MonoBehaviour
         RG = SphereGroup[0].GetComponent<Rigidbody>();
         RG.isKinematic = true;
         RG.mass = mass1;
-
+        count = SphereGroup.Count;
         for (int i = 0; i < SphereGroup.Count - 1; i++)
         {
-            count = SphereGroup.Count;
+            
             if (SphereGroup[i].GetComponent<SpringJoint>() != true)
             {
                 MainSpring = SphereGroup[i].AddComponent<SpringJoint>();
@@ -111,11 +114,11 @@ public class LineSpring : MonoBehaviour
                 Debug.Log("Get");
             }
 
-
-            //MainSpring.spring = Mathf.Pow(count,v);
+            //SphereGroup[i+1].transform.position -= gravity;
+            MainSpring.spring = Mathf.Pow(count,v);
             MainSpring.spring = v * count;
             count--;
-            MainSpring.damper = 10f;
+            MainSpring.damper = 20f;
             Rigidbody otherRG = SphereGroup[i + 1].GetComponent<Rigidbody>();
 
             otherRG.isKinematic = false;
