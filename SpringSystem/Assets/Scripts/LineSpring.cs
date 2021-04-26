@@ -78,6 +78,7 @@ public class LineSpring : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             d = 2;
+            Spring();
         }
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -88,8 +89,8 @@ public class LineSpring : MonoBehaviour
         }
 
         if (d==2)
-        {  
-            Spring();
+        {
+            UpdatePos();
             Draw();
         }  
     }
@@ -99,23 +100,14 @@ public class LineSpring : MonoBehaviour
         RG = SphereGroup[0].GetComponent<Rigidbody>();
         RG.isKinematic = true;
         RG.mass = mass1;
-        count = SphereGroup.Count;
+        
         for (int i = 0; i < SphereGroup.Count - 1; i++)
         {
-            
-            if (SphereGroup[i].GetComponent<SpringJoint>() != true)
-            {
-                MainSpring = SphereGroup[i].AddComponent<SpringJoint>();
-                Debug.Log("Add");
-            }
-            else
-            {
-                MainSpring = SphereGroup[i].GetComponent<SpringJoint>();
-                Debug.Log("Get");
-            }
+            count = SphereGroup.Count;
 
-            //SphereGroup[i+1].transform.position -= gravity;
-            MainSpring.spring = Mathf.Pow(count,v);
+
+            MainSpring = SphereGroup[i].AddComponent<SpringJoint>();
+            //MainSpring.spring = Mathf.Pow(count, v);
             MainSpring.spring = v * count;
             count--;
             MainSpring.damper = 20f;
@@ -124,11 +116,18 @@ public class LineSpring : MonoBehaviour
             otherRG.isKinematic = false;
             otherRG.mass = mass1;
             MainSpring.connectedBody = otherRG;
-
             SpherePos[i + 1] = SphereGroup[i + 1].transform.position;
 
         }
 
+    }
+
+    void UpdatePos()
+    {
+        for(int i=1;i<SphereGroup.Count;i++){
+            SpherePos[i] = SphereGroup[i].transform.position;
+        }
+    
     }
     void RendererSet() {
         player = gameObject.AddComponent<LineRenderer>();
