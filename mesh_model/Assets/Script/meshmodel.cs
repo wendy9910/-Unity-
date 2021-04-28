@@ -32,7 +32,7 @@ public class meshmodel : MonoBehaviour
         if (down == 1) {
             
 
-            MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+            MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y,10.0f));
            
             float dist = Vector3.Distance(LastPos, MousePos);
             if (dist > 1.0f) 
@@ -41,7 +41,7 @@ public class meshmodel : MonoBehaviour
                 MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
                 MousePointPos.Add(MousePos);
                 LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-
+                Debug.Log(MousePos);
             }
 
 
@@ -68,6 +68,7 @@ public class meshmodel : MonoBehaviour
             }
             mesh.triangles = triangles;
             mesh.RecalculateBounds();
+            mesh.RecalculateNormals();
 
         }
         
@@ -76,8 +77,8 @@ public class meshmodel : MonoBehaviour
     void Generate(Vector3 pos1,Vector3 pos2)
     {
         Vector3 Vec0 = pos1-pos2;
-        Vector3 Vec1 = new Vector3(Vec0.y,-Vec0.x,10.0f);
-        Vector3 AddPos = new Vector3(pos1.x+Vec1.x,pos1.y+Vec1.y,pos1.z);
+        Vector3 Vec1 = new Vector3(Vec0.y,-Vec0.x,0.0f);
+        Vector3 AddPos = new Vector3(pos1.x+Vec1.x,pos1.y+Vec1.y,0.0f);
         MousePointPos.Add(AddPos);    
     }
     private void OnDrawGizmos()

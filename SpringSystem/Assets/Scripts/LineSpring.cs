@@ -105,7 +105,16 @@ public class LineSpring : MonoBehaviour
         {
             count = SphereGroup.Count;
 
-
+            /*if (SphereGroup[i].GetComponent<SpringJoint>() != true)
+            {
+                MainSpring = SphereGroup[i].AddComponent<SpringJoint>();
+                Debug.Log("Add");
+            }
+            else
+            {
+                MainSpring = SphereGroup[i].GetComponent<SpringJoint>();
+                Debug.Log("Get");
+            }*/
             MainSpring = SphereGroup[i].AddComponent<SpringJoint>();
             //MainSpring.spring = Mathf.Pow(count, v);
             MainSpring.spring = v * count;
