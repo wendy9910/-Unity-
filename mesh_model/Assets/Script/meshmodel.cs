@@ -9,7 +9,7 @@ public class meshmodel : MonoBehaviour
     private Vector3 MousePos, LastPos;
     private Mesh mesh;
     private Vector3[] vertices;
-
+    
     int down = 0;//滑鼠判定
     // Start is called before the first frame update
     void Start()
@@ -52,9 +52,23 @@ public class meshmodel : MonoBehaviour
 
             GetComponent<MeshFilter>().mesh = mesh = new Mesh();
             mesh.name = "Hair Grid";
+            
+            Vector3[] moscov = MousePointPos.ToArray();
+            Vector2[] uv = new Vector2[MousePointPos.Count];
+            Vector4[] tangents = new Vector4[MousePointPos.Count];
+            Vector4 tangent = new Vector4(1f, 0f, 0f, -1f);
+
+            for (int i = 0; i < MousePointPos.Count; i++) {
+                uv[i].x = MousePointPos[i].x;
+                uv[i].y = MousePointPos[i].y;
+                tangents[i] = tangent;
+            }
 
             mesh.vertices = MousePointPos.ToArray();
+            mesh.uv = uv;
+            mesh.tangents = tangents;
 
+            
             int[] triangles = new int[(MousePointPos.Count / 2 -1) * 6];
             for (int ti = 0, vi = 0, x = 0; x < MousePointPos.Count / 2 - 1; x++, ti += 6, vi+=2)
             {
