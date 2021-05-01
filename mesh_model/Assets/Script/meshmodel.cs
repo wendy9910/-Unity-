@@ -39,9 +39,8 @@ public class meshmodel : MonoBehaviour
             {
                 Generate(MousePos, LastPos);
                 MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-                MousePointPos.Add(MousePos);
+                
                 LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-                Debug.Log(MousePos);
             }
 
 
@@ -70,16 +69,13 @@ public class meshmodel : MonoBehaviour
 
             
             int[] triangles = new int[(MousePointPos.Count / 2 -1) * 6];
-            for (int ti = 0, vi = 0, x = 0; x < MousePointPos.Count / 2 - 1; x++, ti += 6, vi+=2)
-            {
-                triangles[ti] = vi;
-                triangles[ti + 1] = vi + 1;
-                triangles[ti + 2] = vi + 2;
-                triangles[ti + 3] = vi + 2;
-                triangles[ti + 4] = vi + 1;
-                triangles[ti + 5] = vi + 3;
 
+            int t = 0;
+            for (int vi = 0, x = 0; x < MousePointPos.Count / 2 - 1; x++, vi += 2)
+            {
+                t = SetQuad(triangles, t, vi, vi + 1, vi + 2, vi + 3);
             }
+
             mesh.triangles = triangles;
             mesh.RecalculateBounds();
             mesh.RecalculateNormals();
@@ -87,13 +83,25 @@ public class meshmodel : MonoBehaviour
         }
         
     }
-     
+    private static int SetQuad(int[] triangles, int i, int v00, int v10, int v01, int v11)
+    {
+        triangles[i] = v00;
+        triangles[i + 1] = v10;
+        triangles[i + 2] = v01;
+        triangles[i + 3] = v01;
+        triangles[i + 4] = v10;
+        triangles[i + 5] = v11;
+        return i + 6;
+    }
+   
+
     void Generate(Vector3 pos1,Vector3 pos2)
     {
         Vector3 Vec0 = pos1-pos2;
         Vector3 Vec1 = new Vector3(Vec0.y,-Vec0.x,0.0f);
         Vector3 AddPos = new Vector3(pos1.x+Vec1.x,pos1.y+Vec1.y,0.0f);
-        MousePointPos.Add(AddPos);    
+        MousePointPos.Add(AddPos);
+        MousePointPos.Add(MousePos);
     }
     private void OnDrawGizmos()
     {
