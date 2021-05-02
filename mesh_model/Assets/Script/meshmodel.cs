@@ -100,8 +100,10 @@ public class meshmodel : MonoBehaviour
         Vector3 Vec0 = pos1-pos2;
         Vector3 Vec1 = new Vector3(Vec0.y,-Vec0.x,0.0f);
         Vector3 AddPos = new Vector3(pos1.x+Vec1.x,pos1.y+Vec1.y,0.0f);
+        
         MousePointPos.Add(AddPos);
         MousePointPos.Add(MousePos);
+
     }
     private void OnDrawGizmos()
     {

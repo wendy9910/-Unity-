@@ -42,7 +42,6 @@ public class meshmodel2 : MonoBehaviour
                 MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
                 
                 LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
-                Debug.Log(MousePos);
             }
 
 
@@ -78,27 +77,29 @@ public class meshmodel2 : MonoBehaviour
         mesh.vertices = MousePointPos.ToArray();
         mesh.uv = uv;
         mesh.tangents = tangents;
+        int point=0;
+        point = ((MousePointPos.Count / 3) - 1) * 2;
+    ;
 
-
-        int[] triangles = new int[(MousePointPos.Count / 3 - 1) * 6];
-
-
-        int t = 0;
+        int[] triangles = new int[point * 6];
         
-        for (int vi = 0, x = 0; x < MousePointPos.Count / 3 - 1; x++, vi += 3)
+        int t = 0;
+        int k = 0;
+        for (int vi = 0, x = 0; x < point; x++,vi+=k)
         {
-            for (int n = 0; n < 2; n++, vi++)
-            {
-                t = SetQuad(triangles, t, vi, vi + 1, vi + 3 , vi + 4 );
-               
-            }
             
+            t = SetQuad(triangles, t, vi, vi + 1, vi + 3, vi + 4);
+    
+            if (x % 2 != 0) k = 2;
+            else k = 1;
+
         }
         mesh.triangles = triangles;
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
     }
 
+    
     private static int SetQuad(int[] triangles, int i, int v00, int v10, int v01, int v11)
     {
         triangles[i] = v00;
@@ -118,8 +119,9 @@ public class meshmodel2 : MonoBehaviour
         Vector3 AddPos1 = new Vector3(pos1.x + Vec1.x, pos1.y + Vec1.y, 0.0f);
         Vector3 AddPos2 = new Vector3(pos1.x + Vec2.x, pos1.y + Vec2.y, 0.0f);
         MousePointPos.Add(AddPos1);
+        MousePointPos.Add(MousePos);
         MousePointPos.Add(AddPos2);
-        MousePointPos.Add(MousePos); 
+         
     }
     private void OnDrawGizmos()
     {
