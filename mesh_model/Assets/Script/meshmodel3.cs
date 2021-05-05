@@ -6,6 +6,7 @@ using UnityEngine;
 public class meshmodel3 : MonoBehaviour
 {
     public List<Vector3> MousePointPos = new List<Vector3>();
+    public List<Vector3> LinePointPos = new List<Vector3>();
     private Vector3[] thickness1;
     private Vector3[] thickness2;
  
@@ -13,11 +14,19 @@ public class meshmodel3 : MonoBehaviour
     private Mesh mesh;
     public int width = 1;
 
+    private LineRenderer player;
 
     int down = 0;//滑鼠判定
     // Start is called before the first frame update
     void Start()
     {
+        player = gameObject.AddComponent<LineRenderer>();
+        player.material = new Material(Shader.Find("Sprites/Default"));
+        player.SetColors(Color.red, Color.red);
+        player.SetWidth(0.1f, 0.1f);
+        player.numCapVertices = 2;//端點圓度
+        player.numCornerVertices = 2;//拐彎圓滑度
+
         Debug.Log("按Space 設定寬度");
     }
 
@@ -33,11 +42,14 @@ public class meshmodel3 : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0))//劃出髮片路徑抓座標
         {
-            down = 1;
+            
             MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));//new position
             
             LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));//last position
+            player.positionCount = LinePointPos.Count;
+            player.SetPositions(LinePointPos.ToArray());
 
+            down = 1;
         }
         if (down == 1)
         {
@@ -49,6 +61,9 @@ public class meshmodel3 : MonoBehaviour
                 WidthGenerate(MousePos, LastPos);//點座標計算函式
                 MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));
                 LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));
+
+                player.positionCount = LinePointPos.Count;
+                player.SetPositions(LinePointPos.ToArray());
             }
         }
         if (Input.GetMouseButtonUp(0)) down = 2;
@@ -124,6 +139,7 @@ public class meshmodel3 : MonoBehaviour
 
         WidthAdd1(Vec0,pos);
         MousePointPos.Add(MousePos);
+        LinePointPos.Add(MousePos);
         WidthAdd2(Vec0,pos);
 
     }
