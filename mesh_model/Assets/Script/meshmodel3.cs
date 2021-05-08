@@ -154,11 +154,13 @@ public class meshmodel3 : MonoBehaviour
 
     void WidthAdd1(Vector3 Vec, Vector3 pos)//方便計算寬度改變
     {
-        for (int i = 0;i < thickness1.Length;i++) {
-            Vector3 Vec1 = new Vector3((Vec.y)*(i+1), (-Vec.x)*(i+1), 0.0f);
+        for (int i = 0, j = thickness1.Length; i < thickness1.Length; i++,j--)
+        {
+            Vector3 Vec1 = new Vector3((Vec.y) * j, (-Vec.x) * j, 0.0f);
             thickness1[i] = new Vector3(pos.x + Vec1.x, pos.y + Vec1.y, 0.0f);
             MousePointPos.Add(thickness1[i]);
         }
+
     }
 
 
