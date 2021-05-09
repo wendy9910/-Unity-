@@ -64,14 +64,12 @@ public class meshmodel3 : MonoBehaviour
 
                 player.positionCount = LinePointPos.Count;
                 player.SetPositions(LinePointPos.ToArray());
-            }
-        }
-        if (Input.GetMouseButtonUp(0)) down = 2;
 
-        if (down == 2)
-        {
-            MeshGenerate();
+                
+            }
+            if(MousePointPos.Count >= (width*2+1)*2) MeshGenerate(); ;
         }
+        if (Input.GetMouseButtonUp(0)) down = 0; 
     }
 
 
@@ -135,12 +133,22 @@ public class meshmodel3 : MonoBehaviour
        
         //算兩點向量差
         Vector3 Vec0 = pos1 - pos2;
-        Vector3 pos = pos1;
 
-        WidthAdd1(Vec0,pos);
+        for (int i = 0, j = thickness1.Length; i < thickness1.Length; i++, j--)//widthAdd1
+        {
+            Vector3 Vec1 = new Vector3((Vec0.y) * j, (-Vec0.x) * j, 0.0f);
+            thickness1[i] = new Vector3(pos1.x + Vec1.x, pos1.y + Vec1.y, 0.0f);
+            MousePointPos.Add(thickness1[i]);
+        }
         MousePointPos.Add(MousePos);
         LinePointPos.Add(MousePos);
-        WidthAdd2(Vec0,pos);
+
+        for (int i = 0,j = 1; i < thickness2.Length; i++,j++)//widthAdd
+        {
+            Vector3 Vec2 = new Vector3((-Vec0.y) * j, (Vec0.x) * j, 0.0f);
+            thickness2[i] = new Vector3(pos1.x + Vec2.x, pos1.y + Vec2.y, 0.0f);
+            MousePointPos.Add(thickness2[i]);
+        }
 
     }
     private void OnDrawGizmos()
@@ -152,27 +160,5 @@ public class meshmodel3 : MonoBehaviour
         }
     }
 
-    void WidthAdd1(Vector3 Vec, Vector3 pos)//方便計算寬度改變
-    {
-        for (int i = 0, j = thickness1.Length; i < thickness1.Length; i++,j--)
-        {
-            Vector3 Vec1 = new Vector3((Vec.y) * j, (-Vec.x) * j, 0.0f);
-            thickness1[i] = new Vector3(pos.x + Vec1.x, pos.y + Vec1.y, 0.0f);
-            MousePointPos.Add(thickness1[i]);
-        }
-
-    }
-
-
-    void WidthAdd2(Vector3 Vec, Vector3 pos)
-    {
-   
-        for (int i = 0; i < thickness2.Length; i++) {
-            Vector3 Vec2 = new Vector3((-Vec.y)*(i+1), (Vec.x)*(i+1), 0.0f);
-            thickness2[i] = new  Vector3(pos.x + Vec2.x, pos.y + Vec2.y, 0.0f);
-            MousePointPos.Add(thickness2[i]);
-        }
-
-    }
 
 }
