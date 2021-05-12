@@ -496,6 +496,7 @@ GameObject:
   - component: {fileID: 1879992383}
   - component: {fileID: 1879992382}
   - component: {fileID: 1879992387}
+  - component: {fileID: 1879992388}
   m_Layer: 0
   m_Name: hairstyle
   m_TagString: Untagged
@@ -598,7 +599,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1879992381}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 8bafb21d99f45b347bf405acbb3073f3, type: 3}
   m_Name: 
@@ -606,6 +607,21 @@ MonoBehaviour:
   MousePointPos: []
   LinePointPos: []
   width: 1
+--- !u!114 &1879992388
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1879992381}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b15ddaf793198e34cb8af27f756c9500, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  MousePointPos: []
+  MousePointPos2: []
+  LinePointPos: []
 --- !u!1 &1953965226
 GameObject:
   m_ObjectHideFlags: 0
