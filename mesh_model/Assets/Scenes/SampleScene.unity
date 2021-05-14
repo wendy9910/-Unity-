@@ -622,6 +622,7 @@ MonoBehaviour:
   MousePointPos: []
   MousePointPos2: []
   LinePointPos: []
+  width: 2
 --- !u!1 &1953965226
 GameObject:
   m_ObjectHideFlags: 0
