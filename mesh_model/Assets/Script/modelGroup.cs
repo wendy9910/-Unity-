@@ -6,9 +6,9 @@ using UnityEngine;
 public class modelGroup : MonoBehaviour
 {
     public List<Mesh> MeshGroup = new List<Mesh>();
+    public List<List<Vector3>> PosGroup = new List<List<Vector3>>();
 
     public List<Vector3> MousePointPos = new List<Vector3>();
- 
     public List<Vector3> LinePointPos = new List<Vector3>();
     private Vector3[] thickness1;
     private Vector3[] thickness2;
@@ -19,6 +19,7 @@ public class modelGroup : MonoBehaviour
     int sum = 0;
     int c = 1;
 
+    Vector3[] PosArray;
 
     private LineRenderer player;
 
@@ -73,18 +74,25 @@ public class modelGroup : MonoBehaviour
 
 
             }
-            if (MousePointPos.Count >= (width * 2 + 1) * 2) MeshGenerate(); ;
+            if (MousePointPos.Count >= (width * 2 + 1) * 2)
+            {
+               
+            }
         }
         if (Input.GetMouseButtonUp(0)) 
         {
-            down = 0;
+            PosGroup.Add(MousePointPos);
+            MeshGenerate();
+
+            
             MeshGroup.Add(mesh[sum]);
 
             //mesh[sum].Clear();
             //MousePointPos.Clear();
             LinePointPos.Clear();
             sum++;
-            
+
+            down = 0;
         }
 
 
@@ -98,24 +106,32 @@ public class modelGroup : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh[sum] = new Mesh();
         mesh[sum].name = "Hair Grid"+ sum;
 
+        //int len = PosArray.Length;
+        int len = PosGroup[sum].Count;
 
-        Vector2[] uv = new Vector2[MousePointPos.Count];//texture
-        Vector4[] tangents = new Vector4[MousePointPos.Count];
+
+        Vector3[] vertices = new Vector3[len];
+        Vector2[] uv = new Vector2[len];//texture
+        Vector4[] tangents = new Vector4[len];
         Vector4 tangent = new Vector4(1f, 0f, 0f, -1f);
 
-        for (int i = 0; i < MousePointPos.Count; i++)//Vector3轉Vector2
+        for (int i = 0; i < len; i++)//Vector3轉Vector2
         {
-            uv[i].x = MousePointPos[i].x;
-            uv[i].y = MousePointPos[i].y;
+            //uv[i].x = PosArray[i].x;
+
+            uv[i].x = PosGroup[sum][i].x;
+            uv[i].y = PosGroup[sum][i].y;
+            vertices[i] = PosGroup[sum][i]; 
+
             tangents[i] = tangent;
         }
 
-        mesh[sum].vertices = MousePointPos.ToArray();//mesh網格點生成
+        mesh[sum].vertices = vertices;//mesh網格點生成
         mesh[sum].uv = uv;
         mesh[sum].tangents = tangents;
-        int point = 0;
+        int point; 
 
-        point = ((MousePointPos.Count / (3 + (width - 1) * 2) - 1)) * 2 * width;//計算網格數
+        point = ((vertices.Length / (3 + (width - 1) * 2) - 1)) * 2 * width;//計算網格數
 
 
         int[] triangles = new int[point * 6];//計算需要多少三角形點座標
