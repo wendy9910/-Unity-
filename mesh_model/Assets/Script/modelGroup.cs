@@ -6,7 +6,6 @@ using UnityEngine;
 public class modelGroup : MonoBehaviour
 {
     public List<Mesh> MeshGroup = new List<Mesh>();
-    public List<List<Vector3>> PosGroup = new List<List<Vector3>>();
 
     public List<Vector3> MousePointPos = new List<Vector3>();
     public List<Vector3> LinePointPos = new List<Vector3>();
@@ -76,22 +75,18 @@ public class modelGroup : MonoBehaviour
             }
             if (MousePointPos.Count >= (width * 2 + 1) * 2)
             {
-               
+                MeshGenerate();
             }
         }
         if (Input.GetMouseButtonUp(0)) 
         {
-            PosGroup.Add(MousePointPos);
-            MeshGenerate();
-
-            
+                     
             MeshGroup.Add(mesh[sum]);
 
             //mesh[sum].Clear();
             //MousePointPos.Clear();
             LinePointPos.Clear();
             sum++;
-
             down = 0;
         }
 
@@ -107,7 +102,7 @@ public class modelGroup : MonoBehaviour
         mesh[sum].name = "Hair Grid"+ sum;
 
         //int len = PosArray.Length;
-        int len = PosGroup[sum].Count;
+        int len = MousePointPos.Count;
 
 
         Vector3[] vertices = new Vector3[len];
@@ -117,15 +112,13 @@ public class modelGroup : MonoBehaviour
 
         for (int i = 0; i < len; i++)//Vector3轉Vector2
         {
-            //uv[i].x = PosArray[i].x;
 
-            uv[i].x = PosGroup[sum][i].x;
-            uv[i].y = PosGroup[sum][i].y;
-            vertices[i] = PosGroup[sum][i]; 
-
+            uv[i].x = MousePointPos[i].x;
+            uv[i].y = MousePointPos[i].y;
+            vertices[i] = MousePointPos[i];
             tangents[i] = tangent;
         }
-
+        
         mesh[sum].vertices = vertices;//mesh網格點生成
         mesh[sum].uv = uv;
         mesh[sum].tangents = tangents;

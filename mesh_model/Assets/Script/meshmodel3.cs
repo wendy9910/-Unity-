@@ -15,8 +15,9 @@ public class meshmodel3 : MonoBehaviour
     public int width = 1;
 
     private LineRenderer player;
-
+    
     int down = 0;//滑鼠判定
+
     // Start is called before the first frame update
     void Start()
     {
@@ -67,10 +68,20 @@ public class meshmodel3 : MonoBehaviour
 
                 
             }
-            if(MousePointPos.Count >= (width*2+1)*2) MeshGenerate(); ;
+            if (MousePointPos.Count >= (width * 2 + 1) * 2 && MousePointPos != null)
+            {
+                MeshGenerate();
+            }
         }
-        if (Input.GetMouseButtonUp(0)) down = 0; 
-    }
+        if (Input.GetMouseButtonUp(0))
+        {
+            
+            MousePointPos.Clear();
+            LinePointPos.Clear();
+            down = 0;
+        }
+
+}
 
 
     void MeshGenerate()
@@ -78,7 +89,7 @@ public class meshmodel3 : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         mesh.name = "Hair Grid";
 
-        Vector3[] moscov = MousePointPos.ToArray();
+  
         Vector2[] uv = new Vector2[MousePointPos.Count];//texture
         Vector4[] tangents = new Vector4[MousePointPos.Count];
         Vector4 tangent = new Vector4(1f, 0f, 0f, -1f);
