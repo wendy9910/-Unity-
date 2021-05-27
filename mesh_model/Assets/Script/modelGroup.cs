@@ -17,6 +17,7 @@ public class modelGroup : MonoBehaviour
     public int width = 1;
     int sum = 0;
     int c = 1;
+    int box = 1;//計點數
 
     Vector3[] PosArray;
 
