@@ -76,7 +76,7 @@ public class meshmodel3 : MonoBehaviour
         if (Input.GetMouseButtonUp(0))
         {
             
-            MousePointPos.Clear();
+            ///MousePointPos.Clear();
             LinePointPos.Clear();
             down = 0;
         }
@@ -89,7 +89,6 @@ public class meshmodel3 : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         mesh.name = "Hair Grid";
 
-  
         Vector2[] uv = new Vector2[MousePointPos.Count];//texture
         Vector4[] tangents = new Vector4[MousePointPos.Count];
         Vector4 tangent = new Vector4(1f, 0f, 0f, -1f);
@@ -145,19 +144,19 @@ public class meshmodel3 : MonoBehaviour
         //算兩點向量差
         Vector3 Vec0 = pos1 - pos2;
 
-        for (int i = 0, j = thickness1.Length; i < thickness1.Length; i++, j--)//widthAdd1
+         for (int i = 0, j = thickness1.Length; i < thickness1.Length; i++, j--)//widthAdd1
         {
-            Vector3 Vec1 = new Vector3((Vec0.y) * j, (-Vec0.x) * j, 0.0f);
-            thickness1[i] = new Vector3(pos1.x + Vec1.x, pos1.y + Vec1.y, 0.0f);
+            Vector3 Vec1 = new Vector3((Vec0.y) * j, (-Vec0.x) * j, (Vec0.z)*j);
+            thickness1[i] = new Vector3(pos1.x + Vec1.x, pos1.y + Vec1.y, pos1.z + Vec1.z);
             MousePointPos.Add(thickness1[i]);
         }
         MousePointPos.Add(MousePos);
         LinePointPos.Add(MousePos);
 
-        for (int i = 0,j = 1; i < thickness2.Length; i++,j++)//widthAdd
+        for (int i = 0, j = 1; i < thickness2.Length; i++, j++)//widthAdd
         {
-            Vector3 Vec2 = new Vector3((-Vec0.y) * j, (Vec0.x) * j, 0.0f);
-            thickness2[i] = new Vector3(pos1.x + Vec2.x, pos1.y + Vec2.y, 0.0f);
+            Vector3 Vec2 = new Vector3((-Vec0.y) * j, (Vec0.x) * j, (Vec0.z) * j);
+            thickness2[i] = new Vector3(pos1.x + Vec2.x, pos1.y + Vec2.y, pos1.z + Vec2.z);
             MousePointPos.Add(thickness2[i]);
         }
 

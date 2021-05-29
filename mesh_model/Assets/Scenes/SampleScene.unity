@@ -134,6 +134,7 @@ GameObject:
   - component: {fileID: 326204317}
   - component: {fileID: 326204316}
   - component: {fileID: 326204319}
+  - component: {fileID: 326204320}
   m_Layer: 0
   m_Name: combine
   m_TagString: Untagged
@@ -162,7 +163,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 326204314}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9dcb5b2ddcfb6d949aa7f5d9b83fcf45, type: 3}
   m_Name: 
@@ -228,6 +229,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MeshBox: []
+  MousePointPos: []
+  LinePointPos: []
+  width: 1
+--- !u!114 &326204320
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 326204314}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 207dfe5f493cf384aa6a3385afbedc45, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
   MousePointPos: []
   LinePointPos: []
   width: 1
@@ -619,7 +635,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1953965226}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05b38ca10376ed34e871e70e6ed94721, type: 3}
   m_Name: 
@@ -695,7 +711,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1953965226}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 69694866f3b586346857592dd3a1b0df, type: 3}
   m_Name: 
