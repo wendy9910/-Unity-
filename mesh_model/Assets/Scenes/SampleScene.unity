@@ -163,7 +163,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 326204314}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9dcb5b2ddcfb6d949aa7f5d9b83fcf45, type: 3}
   m_Name: 
@@ -223,7 +223,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 326204314}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ee57662bd2b52be4d885478a3174adcb, type: 3}
   m_Name: 
@@ -239,14 +239,20 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 326204314}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 207dfe5f493cf384aa6a3385afbedc45, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MousePointPos: []
-  LinePointPos: []
   width: 1
+  vertice: []
+  uv: []
+  triangles: 
+  oldVerticePos: []
+  oldTrianglePos: 
+  nextVertice: 
+  nextTriangle: 
 --- !u!1 &661129536
 GameObject:
   m_ObjectHideFlags: 0
@@ -334,12 +340,17 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 661129536}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 031a6c05fc560984084d4eeffc0450b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MousePointPos: []
+  MousePos: {x: 0, y: 0, z: 0}
+  LastPos: {x: 0, y: 0, z: 0}
+  mesh: {fileID: 0}
+  vertices: []
+  down: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,7 +552,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1281232179}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b490aede924a83944a7441a4ad73849b, type: 3}
   m_Name: 
@@ -635,7 +646,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1953965226}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05b38ca10376ed34e871e70e6ed94721, type: 3}
   m_Name: 
