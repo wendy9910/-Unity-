@@ -146,7 +146,7 @@ public class meshmodel3 : MonoBehaviour
 
          for (int i = 0, j = thickness1.Length; i < thickness1.Length; i++, j--)//widthAdd1
         {
-            Vector3 Vec1 = new Vector3((Vec0.y) * j, (-Vec0.x) * j, (Vec0.z)*j);
+            Vector3 Vec1 = new Vector3((Vec0.y) * j, (-Vec0.x) * j, (Vec0.y)*j);
             thickness1[i] = new Vector3(pos1.x + Vec1.x, pos1.y + Vec1.y, pos1.z + Vec1.z);
             MousePointPos.Add(thickness1[i]);
         }
@@ -155,7 +155,7 @@ public class meshmodel3 : MonoBehaviour
 
         for (int i = 0, j = 1; i < thickness2.Length; i++, j++)//widthAdd
         {
-            Vector3 Vec2 = new Vector3((-Vec0.y) * j, (Vec0.x) * j, (Vec0.z) * j);
+            Vector3 Vec2 = new Vector3((-Vec0.y) * j, (Vec0.x) * j, (-Vec0.y) * j);
             thickness2[i] = new Vector3(pos1.x + Vec2.x, pos1.y + Vec2.y, pos1.z + Vec2.z);
             MousePointPos.Add(thickness2[i]);
         }

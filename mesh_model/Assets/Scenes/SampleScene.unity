@@ -132,11 +132,10 @@ GameObject:
   - component: {fileID: 326204315}
   - component: {fileID: 326204318}
   - component: {fileID: 326204317}
-  - component: {fileID: 326204316}
-  - component: {fileID: 326204319}
   - component: {fileID: 326204320}
+  - component: {fileID: 326204316}
   m_Layer: 0
-  m_Name: combine
+  m_Name: Hairmodel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -165,10 +164,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 326204314}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9dcb5b2ddcfb6d949aa7f5d9b83fcf45, type: 3}
+  m_Script: {fileID: 11500000, guid: 9494fc936b5ae5d46b506ff4da0c6cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  HairModel: []
+  CreatHair: {fileID: 0}
 --- !u!23 &326204317
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -216,22 +215,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 326204314}
   m_Mesh: {fileID: 0}
---- !u!114 &326204319
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 326204314}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee57662bd2b52be4d885478a3174adcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MeshBox: []
-  MousePointPos: []
-  LinePointPos: []
-  width: 1
 --- !u!114 &326204320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,13 +229,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MousePointPos: []
   width: 1
-  vertice: []
-  uv: []
-  triangles: 
   oldVerticePos: []
   oldTrianglePos: 
   nextVertice: 
   nextTriangle: 
+  mesh: {fileID: 0}
+  verticeBox: 
+  triangleBox: 
+  VBox: []
+  TBox: 
 --- !u!1 &661129536
 GameObject:
   m_ObjectHideFlags: 0
@@ -345,12 +330,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 031a6c05fc560984084d4eeffc0450b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MousePointPos: []
-  MousePos: {x: 0, y: 0, z: 0}
-  LastPos: {x: 0, y: 0, z: 0}
-  mesh: {fileID: 0}
-  vertices: []
-  down: 0
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -646,7 +625,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1953965226}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 05b38ca10376ed34e871e70e6ed94721, type: 3}
   m_Name: 

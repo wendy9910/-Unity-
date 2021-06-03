@@ -20,8 +20,7 @@ public class hairmesh : MonoBehaviour
     void Start()
     {
         Debug.Log("按Space 設定寬度");
-        mesh = GetComponent<MeshFilter>().mesh;
-
+        GetComponent<MeshFilter>().mesh = mesh = new Mesh();
     }
 
     // Update is called once per frame
@@ -32,6 +31,7 @@ public class hairmesh : MonoBehaviour
         {
             width++;
             Debug.Log("Range" + width);
+
         }
 
         if (Input.GetMouseButtonDown(0))//劃出髮片路徑抓座標
@@ -56,73 +56,80 @@ public class hairmesh : MonoBehaviour
             }
             if (MousePointPos.Count >= (width * 2 + 1) * 2 && MousePointPos != null)
             {
-                
-                MeshGenerate(mesh);
+
+                MeshGenerate();
 
             }
         }
-        if (Input.GetMouseButtonUp(0))
+        
+        if (Input.GetMouseButtonUp(0) && down == 1)
         {
-
+            
             HairN++;
             Num++;
 
             nextVertice = new int[HairN];
             nextTriangle = new int[HairN];
 
-            nextVertice[Num] = mesh.vertices.Length;
-            nextTriangle[Num] = mesh.triangles.Length;
+            nextVertice[Num] = oldPos[Num-1];
+            nextTriangle[Num] = pointPos[Num-1];
+            oldVerticePos = vertice;
+            oldTrianglePos = triangles;
+            GetBox(nextVertice,nextTriangle);
 
-            oldVerticePos = new Vector3[nextVertice[Num]];
-            oldVerticePos = mesh.vertices;
-
-            oldTrianglePos = new int[nextTriangle[Num]];
-            oldTrianglePos = mesh.triangles;
             MousePointPos.Clear();
             down = 0;
             
         }
+        
+        //if (MousePointPos.Count >= (width * 2 + 1) * 2 && MousePointPos != null) MeshGenerate();
 
     }
-
-
-    int point = 0;
-    int HairN = 1;//Size
-    int Num = 0;//指標
-
-    private Mesh mesh;
-    public Vector3[] vertice;
-    public Vector2[] uv;
-    public int[] triangles;
-
     public Vector3[] oldVerticePos; //備分之前的髮片V
     public int[] oldTrianglePos; //備分之前的髮片T
     public int[] nextVertice;//total vertice長度
     public int[] nextTriangle;//total triangle長度
+    Vector3[] vertice;
+    Vector2[] uv;
+    int[] triangles;
 
-    
-    void MeshGenerate(Mesh my)
+    int[] oldPos;
+    int[] pointPos;
+    int point=0;
+    int HairN = 1;//Size
+    int Num = 0;//指標
+
+    public Mesh mesh;
+
+    void MeshGenerate()
     {
-        my.name = "Hair Grid";
+        
+        mesh.name = "Hair Grid";
 
         nextVertice = new int[HairN];
         nextTriangle = new int[HairN];
 
+        oldPos = new int[HairN];
+        pointPos = new int[HairN];
+
+        verticeBox = new int[HairN];
+        triangleBox = new int[HairN];
+
         nextVertice[0] = 0;
         nextTriangle[0] = 0;
 
-        //vertice = my.vertices;
-        //triangles = my.triangles;
-
-        //ChangeSize(vsize,tsize);
+        oldVerticePos = new Vector3[nextVertice[Num]];
+        oldTrianglePos = new int[nextTriangle[Num]];
 
         int len = MousePointPos.Count;
         vertice = new Vector3[len + nextVertice[Num]]; 
         uv = new Vector2[len + nextVertice[Num]];
 
+        oldPos[Num] = vertice.Length;
+        
         //備份Vertices
 
-        for (int i = 0; i < nextVertice[Num]; i++)//0 ~ 之前的total長度
+        for (int i = 0; i < verticeBox[Num]; i++)//0 ~ 之前的total長度
         {
             vertice[i] = oldVerticePos[i];
             uv[i].x = oldVerticePos[i].x;
@@ -131,46 +138,59 @@ public class hairmesh : MonoBehaviour
         }
 
         //新的髮片Vertice
-        for (int i = 0,j = nextVertice[Num]; i < len; i++,j++) //從之前開始 ~ 新的長度
+        for (int j = verticeBox[Num]; j < len;j++) //從之前開始 ~ 新的長度
         {
-            vertice[j] = MousePointPos[i];
-            uv[j].x = MousePointPos[i].x;
-            uv[j].y = MousePointPos[i].y;
+            vertice[j] = MousePointPos[j];
+            uv[j].x = MousePointPos[j].x;
+            uv[j].y = MousePointPos[j].y;
         
         }
-        my.vertices = vertice;
-        my.uv = uv;
-
+        mesh.vertices = vertice;
+        //mesh.uv = uv;
         
         point = (len/ (3 + (width-1) * 2) - 1) * width * 2;
-        triangles = new int[point*6 + nextTriangle[Num]];
+        triangles = new int[point*6 + triangleBox[Num]];
 
 
-        //備分三角形
-        int t2 = 0;//初始三角形
-        int k2 = 0;
-        for (int vi = 0, x = 1; x <= nextTriangle[Num] / 6; x++, vi += k2)//迴圈走網格面數
+        for (int vi = 0, x = 1; x <= triangleBox[Num]; x++, vi++)//迴圈走網格面數
         {
-            t2 = SetQuad(triangles, t2, vi, vi + 1, vi + 3 + (2 * (width - 1)), vi + 4 + (2 * (width - 1)));
-            if (x % (width * 2) != (nextTriangle[Num] / 6) % (width * 2)) k2 = 1;//判斷換沒換行
-            else k2 = 2;
+            triangles[vi] = oldTrianglePos[vi];
         }
 
         //新髮片三角形
         int t = 0;//初始三角形
         int k = 0;
-        for (int vi = 0 + nextTriangle[Num], x = 1; x <= point; x++, vi += k)//迴圈走網格面數
+        for (int vi = 0 + triangleBox[Num], x = 1; x <= point; x++, vi += k)//迴圈走網格面數
         {
-            t = SetQuad(triangles, t + nextTriangle[Num], vi, vi + 1, vi + 3 + (2 * (width - 1)), vi + 4 + (2 * (width - 1)));
+            t = SetQuad(triangles, t + triangleBox[Num], vi, vi + 1, vi + 3 + (2 * (width - 1)), vi + 4 + (2 * (width - 1)));
             if (x % (width * 2) != point % (width * 2)) k = 1;//判斷換沒換行
             else k = 2;
         }
 
-        my.triangles = triangles;
+        pointPos[Num] = triangles.Length;
+
+        mesh.triangles = triangles;
+        
+
+    }
+    public int[] verticeBox;
+    public int[] triangleBox;
+    public Vector3[] VBox;
+    public int[] TBox;
+    void GetBox(int[] Ve,int[] Tr)
+    {
+        verticeBox = new int[HairN];
+        triangleBox = new int[HairN];
+        VBox = new Vector3[HairN];
+        TBox = new int[HairN];
+
+        verticeBox[Num] = Ve[Num];
+        triangleBox[Num] = Tr[Num];
+        //VBox[Num] = VPos[Num];
+        //TBox[Num] = TPos[Num];
 
 
     }
-
 
     private static int SetQuad(int[] triangles, int i, int v0, int v1, int v2, int v3)
     {
@@ -184,12 +204,6 @@ public class hairmesh : MonoBehaviour
         return i + 6;
     }
 
-    void ChangeSize(int verticeSize,int triangleSize) 
-    {
-        nextVertice[Num] = verticeSize;
-        nextTriangle[Num] = triangleSize;
-
-    }
 
     void WidthGenerate(Vector3 pos1, Vector3 pos2)//計算點座標 (1)主線段點(2)右左兩個延伸點座標計算
     {
@@ -215,12 +229,12 @@ public class hairmesh : MonoBehaviour
         }
 
     }
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos(Vector3[] Pos)
     {
         Gizmos.color = Color.black;
-        for (int i = 0; i < oldVerticePos.Length; i++)
+        for (int i = 0; i < Pos.Length; i++)
         {
-            Gizmos.DrawSphere(oldVerticePos[i], 0.1f);
+            Gizmos.DrawSphere(Pos[i], 0.1f);
         }
-    }
+    }*/
 }
