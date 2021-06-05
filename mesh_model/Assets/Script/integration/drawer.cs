@@ -16,17 +16,23 @@ public class drawer : MonoBehaviour
     int down = 0;//滑鼠判定
 
     GameObject Hairmodel;
+    public int count = 0;
 
     // Start is called before the first frame update
     void Start()
     {
         Hairmodel = new GameObject();
-
+        Debug.Log("按Space 設定寬度");
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Input.GetKeyDown("space"))//設定mesh寬度
+        {
+            width++;
+            Debug.Log("Range" + width);
+        }
         if (Input.GetMouseButtonDown(0)) 
         {
             
@@ -48,15 +54,18 @@ public class drawer : MonoBehaviour
             }
             if (PointPos.Count >= (width * 2 + 1) * 2) 
             {
-                CreatHair = Hairmodel.AddComponent<MeshGenerate>();
+                if(Hairmodel.GetComponent<MeshGenerate>() == null) CreatHair = Hairmodel.AddComponent<MeshGenerate>();//判斷是否已經存在組件(MeshGenerate.cs)
+                else CreatHair = Hairmodel.GetComponent<MeshGenerate>();
 
-                CreatHair.meshGenerate();
+                CreatHair.meshGenerate(count);//呼叫MeshGenerate.cs中的meshGenerate函式
 
             }
 
         }
         if (Input.GetMouseButtonUp(0)) 
         {
+            count++;
+            PointPos.Clear();
             down = 0;
         
         }
