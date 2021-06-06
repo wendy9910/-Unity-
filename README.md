@@ -1,5 +1,9 @@
-<<<<<<< HEAD
-# Unity_Project
-=======
-# -Unity-
->>>>>>> 13690e5df77233b2f3ea4f4c6e616914f2f96d98
+# 專研 VR髮型設計 個人紀錄部分:
+
+HairStyling:
+
+Dynamic simulation:
+
+VR:
+
+
