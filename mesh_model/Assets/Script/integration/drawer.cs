@@ -9,7 +9,7 @@ public class drawer : MonoBehaviour
     private Vector3[] thickness2;
 
     private Vector3 NewPos, OldPos;//零時座標變數 New & Old
-    public static int width = 1;//調整寬度
+    public int width = 1;//調整寬度
 
     public MeshGenerate CreatHair;
 
@@ -28,11 +28,7 @@ public class drawer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown("space"))//設定mesh寬度
-        {
-            width++;
-            Debug.Log("Range" + width);
-        }
+        controlWidth();
         if (Input.GetMouseButtonDown(0)) 
         {
             
@@ -57,7 +53,7 @@ public class drawer : MonoBehaviour
                 if(Hairmodel.GetComponent<MeshGenerate>() == null) CreatHair = Hairmodel.AddComponent<MeshGenerate>();//判斷是否已經存在組件(MeshGenerate.cs)
                 else CreatHair = Hairmodel.GetComponent<MeshGenerate>();
 
-                CreatHair.meshGenerate(count);//呼叫MeshGenerate.cs中的meshGenerate函式
+                CreatHair.meshGenerate(count,width);//呼叫MeshGenerate.cs中的meshGenerate函式
 
             }
 
@@ -107,5 +103,20 @@ public class drawer : MonoBehaviour
         {
             Gizmos.DrawSphere(PointPos[i], 0.1f);
         }
+    }
+
+    public void controlWidth() 
+    {
+        if (Input.GetKeyDown("down") && width > 1)//設定mesh寬度
+        {
+            width--;
+            Debug.Log("Range" + width);
+        }
+        if (Input.GetKeyDown("up"))
+        {
+            width++;
+            Debug.Log("Range" + width);
+        }
+
     }
 }

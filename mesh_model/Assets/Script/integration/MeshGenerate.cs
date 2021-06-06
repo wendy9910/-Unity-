@@ -12,7 +12,6 @@ public class MeshGenerate : MonoBehaviour
 
     //繼承drawer的變數
     static List<Vector3> GetPointPos = drawer.PointPos;
-    static int Getwidth = drawer.width;
     
     //裝mesh基本設定的陣列
     Vector3[] vertice;
@@ -25,12 +24,13 @@ public class MeshGenerate : MonoBehaviour
     int oldTriangle;
     int Voldlen;
 
+    //記第一下
     int down = 0;
 
-    public void meshGenerate(int count)
+    public void meshGenerate(int count,int Getwidth)
     {
 
-        if (down == 0)
+        if (down == 0)//讓list有值
         {
             verticeBox.Add(0);
             triangleBox.Add(0);
@@ -60,10 +60,10 @@ public class MeshGenerate : MonoBehaviour
 
 
         //新的座標
-        for (int i = Voldlen,j = 0; i < GetPointPos.Count + Voldlen; i++,j++)//Vector3轉Vector2
+        for (int i = Voldlen,j = 0; i < GetPointPos.Count + Voldlen; i++,j++)
         {
             vertice[i] = GetPointPos[j];
-            uv[i].x = GetPointPos[j].x;
+            uv[i].x = GetPointPos[j].x;//Vector3轉Vector2
             uv[i].y = GetPointPos[j].y;
             tangents[i] = tangent;
         }
