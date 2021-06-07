@@ -22,6 +22,7 @@ public class drawer : MonoBehaviour
     void Start()
     {
         Hairmodel = new GameObject();
+        Hairmodel.name = "HairModel";
         Debug.Log("按Space 設定寬度");
     }
 
@@ -32,20 +33,20 @@ public class drawer : MonoBehaviour
         if (Input.GetMouseButtonDown(0)) 
         {
             
-            NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));//new position
-            OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));//old position
+            NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position
+            OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//old position
 
             down = 1;
         }
         if (down == 1) 
         { 
-            NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));//new position
+            NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position
             float dist = Vector3.Distance( OldPos,NewPos);
             if (dist > 1.0f) 
             {
                 PosGenerate(NewPos,OldPos);
-                NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));//new position
-                OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));//old position
+                NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position
+                OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//old position
 
             }
             if (PointPos.Count >= (width * 2 + 1) * 2) 
@@ -76,11 +77,11 @@ public class drawer : MonoBehaviour
         thickness2 = new Vector3[width];
 
         //算兩點向量差
-        Vector3 Vec0 = pos1 - pos2;
+        Vector3 Vec0 = pos1 - pos2;//兩點移動方向向量
 
         for (int i = 0, j = thickness1.Length; i < thickness1.Length; i++, j--)//widthAdd1
         {
-            Vector3 Vec1 = new Vector3((Vec0.y) * j, (-Vec0.x) * j, (Vec0.y) * j);
+            Vector3 Vec1 = new Vector3((Vec0.y) * j, (-Vec0.x) * j, Vec0.z * j);
             thickness1[i] = new Vector3(pos1.x + Vec1.x, pos1.y + Vec1.y, pos1.z + Vec1.z);
             PointPos.Add(thickness1[i]);
         }
@@ -89,7 +90,7 @@ public class drawer : MonoBehaviour
 
         for (int i = 0, j = 1; i < thickness2.Length; i++, j++)//widthAdd
         {
-            Vector3 Vec2 = new Vector3((-Vec0.y) * j, (Vec0.x) * j, (-Vec0.y) * j);
+            Vector3 Vec2 = new Vector3((-Vec0.y) * j, (Vec0.x) * j, (-Vec0.z) * j);
             thickness2[i] = new Vector3(pos1.x + Vec2.x, pos1.y + Vec2.y, pos1.z + Vec2.z);
             PointPos.Add(thickness2[i]);
         }
@@ -107,12 +108,12 @@ public class drawer : MonoBehaviour
 
     public void controlWidth() 
     {
-        if (Input.GetKeyDown("down") && width > 1)//設定mesh寬度
+        if (Input.GetKeyDown("down") && width > 1 && down==0)//設定mesh寬度
         {
             width--;
             Debug.Log("Range" + width);
         }
-        if (Input.GetKeyDown("up"))
+        if (Input.GetKeyDown("up") && down == 0)
         {
             width++;
             Debug.Log("Range" + width);

@@ -35,15 +35,17 @@ public class MeshGenerate : MonoBehaviour
             verticeBox.Add(0);
             triangleBox.Add(0);
             down = 1;
-            hairColor = GetComponent<Renderer>().material;
-            hairColor.color = Color.yellow;
-        }   
+        }
 
+
+        hairColor = GetComponent<Renderer>().material;
+        hairColor.color = Color.red;
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         GetComponent<MeshRenderer>().material = hairColor;
         mesh.name = "Hair Grid";
 
-        Voldlen = verticeBox[count];
+
+        Voldlen = verticeBox[count];//目前的total vertice個數
         vertice = new Vector3[GetPointPos.Count + Voldlen];
         uv = new Vector2[GetPointPos.Count + Voldlen];//texture
         tangents = new Vector4[GetPointPos.Count + Voldlen];
@@ -114,7 +116,7 @@ public class MeshGenerate : MonoBehaviour
     }
 
     //紀錄 vertice & triangle長度的矩陣
-    public List<int> verticeBox = new List<int>();
+    public List<int> verticeBox = new List<int>(); 
     public List<int> triangleBox = new List<int>();
     //輩分座標
     public List<Vector3> oldVerticePos = new List<Vector3>();
@@ -130,6 +132,7 @@ public class MeshGenerate : MonoBehaviour
 
             verticeBox.Add(verticeLength);
             triangleBox.Add(triangleLength);
+
             oldVerticePos.AddRange(verticePos);//重新新增上去
             oldTrianglePos.AddRange(trianglePos);
 
