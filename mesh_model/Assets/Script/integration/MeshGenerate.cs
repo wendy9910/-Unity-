@@ -93,7 +93,7 @@ public class MeshGenerate : MonoBehaviour
         }
 
         mesh.triangles = triangles;
-        mesh.RecalculateBounds();
+        //mesh.RecalculateBounds();
         mesh.RecalculateNormals();
 
         oldVertice = vertice.Length;
