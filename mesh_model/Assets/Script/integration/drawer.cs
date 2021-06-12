@@ -32,9 +32,8 @@ public class drawer : MonoBehaviour
         controlWidth();
         if (Input.GetMouseButtonDown(0)) 
         {
-            
-            NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position
-            OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//old position
+
+            OldPos = NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position
 
             down = 1;
         }
@@ -45,8 +44,7 @@ public class drawer : MonoBehaviour
             if (dist > 1.0f) 
             {
                 PosGenerate(NewPos,OldPos);
-                NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position
-                OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//old position
+                OldPos= NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position//old position
 
             }
             if (PointPos.Count >= (width * 2 + 1) * 2) 

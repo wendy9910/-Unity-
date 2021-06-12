@@ -7,7 +7,7 @@ public class HairShape : MonoBehaviour
 {
 
     public float Hradius = 5;
-    public float Vradius = 10;
+    public float Vradius = 12;
     int block = 12;
 
 

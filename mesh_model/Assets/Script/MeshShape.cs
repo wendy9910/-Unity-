@@ -10,7 +10,7 @@ public class MeshShape : MonoBehaviour
     private int segments = 30;
     //半径
     private int Hradius = 5;
-    private int Vradius = 8;
+    private int Vradius = 12;
     private MeshRenderer m_MeshRender;
     private MeshFilter m_MeshFilter;
 
@@ -78,7 +78,7 @@ public class MeshShape : MonoBehaviour
         mesh.name = "Sphere";
         return mesh;
     }
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         Gizmos.color = Color.black;
         for (int i = 0; i < vertex.Length; i++)
@@ -86,6 +86,6 @@ public class MeshShape : MonoBehaviour
             Gizmos.DrawSphere(vertex[i], 0.1f);
         }
     }
-
+    */
 
 }
