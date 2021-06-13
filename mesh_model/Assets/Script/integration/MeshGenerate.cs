@@ -88,8 +88,8 @@ public class MeshGenerate : MonoBehaviour
         for (int vi = verticeBox[count], x = 1; x <= point; x++, vi += k)
         {
             t = SetQuad(triangles, t, vi, vi + 1, vi + 3 + (2 * (Getwidth - 1)), vi + 4 + (2 * (Getwidth - 1)));
-            if (x % (Getwidth * 2) != point % (Getwidth * 2)) k = 1;
-            else k = 2;
+            if (x % (Getwidth * 2) != point % (Getwidth * 2)) k = 1;  //在同一行
+            else k = 2;  //對vi的累加  (需換行時)
         }
 
         mesh.triangles = triangles;
@@ -104,14 +104,14 @@ public class MeshGenerate : MonoBehaviour
 
     }
 
-    private static int SetQuad(int[] triangles, int i, int v00, int v10, int v01, int v11)
+    private static int SetQuad(int[] triangles, int i, int v0, int v1, int v2, int v3)
     {
-        triangles[i] = v00;
-        triangles[i + 1] = v10;
-        triangles[i + 2] = v01;
-        triangles[i + 3] = v01;
-        triangles[i + 4] = v10;
-        triangles[i + 5] = v11;
+        triangles[i] = v0;
+        triangles[i + 1] = v1;
+        triangles[i + 2] = v2;
+        triangles[i + 3] = v2;
+        triangles[i + 4] = v1;
+        triangles[i + 5] = v3;
         return i + 6;
     }
 

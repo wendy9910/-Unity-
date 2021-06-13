@@ -6,9 +6,12 @@ public class leftShape : MonoBehaviour
 {
     // Start is called before the first frame update
     public List<Vector3> PointPos = new List<Vector3>();
+    public List<Vector3> PointPosSet = new List<Vector3>();
 
+    public float Hradius = 1.0f;
+    public float Vradius = 1;
 
-    private Vector3 NewPos, OldPos,FristPos;//零時座標變數 New & Old
+    private Vector3 NewPos, OldPos;//零時座標變數 New & Old
     int down = 0;//滑鼠判定
 
     void Start()
@@ -23,7 +26,6 @@ public class leftShape : MonoBehaviour
         {
 
             NewPos = OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position //old position
-            FristPos = NewPos;
             down = 1;
         }
         if (down == 1)
@@ -35,8 +37,9 @@ public class leftShape : MonoBehaviour
                 PointPos.Add(NewPos);
                 if (PointPos.Count > 2 && PointPos.Count % 2 != 0)
                 {
-                    LeftGenerate();
+                    
                 }
+                //PointPosSet.Clear();
                 OldPos = NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));
 
             }
@@ -44,7 +47,8 @@ public class leftShape : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0))
         {
-            PointPos.Clear();
+            LeftGenerate();
+            //PointPos.Clear();
             down = 0;
 
         }
@@ -52,27 +56,43 @@ public class leftShape : MonoBehaviour
    
     void LeftGenerate() 
     {
+        PointPosSet.AddRange(PointPos);
         int mid = PointPos.Count / 2;
-        float Len = Vector3.Distance(FristPos, PointPos[mid]);
-        Debug.Log(Len);
 
-        float Hradius = 1;
-
-        int degree = 360;
-        int block = PointPos.Count * 3;
+        int degree = 45;
         float angle = degree * Mathf.Deg2Rad;
         float curAngle = angle / 2;
-        float deltaAngle = angle / block;
+   
+        float cos = Mathf.Cos(curAngle);
+        float sin = Mathf.Sin(curAngle);
 
-        for (int i = 0; i < block; i++)
+        float w = 0f;
+
+        for (int i = PointPos.Count, j = 1; i < (PointPos.Count - 2) * 2 ; i++, j++)
         {
-            float cos = Mathf.Cos(curAngle);
-            float sin = Mathf.Sin(curAngle);
 
-            PointPos.Add(new Vector3(PointPos[mid].x + cos * Hradius, PointPos[0].y + sin * Len, 0));
-            curAngle -= deltaAngle;
+            PointPosSet.Add(new Vector3(PointPos[j].x + cos * (Hradius + w), PointPos[j].y + sin * Vradius, 0));
+
+            if (j <= mid) w += 0.5f;
+            else w -= 0.5f;
+
+            if (j == mid)
+            {
+                j = 0;
+
+                degree = 315;
+                angle = degree * Mathf.Deg2Rad;
+                Hradius = 1;
+                curAngle = angle / 2;
+                cos = Mathf.Cos(curAngle);
+                sin = Mathf.Sin(curAngle);
+                w = 0;
+            }
+
         }
-        
+        //Hradius = 1;
+
+
 
 
     }
@@ -80,9 +100,9 @@ public class leftShape : MonoBehaviour
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.black;
-        for (int i = 0; i < PointPos.Count; i++)
+        for (int i = 0; i < PointPosSet.Count; i++)
         {
-            Gizmos.DrawSphere(PointPos[i], 0.1f);
+            Gizmos.DrawSphere(PointPosSet[i], 0.1f);
         }
     }
 
