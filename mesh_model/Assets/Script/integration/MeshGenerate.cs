@@ -10,9 +10,7 @@ public class MeshGenerate : MonoBehaviour
     private Mesh mesh;
     private Material hairColor;
 
-    //繼承drawer的變數
-    static List<Vector3> GetPointPos = drawer.PointPos;
-    
+
     //裝mesh基本設定的陣列
     Vector3[] vertice;
     Vector2[] uv;//texture
@@ -27,7 +25,7 @@ public class MeshGenerate : MonoBehaviour
     //記第一下
     int down = 0;
 
-    public void meshGenerate(int count,int Getwidth)
+    public void meshGenerate(int count,int Getwidth,List<Vector3> GetPointPos)
     {
 
         if (down == 0)//讓list有值

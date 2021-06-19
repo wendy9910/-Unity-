@@ -52,7 +52,7 @@ public class drawer : MonoBehaviour
                 if(Hairmodel.GetComponent<MeshGenerate>() == null) CreatHair = Hairmodel.AddComponent<MeshGenerate>();//判斷是否已經存在組件(MeshGenerate.cs)
                 else CreatHair = Hairmodel.GetComponent<MeshGenerate>();
 
-                CreatHair.meshGenerate(count,width);//呼叫MeshGenerate.cs中的meshGenerate函式
+                CreatHair.meshGenerate(count,width,PointPos);//呼叫MeshGenerate.cs中的meshGenerate函式
 
             }
 
