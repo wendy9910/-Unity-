@@ -12,6 +12,7 @@ public class diamondShape : MonoBehaviour
 
     private Vector3 NewPos, OldPos;//零時座標變數 New & Old
     public int width = 1;//調整寬度
+    float widthForPoint = 1;
 
     public MeshGenerate CreatHair;
 
@@ -26,6 +27,8 @@ public class diamondShape : MonoBehaviour
         Hairmodel = new GameObject();
         Hairmodel.name = "HairModel";
         Debug.Log("按Space 設定寬度");
+
+     
     }
 
     // Update is called once per frame
@@ -49,7 +52,7 @@ public class diamondShape : MonoBehaviour
                 OldPos = NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position//old position
 
             }
-            if (UpdatePoint.Count >= (3+(width-1))*3)
+            if (UpdatePoint.Count >= (3+(width-1)*2)*3)
             {
                 if (Hairmodel.GetComponent<MeshGenerate>() == null) CreatHair = Hairmodel.AddComponent<MeshGenerate>();//判斷是否已經存在組件(MeshGenerate.cs)
                 else CreatHair = Hairmodel.GetComponent<MeshGenerate>();
@@ -104,21 +107,63 @@ public class diamondShape : MonoBehaviour
     public List<Vector3> tempPoint = new List<Vector3>();
     public List<Vector3> UpdatePoint = new List<Vector3>();
 
+    
     void UpdatPoint(List<Vector3> Point)
     {
         UpdatePoint.Clear();
         tempPoint.Clear();
-        for (int i = 0; i < Point.Count; i++)
+        float w;
+        float mid = LenPoint.Count / 2.0f;
+        if (LenPoint.Count % 2 != 0) w = widthForPoint / mid;
+        else  w = widthForPoint / (mid-1);
+
+        for (int i = 0,x=1; i < Point.Count; i++,x++)
         {
             if (i < 3 + (width - 1))
             {
                 tempPoint.Add(LenPoint[0]);
             }
-            else if (i >= (3 + (width - 1)*2) * (LenPoint.Count - 1) )
+            else if (i >= (3 + (width - 1) * 2) * (LenPoint.Count - 1))
             {
-                tempPoint.Add(LenPoint[LenPoint.Count-1]);
+                tempPoint.Add(LenPoint[LenPoint.Count - 1]);
             }
-            else tempPoint.Add(Point[i]);
+            else 
+            {
+                if (LenPoint.Count % 2 != 0) {
+                    
+                    
+                    if (i < mid - 1) {
+                        if (x % 3 + (width - 1) * 2 == 0) w += w;
+                        Vector3 temp = new Vector3(Point[i].x + w, Point[i].y + w,Point[i].z);
+                        tempPoint.Add(temp);
+                    }
+                    else if (i > mid + 1) {
+                        if (x % 3 + (width - 1) * 2 == 0) w -= w;
+                        Vector3 temp = new Vector3(Point[i].x + w , Point[i].y + w, Point[i].z);
+                        tempPoint.Add(temp);
+                    }
+                    else tempPoint.Add(Point[i]);
+                    
+                }
+                else {
+                    //float w = widthForPoint / (mid-1);
+                    if (i < mid - 1)
+                    {
+                        if (x % 3 + (width - 1) * 2 == 0) w += w;
+                        Vector3 temp = new Vector3(Point[i].x + w, Point[i].y + w,Point[i].z);
+                        tempPoint.Add(temp);
+                    }
+                    else if (i > mid)
+                    {
+                        if (x % 3 + (width - 1) * 2 == 0) w -= w;
+                        Vector3 temp = new Vector3(Point[i].x + w, Point[i].y + w, Point[i].z);
+                        tempPoint.Add(temp);
+                    }
+                    else tempPoint.Add(Point[i]);
+
+                }
+                Debug.Log(w);
+            }
         }
 
         UpdatePoint.AddRange(tempPoint);
@@ -140,11 +185,13 @@ public class diamondShape : MonoBehaviour
         if (Input.GetKeyDown("down") && width > 1 && down == 0)//設定mesh寬度
         {
             width--;
+            widthForPoint--;
             Debug.Log("Range" + width);
         }
         if (Input.GetKeyDown("up") && down == 0)
         {
             width++;
+            widthForPoint++;
             Debug.Log("Range" + width);
         }
 

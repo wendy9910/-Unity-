@@ -47,7 +47,7 @@ public class drawer : MonoBehaviour
                 OldPos= NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position//old position
 
             }
-            if (PointPos.Count >= (width * 2 + 1) * 2) 
+            if (PointPos.Count >= ((3 + (width - 1)*2) * 2))
             {
                 if(Hairmodel.GetComponent<MeshGenerate>() == null) CreatHair = Hairmodel.AddComponent<MeshGenerate>();//判斷是否已經存在組件(MeshGenerate.cs)
                 else CreatHair = Hairmodel.GetComponent<MeshGenerate>();
