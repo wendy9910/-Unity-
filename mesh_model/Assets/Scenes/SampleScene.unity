@@ -132,15 +132,14 @@ GameObject:
   - component: {fileID: 326204315}
   - component: {fileID: 326204318}
   - component: {fileID: 326204317}
-  - component: {fileID: 326204320}
   - component: {fileID: 326204316}
   m_Layer: 0
-  m_Name: Hairmodel
+  m_Name: MainHairmodel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &326204315
 Transform:
   m_ObjectHideFlags: 0
@@ -162,13 +161,16 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 326204314}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9494fc936b5ae5d46b506ff4da0c6cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  LenPoint: []
   width: 1
+  Select: 0
   CreatHair: {fileID: 0}
+  CreatePosition: {fileID: 0}
   count: 0
 --- !u!23 &326204317
 MeshRenderer:
@@ -217,29 +219,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 326204314}
   m_Mesh: {fileID: 0}
---- !u!114 &326204320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 326204314}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 207dfe5f493cf384aa6a3385afbedc45, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  MousePointPos: []
-  width: 1
-  oldVerticePos: []
-  oldTrianglePos: 
-  nextVertice: 
-  nextTriangle: 
-  mesh: {fileID: 0}
-  verticeBox: 
-  triangleBox: 
-  VBox: []
-  TBox: 
 --- !u!1 &705507993
 GameObject:
   m_ObjectHideFlags: 0
@@ -433,7 +412,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1506905487
 MonoBehaviour:
   m_ObjectHideFlags: 0
