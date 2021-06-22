@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
+
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class MeshGenerate : MonoBehaviour
 {
 
     private Mesh mesh;
-    private Material hairColor;
+    public Material GethairColor;
 
 
     //裝mesh基本設定的陣列
@@ -36,10 +37,10 @@ public class MeshGenerate : MonoBehaviour
         }
 
 
-        hairColor = GetComponent<Renderer>().material;
-        hairColor.color = Color.red;
+        GethairColor = GetComponent<Renderer>().material;
+        GethairColor.color = Color.red;
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
-        GetComponent<MeshRenderer>().material = hairColor;
+        GetComponent<MeshRenderer>().material = GethairColor;
         mesh.name = "Hair Grid";
 
 
@@ -98,7 +99,7 @@ public class MeshGenerate : MonoBehaviour
         oldTriangle = triangles.Length;
 
         //收集長度&舊的位置
-        RecordValue(oldVertice, oldTriangle,mesh.vertices,mesh.triangles);
+        RecordValue(oldVertice, oldTriangle,mesh.vertices,mesh.triangles,count);
 
     }
 
@@ -119,8 +120,10 @@ public class MeshGenerate : MonoBehaviour
     //輩分座標
     public List<Vector3> oldVerticePos = new List<Vector3>();
     public List<int> oldTrianglePos = new List<int>();
+    public List<int> VerticeTotal = new List<int>();
+    public List<int> TriangleTotal = new List<int>();
 
-    public void RecordValue(int verticeLength,int triangleLength,Vector3[] verticePos,int[] trianglePos) 
+    public void RecordValue(int verticeLength,int triangleLength,Vector3[] verticePos,int[] trianglePos,int count) 
     {
 
         if (Input.GetMouseButtonUp(0))
@@ -134,7 +137,34 @@ public class MeshGenerate : MonoBehaviour
             oldVerticePos.AddRange(verticePos);//重新新增上去
             oldTrianglePos.AddRange(trianglePos);
 
+            Debug.Log(count);
+
+            
+            if (count == 0) VerticeTotal.Add(verticeBox[count + 1]);
+            else VerticeTotal.Add(verticeBox[count + 1] - verticeBox[count]);
+            if (count == 0) TriangleTotal.Add(triangleBox[count + 1]);
+            else TriangleTotal.Add(triangleBox[count + 1] - triangleBox[count]);
+
         }
     
     }
+
+    public void RemoveMesh(Vector3 removePos)
+    {
+        Debug.Log("Hi");
+
+        Vector3[] MeshVertice = mesh.vertices;
+        for (int i=0;i< MeshVertice.Length;i++) 
+        {
+            Debug.Log("in");
+            if (removePos == MeshVertice[i]) Debug.Log("Get");
+        }
+    }
+
+    public void Selectcolor(int Getcolor)
+    {
+
+
+    }
+
 }

@@ -11,7 +11,6 @@ public class PositionGenerate : MonoBehaviour
 
     public static List<Vector3> tempPoint = new List<Vector3>();//變形時暫存用
     public List<Vector3> GetUpdatePoint = drawer.UpdatePoint;
-
     public List<Vector3> GetLenPoint = drawer.LenPoint;
 
     public void PosGenerate(Vector3 pos1, Vector3 pos2,int width,List<Vector3> PointPos,int GetSelect,int count)//計算點座標 (1)主線段點(2)右左兩個延伸點座標計算
@@ -27,9 +26,8 @@ public class PositionGenerate : MonoBehaviour
         {
             Vector3 Vec1 = new Vector3((Vec0.y) * j, (-Vec0.x) * j, Vec0.z * j);
             thickness1[i] = new Vector3(pos1.x + Vec1.x, pos1.y + Vec1.y, pos1.z + Vec1.z);
-            //thickness1[i] = pos1;
             PointPos.Add(thickness1[i]);
-            //PointPos.Add(pos1);
+
         }
 
         PointPos.Add(pos1);
@@ -39,9 +37,8 @@ public class PositionGenerate : MonoBehaviour
         {
             Vector3 Vec2 = new Vector3((-Vec0.y) * j, (Vec0.x) * j, (-Vec0.z) * j);
             thickness2[i] = new Vector3(pos1.x + Vec2.x, pos1.y + Vec2.y, pos1.z + Vec2.z);
-            //thickness2[i] = pos1;
             PointPos.Add(thickness2[i]);
-            //PointPos.Add(pos1);
+
         }
 
 
@@ -49,30 +46,49 @@ public class PositionGenerate : MonoBehaviour
         if (GetLenPoint.Count > 2 && GetSelect == 1) diamandStyle(PointPos, width);
         
     }
-
+    
     public void straightStyle(List<Vector3> Point,int width)
     {
         GetUpdatePoint.Clear();
         tempPoint.Clear();
+        int n = ((3 + (width - 1) * 2) / 2) + (3+(width-1)*2);
+
+        //Debug.Log(n);
+        float L = 0.1f;
+
+        int j = 1;
 
         for (int i = 0, x = 1; i < Point.Count; i++, x++)
         {
+
             if (i < 3 + (width - 1))
             {
                 tempPoint.Add(GetLenPoint[0]);
             }
-            /*else if (i >= (3 + (width - 1) * 2) * (LenPoint.Count - 1))
-            {
-                tempPoint.Add(LenPoint[LenPoint.Count - 1]);
-            }*/
             else
             {
-                tempPoint.Add(Point[i]);
+                
+                if (i == n) 
+                { 
+                    tempPoint.Add(Point[i]);
+                    n+=3;
+                    //Debug.Log(i);
+                    
+                }
+                else
+                {
+                    
+                    Vector3 temp = new Vector3(Point[i].x, Point[i].y, Point[i].z);
+
+                    if (j / 2 == 0) L += L;
+                    j++;
+                    tempPoint.Add(temp);
+                    
+                }
             }
         }
         GetUpdatePoint.AddRange(tempPoint);
 
-        if (Input.GetMouseButtonUp(0)) GetLenPoint.Clear();
 
     }
 
@@ -97,7 +113,7 @@ public class PositionGenerate : MonoBehaviour
             }
         }
         GetUpdatePoint.AddRange(tempPoint);
-        if (Input.GetMouseButtonUp(0)) GetLenPoint.Clear();
+
     }
 
     public void OnDrawGizmos()
