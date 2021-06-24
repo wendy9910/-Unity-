@@ -137,8 +137,6 @@ public class MeshGenerate : MonoBehaviour
             oldVerticePos.AddRange(verticePos);//重新新增上去
             oldTrianglePos.AddRange(trianglePos);
 
-            Debug.Log(count);
-
             
             if (count == 0) VerticeTotal.Add(verticeBox[count + 1]);
             else VerticeTotal.Add(verticeBox[count + 1] - verticeBox[count]);

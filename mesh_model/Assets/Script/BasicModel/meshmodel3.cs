@@ -44,9 +44,9 @@ public class meshmodel3 : MonoBehaviour
         if (Input.GetMouseButtonDown(0))//劃出髮片路徑抓座標
         {
             
-            MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));//new position
+            MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position
             
-            LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));//last position
+            LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//last position
             player.positionCount = LinePointPos.Count;
             player.SetPositions(LinePointPos.ToArray());
 
@@ -54,14 +54,14 @@ public class meshmodel3 : MonoBehaviour
         }
         if (down == 1)
         {
-            MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));
+            MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));
 
             float dist = Vector3.Distance(LastPos, MousePos);//座標間距
             if (dist > 1.0f)
             {
                 WidthGenerate(MousePos, LastPos);//點座標計算函式
-                MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));
-                LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 20.0f));
+                MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));
+                LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));
 
                 player.positionCount = LinePointPos.Count;
                 player.SetPositions(LinePointPos.ToArray());
@@ -89,18 +89,21 @@ public class meshmodel3 : MonoBehaviour
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         mesh.name = "Hair Grid";
 
-        Vector2[] uv = new Vector2[MousePointPos.Count];//texture
-        Vector4[] tangents = new Vector4[MousePointPos.Count];
+        Vector3[] vertice = new Vector3[MousePointPos.Count *2];
+        Vector2[] uv = new Vector2[MousePointPos.Count * 2];//texture
+        Vector4[] tangents = new Vector4[MousePointPos.Count * 2];
         Vector4 tangent = new Vector4(1f, 0f, 0f, -1f);
 
-        for (int i = 0; i < MousePointPos.Count; i++)//Vector3轉Vector2
+        for (int i = 0,j=0; i < MousePointPos.Count*2; i++,j++)//Vector3轉Vector2
         {
-            uv[i].x = MousePointPos[i].x;
-            uv[i].y = MousePointPos[i].y;
+            if (i == MousePointPos.Count) j = 0;
+            vertice[j] = MousePointPos[j];
+            uv[i].x = MousePointPos[j].x;
+            uv[i].y = MousePointPos[j].y;
             tangents[i] = tangent;
         }
 
-        mesh.vertices = MousePointPos.ToArray();//mesh網格點生成
+        mesh.vertices = vertice;//mesh網格點生成
         mesh.uv = uv;
         mesh.tangents = tangents;
         int point = 0;
@@ -108,13 +111,14 @@ public class meshmodel3 : MonoBehaviour
         point = ((MousePointPos.Count / (3 + (width-1)*2 ) - 1)) * 2 * width;//計算網格數
         
 
-        int[] triangles = new int[point * 6];//計算需要多少三角形點座標
+        int[] triangles = new int[point * 6 * 2];//計算需要多少三角形點座標
 
         int t = 0;//初始三角形
         int k = 0;//累加
         for (int vi = 0, x = 1; x <= point; x++, vi += k)
         {
             t = SetQuad(triangles, t, vi, vi + 1, vi + 3 + (2 * (width - 1)), vi + 4 + (2 * (width - 1)));
+            t = SetQuad2(triangles, t, vi, vi + 1, vi + 3 + (2 * (width - 1)), vi + 4 + (2 * (width - 1)));
             if (x % (width * 2) != point % (width * 2)) k = 1;
             else k = 2;
         }
@@ -132,6 +136,21 @@ public class meshmodel3 : MonoBehaviour
         triangles[i + 3] = v01;
         triangles[i + 4] = v10;
         triangles[i + 5] = v11;
+
+       
+
+        return i + 6;
+    }
+    private static int SetQuad2(int[] triangles, int i, int v00, int v10, int v01, int v11)
+    {
+
+        triangles[i] = v00;
+        triangles[i + 1] = v01;
+        triangles[i + 2] = v10;
+        triangles[i + 3] = v10;
+        triangles[i + 4] = v01;
+        triangles[i + 5] = v11;
+
         return i + 6;
     }
 
