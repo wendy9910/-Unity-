@@ -25,6 +25,7 @@ public class MeshGenerate : MonoBehaviour
 
     //記第一下
     int down = 0;
+    int meshclear = 0;//標記清空
 
     public void meshGenerate(int count,int Getwidth,List<Vector3> GetPointPos)
     {
@@ -73,14 +74,15 @@ public class MeshGenerate : MonoBehaviour
         mesh.uv = uv;
         mesh.tangents = tangents;
 
-        int point = ((GetPointPos.Count / (3 + (Getwidth - 1) * 2) - 1)) * 2 * Getwidth;//計算網格數
+        int point;
+
+        if (GetPointPos.Count < 1) point = 0;//計算網格數
+        else point = ((GetPointPos.Count / (3 + (Getwidth - 1) * 2) - 1)) * 2 * Getwidth;
+
         triangles = new int[point * 6 + triangleBox[count]];//計算需要多少三角形點座標
 
         //備份三角形
-        for (int i = 0; i < triangleBox[count]; i++)
-        {
-            triangles[i] = oldTrianglePos[i];
-        }
+        for (int i = 0; i < triangleBox[count]; i++) triangles[i] = oldTrianglePos[i];
 
         int t = triangleBox[count];//初始三角形
         int k = 0;//累加
@@ -92,7 +94,7 @@ public class MeshGenerate : MonoBehaviour
         }
 
         mesh.triangles = triangles;
-        //mesh.RecalculateBounds();
+        mesh.RecalculateBounds();
         mesh.RecalculateNormals();
 
         oldVertice = vertice.Length;
@@ -117,9 +119,14 @@ public class MeshGenerate : MonoBehaviour
     //紀錄 vertice & triangle長度的矩陣
     public List<int> verticeBox = new List<int>(); 
     public List<int> triangleBox = new List<int>();
+    public List<int> tempVerticeBox = new List<int>();
+    public List<int> tempTriangleBox = new List<int>();
     //輩分座標
     public List<Vector3> oldVerticePos = new List<Vector3>();
     public List<int> oldTrianglePos = new List<int>();
+    public List<Vector3> tempOldVerticePos = new List<Vector3>();
+    public List<int> tempOldTrianglePos = new List<int>();
+    //個別的髮片的 vertice與triangle個數
     public List<int> VerticeTotal = new List<int>();
     public List<int> TriangleTotal = new List<int>();
 
@@ -137,19 +144,18 @@ public class MeshGenerate : MonoBehaviour
             oldVerticePos.AddRange(verticePos);//重新新增上去
             oldTrianglePos.AddRange(trianglePos);
 
-            
             if (count == 0) VerticeTotal.Add(verticeBox[count + 1]);
             else VerticeTotal.Add(verticeBox[count + 1] - verticeBox[count]);
             if (count == 0) TriangleTotal.Add(triangleBox[count + 1]);
             else TriangleTotal.Add(triangleBox[count + 1] - triangleBox[count]);
 
+            meshclear = 0;
         }
     
     }
 
     public void RemoveMesh(Vector3 removePos)
     {
-        Debug.Log("Hi");
 
         Vector3[] MeshVertice = mesh.vertices;
         for (int i=0;i< MeshVertice.Length;i++) 
@@ -159,9 +165,67 @@ public class MeshGenerate : MonoBehaviour
         }
     }
 
-    public void Selectcolor(int Getcolor)
+    
+
+    public void ClearMesh() 
+    {
+        Debug.Log("Clear");
+        meshclear = 1;
+
+        mesh.Clear();
+        tempOldVerticePos.Clear();
+        tempOldTrianglePos.Clear();
+        tempVerticeBox.Clear();
+        tempTriangleBox.Clear();
+ 
+        tempOldVerticePos.AddRange(oldVerticePos);
+        tempOldTrianglePos.AddRange(oldTrianglePos);
+        tempVerticeBox.AddRange(verticeBox);
+        tempTriangleBox.AddRange(triangleBox);
+
+        oldVerticePos.Clear();
+        oldTrianglePos.Clear();
+        verticeBox.Clear(); 
+        triangleBox.Clear();
+
+        down = 0;
+    }
+
+    public void undoMeshUpdate(int count,int Copycount) 
     {
 
+        Debug.Log("undo Update");
+        int len = verticeBox.Count-(count+1);
+        int v = verticeBox[Copycount] - verticeBox[count + 1];
+        int t = triangleBox[Copycount] - triangleBox[count + 1];
+
+        Debug.Log(len);
+
+        verticeBox.RemoveRange(count+1,len);
+        triangleBox.RemoveRange(count+1, len);
+
+        oldVerticePos.RemoveRange(verticeBox[count]+1,v);
+        oldTrianglePos.RemoveRange(triangleBox[count]+1,t);
+    }
+
+    public void undoMesh() 
+    {
+        if (meshclear == 1)
+        {
+            down = 1;
+            Debug.Log("Reply");
+            oldVerticePos.AddRange(tempOldVerticePos);
+            oldTrianglePos.AddRange(tempOldTrianglePos);
+            verticeBox.AddRange(tempVerticeBox);
+            triangleBox.AddRange(tempTriangleBox);
+            meshclear = 0;
+        }
+    }
+
+
+    public void Selectcolor(int Getcolor)
+    {
+        
 
     }
 

@@ -13,7 +13,7 @@ public class PositionGenerate : MonoBehaviour
     public List<Vector3> GetUpdatePoint = drawer.UpdatePoint;
     public List<Vector3> GetLenPoint = drawer.LenPoint;
 
-    public void PosGenerate(Vector3 pos1, Vector3 pos2,int width,List<Vector3> PointPos,int GetSelect,int count)//計算點座標 (1)主線段點(2)右左兩個延伸點座標計算
+    public void PosGenerate(Vector3 pos1, Vector3 pos2,int width,List<Vector3> PointPos,int GetSelect,float widthAdj)//計算點座標 (1)主線段點(2)右左兩個延伸點座標計算
     {
         //右左兩個延伸點座標矩陣
         thickness1 = new Vector3[width];
@@ -40,13 +40,13 @@ public class PositionGenerate : MonoBehaviour
         }
 
 
-        if(GetLenPoint.Count > 2 && GetSelect == 0)straightStyle(PointPos,width,Vec0);
-        if (GetLenPoint.Count > 2 && GetSelect == 1) diamandStyle(PointPos, width);
+        if(GetLenPoint.Count > 2 && GetSelect == 0)straightStyle(PointPos,width,Vec0,widthAdj);
+        if (GetLenPoint.Count > 2 && GetSelect == 1) diamandStyle(PointPos, width,Vec0,widthAdj);
         
     }
 
     Vector3 Vec = new Vector3();
-    public void straightStyle(List<Vector3> Point, int width,Vector3 Vec00)
+    public void straightStyle(List<Vector3> Point, int width,Vector3 Vec00,float widthAdj)
     {
         
         tempPoint.Clear();
@@ -63,7 +63,7 @@ public class PositionGenerate : MonoBehaviour
             {
                 for (int ii = 0; ii < thickness1.Length + thickness2.Length + 1; ii++)
                 {
-                    tempPoint.Add(GetLenPoint[0]);
+                    tempPoint.Add(GetLenPoint[i]);
                     x++;
                 }
                 x--;
@@ -71,26 +71,27 @@ public class PositionGenerate : MonoBehaviour
             }
             else
             {
+              
                 for (int k = 0, j = thickness1.Length; k < thickness1.Length; k++, j--)
-                {
+                { 
                     x++;
-                    Vector3 Vec1 = new Vector3((Vec.y) * j * w, (-Vec.x) * j * w, Vec.z * j);
+                    Vector3 Vec1 = new Vector3((Vec.y)* j* w, (-Vec.x)* j* w , Vec.z * j);
                     Vector3 temp = new Vector3(Point[x].x + Vec1.x, Point[x].y + Vec1.y, Point[x].z + Vec1.z);
                     tempPoint.Add(temp);
-                    Debug.Log(x); 
                 }
    
                 tempPoint.Add(GetLenPoint[i]);
                 x++;
                 for (int k = 0, j = 1; k < thickness2.Length; k++, j++)
                 {
+                 
                     x++;
-                    Vector3 Vec1 = new Vector3((-Vec.y) * j * w, (+Vec.x) * j * w, Vec.z * j);
+                    Vector3 Vec1 = new Vector3((-Vec.y)* j* w, (+Vec.x)* j * w, Vec.z * j);
                     Vector3 temp = new Vector3(Point[x].x + Vec1.x, Point[x].y + Vec1.y, Point[x].z + Vec1.z);
                     tempPoint.Add(temp);
-                    Debug.Log(x);
+                    
                 }
-                if (w < width) w += 0.1f;
+                if (w < width) w += widthAdj;
                 
                 
             }
@@ -101,26 +102,67 @@ public class PositionGenerate : MonoBehaviour
 
     }
     
-    public void diamandStyle(List<Vector3> Point, int width)
+    public void diamandStyle(List<Vector3> Point, int width, Vector3 Vec00,float widthAdj)
     {
-        GetUpdatePoint.Clear();
         tempPoint.Clear();
+        GetUpdatePoint.Clear();
 
-        for (int i = 0, x = 1; i < Point.Count; i++, x++)
+        float w = 0.1f;
+        int x = 0;
+        for (int i = 0; i < GetLenPoint.Count; i++)
         {
-            if (i < 3 + (width - 1))
+            if (i == 0) Vec = Vec00;
+            else Vec = GetLenPoint[i] - GetLenPoint[i - 1];//兩點移動方向向量  new - old
+            if (i == 0)
             {
-                tempPoint.Add(GetLenPoint[0]);
+                for (int ii = 0; ii < thickness1.Length + thickness2.Length + 1; ii++)
+                {
+                    tempPoint.Add(GetLenPoint[i]);
+                    x++;
+                }
+                x--;
             }
-            else if (i >= (3 + (width - 1) * 2) * (GetLenPoint.Count - 1))
+            else if (i == GetLenPoint.Count - 1)
             {
-                tempPoint.Add(GetLenPoint[GetLenPoint.Count - 1]);
+                for (int ii = 0; ii < thickness1.Length + thickness2.Length + 1; ii++)
+                {
+                    tempPoint.Add(GetLenPoint[i]);
+                    x++;
+                }
+                w = widthAdj;
+
             }
             else
             {
-                tempPoint.Add(Point[i]);
+                for (int k = 0, j = thickness1.Length; k < thickness1.Length; k++, j--)
+                {
+                    x++;
+                    Vector3 Vec1 = new Vector3((Vec.y)*j* w, (-Vec.x)*j* w, Vec.z * j);
+                    Vector3 temp = new Vector3(Point[x].x + Vec1.x, Point[x].y + Vec1.y, Point[x].z + Vec1.z);
+                    tempPoint.Add(temp);
+                }
+
+                tempPoint.Add(GetLenPoint[i]);
+                x++;
+                for (int k = 0, j = 1; k < thickness2.Length; k++, j++)
+                {
+                    x++;
+                    Vector3 Vec1 = new Vector3((-Vec.y)* j* w, (+Vec.x)* j * w, Vec.z * j);
+                    Vector3 temp = new Vector3(Point[x].x + Vec1.x, Point[x].y + Vec1.y, Point[x].z + Vec1.z);
+                    tempPoint.Add(temp);
+                }
+
+                if (w < width && i < GetLenPoint.Count / 2) w += widthAdj;//作為可調參數
+                else if (i >= GetLenPoint.Count / 2 + 2) w -= widthAdj;
+                else if (w < widthAdj+0.05f) w = widthAdj;
+
+               // Debug.Log(w);
+
+
             }
+            
         }
+        
         GetUpdatePoint.AddRange(tempPoint);
 
     }
