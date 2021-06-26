@@ -54,7 +54,7 @@ public class diamondShape : MonoBehaviour
             {
                 if (Hairmodel.GetComponent<MeshGenerate>() == null) CreatHair = Hairmodel.AddComponent<MeshGenerate>();//判斷是否已經存在組件(MeshGenerate.cs)
                 else CreatHair = Hairmodel.GetComponent<MeshGenerate>();
-                CreatHair.meshGenerate(count, width, UpdatePoint);//呼叫MeshGenerate.cs中的meshGenerate函式
+                //CreatHair.meshGenerate(count, width, UpdatePoint);//呼叫MeshGenerate.cs中的meshGenerate函式
             }
         }
         if (Input.GetMouseButtonUp(0))

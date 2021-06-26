@@ -21,9 +21,9 @@ public class drawer : MonoBehaviour
     GameObject Hairmodel;
     public int count = 0;
     int CopyCount = 0;
-    int clearMesh = 0;
     int chickUndo = 0;
-    int tempCount;
+    int clearMesh = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -42,14 +42,6 @@ public class drawer : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0)) 
         {
-            Debug.Log("Hi");
-            if (chickUndo == 1 && count!=0)
-            {
-                CreatHair = Hairmodel.GetComponent<MeshGenerate>();
-                CreatHair.undoMeshUpdate(count, CopyCount);
-                chickUndo = 0;
-            }
-
             OldPos = NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position
             down = 1;
         }
@@ -69,7 +61,7 @@ public class drawer : MonoBehaviour
                 //if(Hairmodel.GetComponent<MeshGenerate>() == null) CreatHair = Hairmodel.AddComponent<MeshGenerate>();//判斷是否已經存在組件(MeshGenerate.cs)
                 CreatHair = Hairmodel.GetComponent<MeshGenerate>();
                 CreatHair.Selectcolor(colorSelect);
-                CreatHair.meshGenerate(count,width,UpdatePoint);//呼叫MeshGenerate.cs中的meshGenerate函式
+                CreatHair.meshGenerate(count,width,UpdatePoint,Hairmodel);//呼叫MeshGenerate.cs中的meshGenerate函式
                 
             }
         }
@@ -112,50 +104,33 @@ public class drawer : MonoBehaviour
         CreatHair = Hairmodel.GetComponent<MeshGenerate>();
         if (Input.GetKeyDown("c")) 
         {
-            if (chickUndo == 1) {
-                
-                CreatHair.undoMeshUpdate(count, CopyCount);
-                tempCount = count;
-            }
-            CreatHair.ClearMesh();//清除備份
+
+            clearMesh = 1;
+            CreatHair.ClearMesh(count);
             count = 0;
-            clearMesh = 0;
-            chickUndo = 0;
-            Debug.Log("bug");//....卡在判定裡
+            CreatHair.meshGenerate(count, width, UpdatePoint, Hairmodel);
+
         }
-        Debug.Log("QQ");
 
         if (Input.GetKeyDown("u")) 
         {
-            chickUndo = 1;
+            
+            CreatHair.undoMesh(count);
+            count--;
+            CreatHair.meshGenerate(count, width, UpdatePoint, Hairmodel);
 
-
-            if (clearMesh == 1 && chickUndo == 1)
-            {
-                count = tempCount;
-                clearMesh = 0;
-                CreatHair.undoMesh();
-                //chickUndo = 0;
-            }
-            else if (clearMesh == 1) 
-            {
-                count = CopyCount;
-                clearMesh = 0;
-                CreatHair.undoMesh();                
-            }
-            else if (count > 0) count--;
-
-            if (count < CopyCount && count != 0) chickUndo = 1;
-            else chickUndo = 0;
-
-            CreatHair.meshGenerate(count, width, UpdatePoint);
+            
 
         }
+        if (CopyCount > count) chickUndo = 1;
+        else chickUndo = 0;
         if (Input.GetKeyDown("r") && chickUndo == 1)
         {
-            if (count <= CopyCount) count++;
-            if (count == CopyCount) chickUndo = 0;
-            CreatHair.meshGenerate(count, width, UpdatePoint);
+           
+            CreatHair.redoMesh();
+            count++;
+            CreatHair.meshGenerate(count, width, UpdatePoint, Hairmodel); 
+            
 
         }
 

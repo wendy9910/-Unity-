@@ -10,8 +10,7 @@ public class MeshGenerate : MonoBehaviour
 
     private Mesh mesh;
     public Material GethairColor;
-
-
+    MeshCollider meshCollider;
     //裝mesh基本設定的陣列
     Vector3[] vertice;
     Vector2[] uv;//texture
@@ -25,9 +24,9 @@ public class MeshGenerate : MonoBehaviour
 
     //記第一下
     int down = 0;
-    int meshclear = 0;//標記清空
 
-    public void meshGenerate(int count,int Getwidth,List<Vector3> GetPointPos)
+
+    public void meshGenerate(int count,int Getwidth,List<Vector3> GetPointPos,GameObject Hairmodel)
     {
 
         if (down == 0)//讓list有值
@@ -36,14 +35,13 @@ public class MeshGenerate : MonoBehaviour
             triangleBox.Add(0);
             down = 1;
         }
-
+        //meshCollider = Hairmodel.AddComponent<MeshCollider>();
 
         GethairColor = GetComponent<Renderer>().material;
         GethairColor.color = Color.red;
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         GetComponent<MeshRenderer>().material = GethairColor;
         mesh.name = "Hair Grid";
-
 
         Voldlen = verticeBox[count];//目前的total vertice個數
         vertice = new Vector3[GetPointPos.Count + Voldlen];
@@ -119,16 +117,19 @@ public class MeshGenerate : MonoBehaviour
     //紀錄 vertice & triangle長度的矩陣
     public List<int> verticeBox = new List<int>(); 
     public List<int> triangleBox = new List<int>();
-    public List<int> tempVerticeBox = new List<int>();
-    public List<int> tempTriangleBox = new List<int>();
+    
     //輩分座標
     public List<Vector3> oldVerticePos = new List<Vector3>();
     public List<int> oldTrianglePos = new List<int>();
-    public List<Vector3> tempOldVerticePos = new List<Vector3>();
-    public List<int> tempOldTrianglePos = new List<int>();
+    //undo暫存值
+    public List<Vector3> undoVerticePos = new List<Vector3>();
+    public List<int> undoTrianglePos = new List<int>();
     //個別的髮片的 vertice與triangle個數
     public List<int> VerticeTotal = new List<int>();
     public List<int> TriangleTotal = new List<int>();
+    //undo排序
+    public List<int> undoSortVertice = new List<int>();
+    public List<int> undoSortTriangle = new List<int>();
 
     public void RecordValue(int verticeLength,int triangleLength,Vector3[] verticePos,int[] trianglePos,int count) 
     {
@@ -149,7 +150,6 @@ public class MeshGenerate : MonoBehaviour
             if (count == 0) TriangleTotal.Add(triangleBox[count + 1]);
             else TriangleTotal.Add(triangleBox[count + 1] - triangleBox[count]);
 
-            meshclear = 0;
         }
     
     }
@@ -157,70 +157,64 @@ public class MeshGenerate : MonoBehaviour
     public void RemoveMesh(Vector3 removePos)
     {
 
-        Vector3[] MeshVertice = mesh.vertices;
-        for (int i=0;i< MeshVertice.Length;i++) 
-        {
-            Debug.Log("in");
-            if (removePos == MeshVertice[i]) Debug.Log("Get");
-        }
-    }
-
-    
-
-    public void ClearMesh() 
-    {
-        Debug.Log("Clear");
-        meshclear = 1;
-
-        mesh.Clear();
-        tempOldVerticePos.Clear();
-        tempOldTrianglePos.Clear();
-        tempVerticeBox.Clear();
-        tempTriangleBox.Clear();
  
-        tempOldVerticePos.AddRange(oldVerticePos);
-        tempOldTrianglePos.AddRange(oldTrianglePos);
-        tempVerticeBox.AddRange(verticeBox);
-        tempTriangleBox.AddRange(triangleBox);
+    }
+ 
+
+    public void ClearMesh(int count) 
+    {
+
+        undoSortVertice.Add(verticeBox[count]);
+        undoSortTriangle.Add(triangleBox[count]);
+
+        undoVerticePos.AddRange(oldVerticePos);
+        undoTrianglePos.AddRange(oldTrianglePos);
 
         oldVerticePos.Clear();
         oldTrianglePos.Clear();
-        verticeBox.Clear(); 
-        triangleBox.Clear();
 
         down = 0;
     }
 
-    public void undoMeshUpdate(int count,int Copycount) 
+
+    public void undoMesh(int count) 
     {
+        undoSortVertice.Add(VerticeTotal[count-1]);
+        undoSortTriangle.Add(TriangleTotal[count-1]);
 
-        Debug.Log("undo Update");
-        int len = verticeBox.Count-(count+1);
-        int v = verticeBox[Copycount] - verticeBox[count + 1];
-        int t = triangleBox[Copycount] - triangleBox[count + 1];
+        int Vindex = verticeBox[count-1];
+        int Tindex = triangleBox[count-1];
 
-        Debug.Log(len);
+        undoVerticePos.AddRange(oldVerticePos.GetRange(Vindex,VerticeTotal[count-1]));
+        undoTrianglePos.AddRange(oldTrianglePos.GetRange(Tindex,TriangleTotal[count-1]));
+        oldVerticePos.RemoveRange(Vindex,VerticeTotal[count-1]);
+        oldTrianglePos.RemoveRange(Tindex,TriangleTotal[count-1]);
 
-        verticeBox.RemoveRange(count+1,len);
-        triangleBox.RemoveRange(count+1, len);
-
-        oldVerticePos.RemoveRange(verticeBox[count]+1,v);
-        oldTrianglePos.RemoveRange(triangleBox[count]+1,t);
     }
-
-    public void undoMesh() 
+    public void redoMesh()
     {
-        if (meshclear == 1)
-        {
-            down = 1;
-            Debug.Log("Reply");
-            oldVerticePos.AddRange(tempOldVerticePos);
-            oldTrianglePos.AddRange(tempOldTrianglePos);
-            verticeBox.AddRange(tempVerticeBox);
-            triangleBox.AddRange(tempTriangleBox);
-            meshclear = 0;
-        }
+        //推回去
+        int LastUndoVIndex = undoSortVertice.Count - 1;
+        int LastUndoTIndex = undoSortTriangle.Count - 1;
 
+        Debug.Log("Last" + LastUndoVIndex);
+        Debug.Log("Last count" + undoSortTriangle[LastUndoTIndex]);
+
+        int Vindex = undoVerticePos.Count - undoSortVertice[LastUndoVIndex];
+        int Tindex = undoTrianglePos.Count - undoSortTriangle[LastUndoTIndex];
+
+
+        oldVerticePos.AddRange(undoVerticePos.GetRange(Vindex,undoSortVertice[LastUndoVIndex]));
+        oldTrianglePos.AddRange(undoTrianglePos.GetRange(Tindex, undoSortTriangle[LastUndoTIndex]));
+
+        //移除
+        undoVerticePos.RemoveRange(Vindex, undoSortVertice[LastUndoVIndex]);
+        undoTrianglePos.RemoveRange(Tindex, undoSortTriangle[LastUndoTIndex]);
+
+        undoSortVertice.RemoveAt(LastUndoVIndex);
+        undoSortTriangle.RemoveAt(LastUndoTIndex);
+
+        
     }
 
 
