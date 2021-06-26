@@ -220,6 +220,7 @@ public class MeshGenerate : MonoBehaviour
             triangleBox.AddRange(tempTriangleBox);
             meshclear = 0;
         }
+
     }
 
 

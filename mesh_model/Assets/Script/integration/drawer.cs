@@ -42,7 +42,8 @@ public class drawer : MonoBehaviour
 
         if (Input.GetMouseButtonDown(0)) 
         {
-            if (chickUndo == 1)
+            Debug.Log("Hi");
+            if (chickUndo == 1 && count!=0)
             {
                 CreatHair = Hairmodel.GetComponent<MeshGenerate>();
                 CreatHair.undoMeshUpdate(count, CopyCount);
@@ -108,37 +109,44 @@ public class drawer : MonoBehaviour
     
     public void controlMesh()//髮片控制 clear undo redo color 
     {
-        
-        /*if (Input.GetKeyDown("c") && chickUndo ==1)//清除前Undo再復原會有問題
-        {
-            Debug.Log("chick "+ chickUndo);
-            CreatHair = Hairmodel.GetComponent<MeshGenerate>();
-            CreatHair.undoMeshUpdate(count, CopyCount);
-            //1.undo - clear - undo 會壞掉
-            clearMesh = 2;
-            tempCount = count;
-        }*/
+        CreatHair = Hairmodel.GetComponent<MeshGenerate>();
         if (Input.GetKeyDown("c")) 
         {
+            if (chickUndo == 1) {
+                
+                CreatHair.undoMeshUpdate(count, CopyCount);
+                tempCount = count;
+            }
+            CreatHair.ClearMesh();//清除備份
             count = 0;
-            CreatHair.ClearMesh();
-            clearMesh = 1;
+            clearMesh = 0;
+            chickUndo = 0;
+            Debug.Log("bug");//....卡在判定裡
         }
+        Debug.Log("QQ");
 
         if (Input.GetKeyDown("u")) 
-        { 
-            CreatHair = Hairmodel.GetComponent<MeshGenerate>();
-            CreatHair.undoMesh();
+        {
+            chickUndo = 1;
 
-            if (clearMesh == 1)
+
+            if (clearMesh == 1 && chickUndo == 1)
+            {
+                count = tempCount;
+                clearMesh = 0;
+                CreatHair.undoMesh();
+                //chickUndo = 0;
+            }
+            else if (clearMesh == 1) 
             {
                 count = CopyCount;
                 clearMesh = 0;
+                CreatHair.undoMesh();                
             }
-
-
             else if (count > 0) count--;
-            if (count < CopyCount) chickUndo = 1;
+
+            if (count < CopyCount && count != 0) chickUndo = 1;
+            else chickUndo = 0;
 
             CreatHair.meshGenerate(count, width, UpdatePoint);
 
@@ -147,7 +155,6 @@ public class drawer : MonoBehaviour
         {
             if (count <= CopyCount) count++;
             if (count == CopyCount) chickUndo = 0;
-            CreatHair = Hairmodel.GetComponent<MeshGenerate>();
             CreatHair.meshGenerate(count, width, UpdatePoint);
 
         }
