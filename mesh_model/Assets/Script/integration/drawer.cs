@@ -22,7 +22,7 @@ public class drawer : MonoBehaviour
     public int count = 0;
     int CopyCount = 0;
     int chickUndo = 0;
-    int clearMesh = 0;
+
 
     // Start is called before the first frame update
     void Start()
@@ -104,9 +104,8 @@ public class drawer : MonoBehaviour
         CreatHair = Hairmodel.GetComponent<MeshGenerate>();
         if (Input.GetKeyDown("c")) 
         {
-
-            clearMesh = 1;
             CreatHair.ClearMesh(count);
+            CopyCount = count;
             count = 0;
             CreatHair.meshGenerate(count, width, UpdatePoint, Hairmodel);
 
@@ -116,10 +115,9 @@ public class drawer : MonoBehaviour
         {
             
             CreatHair.undoMesh(count);
-            count--;
+            if (count == 0) count = CopyCount;
+            else count--;
             CreatHair.meshGenerate(count, width, UpdatePoint, Hairmodel);
-
-            
 
         }
         if (CopyCount > count) chickUndo = 1;
