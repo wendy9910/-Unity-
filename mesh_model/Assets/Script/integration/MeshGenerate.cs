@@ -207,9 +207,6 @@ public class MeshGenerate : MonoBehaviour
             int LastUndoVIndex = undoSortVertice.Count - 1;
             int LastUndoTIndex = undoSortTriangle.Count - 1;
 
-            int Vindex = undoVerticePos.Count - undoSortVertice[LastUndoVIndex];
-            int Tindex = undoTrianglePos.Count - undoSortTriangle[LastUndoTIndex];
-
             int Lastindex = tempVerticeBox.Count - tempcount;
 
             int totalUndoPosV = 0;
@@ -259,23 +256,27 @@ public class MeshGenerate : MonoBehaviour
         }
         else
         {
+           
             //更新
-            undoSortVertice.Add(VerticeTotal[count - 1]);
-            undoSortTriangle.Add(TriangleTotal[count - 1]);
+            int index = VerticeTotal.Count - 1; 
 
-            int Vindex = verticeBox[count - 1];
-            int Tindex = triangleBox[count - 1];
+            undoSortVertice.Add(VerticeTotal[index]);
+            undoSortTriangle.Add(TriangleTotal[index]);
 
-            undoVerticePos.AddRange(oldVerticePos.GetRange(Vindex, VerticeTotal[count - 1]));
-            undoTrianglePos.AddRange(oldTrianglePos.GetRange(Tindex, TriangleTotal[count - 1]));
+            int Vindex = verticeBox[verticeBox.Count-2];
+            int Tindex = triangleBox[triangleBox.Count-2];
+
+            undoVerticePos.AddRange(oldVerticePos.GetRange(Vindex, VerticeTotal[index]));
+            undoTrianglePos.AddRange(oldTrianglePos.GetRange(Tindex, TriangleTotal[index]));
 
             int LastIndex = verticeBox.Count - 1;
 
             tempVerticeBox.Add(verticeBox[LastIndex]);
             tempTriangleBox.Add(triangleBox[LastIndex]);
 
-            tempVerticeTotal.Add(VerticeTotal[VerticeTotal.Count-1]);
-            tempTriangleTotal.Add(TriangleTotal[TriangleTotal.Count-1]);
+            tempVerticeTotal.Add(VerticeTotal[VerticeTotal.Count - 1]);
+            tempTriangleTotal.Add(TriangleTotal[TriangleTotal.Count - 1]);
+
 
             //搬移
 
@@ -286,9 +287,9 @@ public class MeshGenerate : MonoBehaviour
             oldTrianglePos.RemoveRange(Tindex, TriangleTotal[count - 1]);
 
             int lastindex = VerticeTotal.Count - 1;
-
             VerticeTotal.RemoveAt(lastindex);
             TriangleTotal.RemoveAt(lastindex);
+
 
         }
 
