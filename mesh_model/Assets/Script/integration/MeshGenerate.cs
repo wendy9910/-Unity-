@@ -208,19 +208,14 @@ public class MeshGenerate : MonoBehaviour
             int LastUndoTIndex = undoSortTriangle.Count - 1;
 
             int Lastindex = tempVerticeBox.Count - tempcount;
-
             int totalUndoPosV = 0;
             int totalUndoPosA = 0;
-
-            Debug.Log(undoSortVertice.Count - tempcount);
 
             for (int i = undoSortVertice.Count - tempcount; i < undoSortVertice.Count; i++)
             {
                 totalUndoPosV += undoSortVertice[i];
                 totalUndoPosA += undoSortTriangle[i];
-
             }
-            Debug.Log(totalUndoPosV);
 
             int indexV = undoVerticePos.Count - totalUndoPosV;
             int indexT = undoTrianglePos.Count - totalUndoPosA;
@@ -242,17 +237,12 @@ public class MeshGenerate : MonoBehaviour
 
             tempVerticeBox.RemoveRange(Lastindex,tempcount);
             tempTriangleBox.RemoveRange(Lastindex,tempcount);
-            
-
-            Debug.Log("totalUndoPosV" + totalUndoPosV);
 
             undoVerticePos.RemoveRange(indexV,totalUndoPosV);
             undoTrianglePos.RemoveRange(indexT,totalUndoPosA);
 
             tempVerticeTotal.RemoveRange(Lastindex,tempcount);
             tempTriangleTotal.RemoveRange(Lastindex,tempcount);
-
-
         }
         else
         {
@@ -277,9 +267,7 @@ public class MeshGenerate : MonoBehaviour
             tempVerticeTotal.Add(VerticeTotal[VerticeTotal.Count - 1]);
             tempTriangleTotal.Add(TriangleTotal[TriangleTotal.Count - 1]);
 
-
             //搬移
-
             verticeBox.RemoveAt(LastIndex);
             triangleBox.RemoveAt(LastIndex);
 
@@ -289,8 +277,6 @@ public class MeshGenerate : MonoBehaviour
             int lastindex = VerticeTotal.Count - 1;
             VerticeTotal.RemoveAt(lastindex);
             TriangleTotal.RemoveAt(lastindex);
-
-
         }
 
     }

@@ -8,18 +8,23 @@ public class drawer : MonoBehaviour
     public static List<Vector3> UpdatePoint = new List<Vector3>();
     public static List<Vector3> LenPoint = new List<Vector3>();
 
+    //For Position
     private Vector3 NewPos, OldPos;//零時座標變數 New & Old
+    public float lenght = 0.5f;
     public int width = 1;//調整寬度
     public int Select = 0;//選擇頭髮style
+    float widthAdj = 0.15f;//寬度參數
+    
     public int colorSelect = 1;//選擇頭髮顏色
     int down = 0;//滑鼠判定
-    float widthAdj = 0.15f;//寬度參數
-
+    
     public MeshGenerate CreatHair;
     public PositionGenerate CreatePosition;
 
     GameObject Hairmodel;
-    public int count = 0;
+    
+    public int count = 0;//髮片片數
+    //For undo redo
     int CopyCount = 0;
     int chickUndo = 0;
 
@@ -44,20 +49,19 @@ public class drawer : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
-                OldPos = NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position
+                OldPos = NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));//new position
                 down = 1;
             }
         }
-        
         if (down == 1) 
         { 
-            NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position
+            NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));//new position
             float dist = Vector3.Distance( OldPos,NewPos);
-            if (dist > 1.0f) 
+            if (dist > lenght) 
             {
                 CreatePosition = Hairmodel.GetComponent<PositionGenerate>();
-                CreatePosition.PosGenerate(NewPos,OldPos,width,PointPos,Select,widthAdj);
-                OldPos= NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));//new position//old position
+                CreatePosition.PosGenerate(OldPos,NewPos,width,PointPos,Select,widthAdj);//NewPos & OldPos倒過來解決隊不到點問題
+                OldPos= NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));//new position//old position
 
             }
             if (PointPos.Count >= (3 + (width - 1) * 2) * 3)
@@ -78,7 +82,6 @@ public class drawer : MonoBehaviour
                 down = 0;
             }
         }
-        
         
     }
 
@@ -101,6 +104,8 @@ public class drawer : MonoBehaviour
 
         if (Input.GetKeyDown("1")) Select = 0;
         if (Input.GetKeyDown("2")) Select = 1;
+
+
 
     }
     int d = 0;
