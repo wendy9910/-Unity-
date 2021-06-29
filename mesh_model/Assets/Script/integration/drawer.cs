@@ -10,12 +10,12 @@ public class drawer : MonoBehaviour
 
     //For Position
     private Vector3 NewPos, OldPos;//零時座標變數 New & Old
-    public float lenght = 0.5f;
+    public float length = 0.4f;
     public int width = 1;//調整寬度
     public int Select = 0;//選擇頭髮style
-    float widthAdj = 0.15f;//寬度參數
+    float widthAdj;//寬度參數
     
-    public int colorSelect = 1;//選擇頭髮顏色
+    public static int colorSelect = 1;//選擇頭髮顏色
     int down = 0;//滑鼠判定
     
     public MeshGenerate CreatHair;
@@ -57,24 +57,23 @@ public class drawer : MonoBehaviour
         { 
             NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));//new position
             float dist = Vector3.Distance( OldPos,NewPos);
-            if (dist > lenght) 
+            if (dist > length) 
             {
                 CreatePosition = Hairmodel.GetComponent<PositionGenerate>();
                 CreatePosition.PosGenerate(OldPos,NewPos,width,PointPos,Select,widthAdj);//NewPos & OldPos倒過來解決隊不到點問題
                 OldPos= NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));//new position//old position
 
             }
-            if (PointPos.Count >= (3 + (width - 1) * 2) * 3)
+            if (PointPos.Count >= (3 + (width - 1) * 2) * 2)
             {
                 //if(Hairmodel.GetComponent<MeshGenerate>() == null) CreatHair = Hairmodel.AddComponent<MeshGenerate>();//判斷是否已經存在組件(MeshGenerate.cs)
                 CreatHair = Hairmodel.GetComponent<MeshGenerate>();
-                CreatHair.Selectcolor(colorSelect);
                 CreatHair.meshGenerate(count,width,UpdatePoint,Hairmodel);//呼叫MeshGenerate.cs中的meshGenerate函式
                 
             }
             if (Input.GetMouseButtonUp(0))
             {
-                if (PointPos.Count >= (3 + (width - 1) * 2) * 3) count++;
+                if (PointPos.Count >= (3 + (width - 1) * 2) * 2) count++;
                 PointPos.Clear();
                 LenPoint.Clear();
                 UpdatePoint.Clear();
@@ -89,18 +88,20 @@ public class drawer : MonoBehaviour
 
     public void controlWidth()//寬度&髮片風格設定 
     {
-        if (Input.GetKeyDown("down") && width > 1 && down==0)//設定mesh寬度
+        
+        if (Input.GetKeyDown("down") && down==0)//設定mesh寬度
         {
-            width--;
-            widthAdj -= 0.05f;
+            length -= 0.1f;
+            //width--;
             Debug.Log("Range" + width);
         }
         if (Input.GetKeyDown("up") && down == 0)
         {
-            width++;
-            widthAdj += 0.05f;
+            length += 0.1f;
+            //width++;
             Debug.Log("Range" + width);
         }
+        widthAdj = length / 4;
 
         if (Input.GetKeyDown("1")) Select = 0;
         if (Input.GetKeyDown("2")) Select = 1;
@@ -141,14 +142,11 @@ public class drawer : MonoBehaviour
         }
 
 
-        if (Input.GetMouseButtonDown(1))
-        {
-            Vector3 RemovePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 30.0f));
-            CreatHair.RemoveMesh(RemovePos);
-        }
 
         if (Input.GetKeyDown("3")) colorSelect = 1;
         if (Input.GetKeyDown("4")) colorSelect = 2;
+        if (Input.GetKeyDown("5")) colorSelect = 3;
+        
 
     }
 

@@ -36,7 +36,7 @@ public class MeshGenerate : MonoBehaviour
         //meshCollider = Hairmodel.AddComponent<MeshCollider>();
 
         GethairColor = GetComponent<Renderer>().material;
-        GethairColor.color = Color.red;
+        Selectcolor();
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         GetComponent<MeshRenderer>().material = GethairColor;
         mesh.name = "Hair Grid";
@@ -316,9 +316,13 @@ public class MeshGenerate : MonoBehaviour
     }
 
 
-    public void Selectcolor(int Getcolor)
+    public void Selectcolor()
     {
-        
+        if(drawer.colorSelect == 1) GethairColor.color = Color.black;
+        if(drawer.colorSelect == 2) GethairColor.color = Color.red;
+        if(drawer.colorSelect == 3) GethairColor.color = Color.blue;
+
+
 
     }
 

@@ -166,7 +166,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9494fc936b5ae5d46b506ff4da0c6cd6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  lenght: 0.5
+  lenght: 0.4
   width: 1
   Select: 0
   colorSelect: 1
