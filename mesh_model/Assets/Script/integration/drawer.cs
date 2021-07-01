@@ -105,9 +105,6 @@ public class drawer : MonoBehaviour
 
         if (Input.GetKeyDown("1")) Select = 0;
         if (Input.GetKeyDown("2")) Select = 1;
-
-
-
     }
     int d = 0;
     
@@ -140,8 +137,6 @@ public class drawer : MonoBehaviour
             CreatHair.meshGenerate(count, width, UpdatePoint, Hairmodel); 
       
         }
-
-
 
         if (Input.GetKeyDown("3")) colorSelect = 1;
         if (Input.GetKeyDown("4")) colorSelect = 2;

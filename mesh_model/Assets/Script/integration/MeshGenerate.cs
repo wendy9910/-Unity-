@@ -204,9 +204,6 @@ public class MeshGenerate : MonoBehaviour
         if (count == 0) 
         {
             //推回去
-            int LastUndoVIndex = undoSortVertice.Count - 1;
-            int LastUndoTIndex = undoSortTriangle.Count - 1;
-
             int Lastindex = tempVerticeBox.Count - tempcount;
             int totalUndoPosV = 0;
             int totalUndoPosA = 0;
