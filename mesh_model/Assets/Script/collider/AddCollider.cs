@@ -9,16 +9,17 @@ public class AddCollider : MonoBehaviour
     int down = 0;
 
     public List<Vector3> PointPos = new List<Vector3>();
-    public List<SphereCollider> boxCollider = new List<SphereCollider>();
-    SphereCollider box;
-
-    int n = 0;
+    public List<SphereCollider> SphereCollider = new List<SphereCollider>();
+    public List<GameObject> SetCollider = new List<GameObject>();
+    
+    int c = 0;
+    int n = 1; 
     //GameObject Hairmodel;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -40,18 +41,16 @@ public class AddCollider : MonoBehaviour
             if (dist > length) 
             {
                 PointPos.Add(OldPos);
-                
-                box = gameObject.AddComponent<SphereCollider>();
-                box.name = "box" + n;
-                box.center = OldPos;
-                box.isTrigger = true;
-                boxCollider.Add(box);
+
+                SetCol();
+
                 OldPos = NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                n++;
             }
             if (Input.GetMouseButtonUp(0))
             {
                 //PointPos.Clear();
-                n++;
+                c++;
                 down = 0;
             
             }
@@ -63,19 +62,9 @@ public class AddCollider : MonoBehaviour
         if (Input.GetMouseButtonDown(1) && Physics.Raycast(ray, out hit))
         {
             Debug.DrawLine(Camera.main.transform.position, hit.transform.position, Color.red, 0.1f, true);
-            Debug.Log(hit.collider.name);
-
-            if (box.Raycast(ray, out hit, 1f))
-            {
-                Debug.Log("Yes");
-            }
-
+            Debug.Log(hit.transform.name);
 
         }
-
-        
-
-
     }
 
 
@@ -91,6 +80,19 @@ public class AddCollider : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Get");
+    }
+
+    void SetCol()
+    {
+        GameObject EmptySet = new GameObject();
+        SphereCollider box = EmptySet.AddComponent<SphereCollider>();
+        EmptySet.transform.position = OldPos;
+        EmptySet.transform.localScale = new Vector3(0.4f, 0.4f, 0.4f);
+        box.name = "box" + c;
+        box.center = OldPos;
+        box.radius = 1.0f;
+        box.isTrigger = true;
+        SetCollider.Add(EmptySet);
     }
 
 }
