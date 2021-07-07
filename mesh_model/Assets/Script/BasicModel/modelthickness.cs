@@ -46,10 +46,7 @@ public class modelthickness : MonoBehaviour
             }
             if (Input.GetMouseButtonUp(0)) 
             {
-                int Pointlen = PointPos.Count / (((3 + (width - 1) * 2) - 1) * 2 + 2);
-                Debug.Log(Pointlen);
-                int point = (((3 + (width - 1) * 2) - 1) * 2 + 2) * (Pointlen - 1) + ((3 + (width - 1) * 2) - 1) * 2;
-                Debug.Log(point);
+               
                 down = 0;
             }
 
@@ -112,11 +109,22 @@ public class modelthickness : MonoBehaviour
         mesh.vertices = vertice;
         mesh.uv = uv;
         mesh.tangents = tangents;
-        
 
-        //triangles = new int[point*6];
+        int Pointlen = PointPos.Count / (((3 + (width - 1) * 2) - 1) * 2 + 2);
+        int point = (((3 + (width - 1) * 2) - 1) * 2 + 2) * (Pointlen - 1) + ((3 + (width - 1) * 2) - 1) * 2;
+        triangles = new int[point*6];
 
+        int t = 0;//初始三角形
+        int k = 0;//累加
 
+        for (int vi = 0, x = 1; x <= point; x++, vi += k)
+        {
+            t = SetQuad(triangles, t, vi, vi + 1, vi + 3 + (2 * (width - 1)), vi + 4 + (2 * (width - 1)));
+
+            if (x % (width * 2) != point % (width * 2)) k = 1;
+            else k = 2;
+
+        }
 
     }
 
