@@ -117,7 +117,7 @@ MonoBehaviour:
   m_MinSize: {x: 910, y: 342}
   m_MaxSize: {x: 22005, y: 10021}
   vertical: 0
-  controlID: 153
+  controlID: 165
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -704,8 +704,8 @@ MonoBehaviour:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 32340000
-    m_LastClickedID: 13362
+    m_SelectedIDs: 30340000
+    m_LastClickedID: 13360
     m_ExpandedIDs: 00000000243400002c34000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
