@@ -14,6 +14,7 @@ public class modelthickness : MonoBehaviour
     int down = 0;
 
     Mesh mesh;
+    public Material GethairColor;
 
     // Start is called before the first frame update
     void Start()
@@ -97,7 +98,10 @@ public class modelthickness : MonoBehaviour
     
     public void GetMesh()
     {
+        GethairColor = GetComponent<Renderer>().material;
+        GethairColor.color = Color.blue;
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
+        GetComponent<MeshRenderer>().material = GethairColor;
         mesh.name = "Hair Grid";
 
         vertice = new Vector3[PointPos.Count];
@@ -116,12 +120,9 @@ public class modelthickness : MonoBehaviour
         mesh.tangents = tangents;
 
         int Pointlen = PointPos.Count / (((3 + (width - 1) * 2) - 1) * 2 + 2);
+   
         int totalPoint = (((3 + (width - 1) * 2) - 1) * 2 + 2) * (Pointlen - 1) + ((3 + (width - 1) * 2) - 1) * 2;
 
-        //Debug.Log(totalPoint);
-        //if (PointPos.Count < 1) point = 0;//計算網格數
-        //else point = ((PointPos.Count / (3 + (width - 1) * 2) - 1)) * 2 * width;
-        //int totalPoint = 2;
         triangles = new int[totalPoint * 6];
 
         int t = 0;//初始三角形
@@ -129,46 +130,57 @@ public class modelthickness : MonoBehaviour
         //Debug.Log(totalPoint*6);
 
         int Block1 = ((3+(width-1)*2)-1)*(Pointlen-1); // 前or後兩面區塊
-
+        Debug.Log(Block1);
+        //A1
         for (int vi = 0, x = 1, k = 0; x <= Block1; x++, vi += k) 
         {
-            t = SetQuad(triangles,t,vi,vi+1, vi + 6 + (2 * (width - 1)), vi + 7 + (2 * (width - 1)));
-            if (x % (3 + (width-1)*2) != 0) k = 1;
+            t = SetQuad(triangles, t, vi, vi + 1, vi + 6 , vi + 7 );
+            //t = SetQuad(triangles,t,vi,vi+1, vi + 6 + (2 * (width - 1)), vi + 7 + (2 * (width - 1)));
+            if (x % ((3 + (width-1)*2)-1) != 0) k = 1;
             else k = 5 + (width-1)*2;
 
         }
-
+        //A2
         for (int vi = vertice.Length-1, x = 1, k = 0; x <= Block1; x++, vi -=k ) 
         {
-            t = SetQuad(triangles, t, vi, vi - 1, vi - ( 6 + (2 * (width - 1))), vi - ( 7 + (2 * (width - 1))));
-            if (x % (3 + (width - 1) * 2) != 0) k = 1;
+            t = SetQuad(triangles, t, vi, vi - 1, vi - 6 , vi - 7 );
+            //t = SetQuad(triangles, t, vi, vi - 1, vi - ( 6 + (2 * (width - 1))), vi - ( 7 + (2 * (width - 1))));
+            if (x % ((3 + (width - 1) * 2)-1) != 0) k = 1;
             else k = 5 + (width - 1) * 2;
         }
         //(3 + (width - 1) * 2) * 2 - 1
+        //B1
         for (int vi = 5,vii = 0, x =1; x<= (3 + (width - 1) * 2) - 1; x++, vi--, vii++) 
         {
-            t = SetQuad(triangles, t, vi, vi - 5, vii , vii + 1);
+            t = SetQuad(triangles, t, vi, vi - 1, vii , vii + 1);
         }
+        //for (int vi = 3 + (width - 1) * 2, x = 1; x <= Pointlen - 1; x++, vi+= 6 + (2 * (width - 1))) 
 
-        for (int vi = 3 + (width - 1) * 2, x = 1; x <= Pointlen - 1; x++, vi+= 6 + (2 * (width - 1))) 
+        //Top
+        for (int vi = 3 + (width - 1) * 2, x = 1; x <= Pointlen - 1; x++, vi+= 6) 
         {
-            t = SetQuad(triangles, t, vi, vi + 6 , vi -1, vi + 5 );
-            //t = SetQuad(triangles, t, vi, vi + 6 + (width - 1) * 4, vi - 1, vi + 5 + (width - 1) * 4);
+            //t = SetQuad(triangles, t, vi, vi + 6 , vi -1, vi + 5);
+            t = SetQuad(triangles, t, vi, vi + 6 + (width - 1) * 4, vi - 1, vi + 5 + (width - 1) * 4);        
         }
         //Debug.Log((vertice.Length - 1) - (3 + (width - 1) * 2) * 2 - 1);
-        for (int vi = (vertice.Length - 1) - (3 + (width - 1) * 2) * 2 - 1, vii = vertice.Length-1, x = 1; x <= (3 + (width - 1) * 2) - 1; x++ ,vi++, vii--) 
-        {
-            t = SetQuad(triangles, t, vi,vi - 5, vii, vii + 1);
-        }
+        //for (int vi = (vertice.Length - 1) - (3 + (width - 1) * 2) * 2 - 1, vii = vertice.Length - 1, x = 1; x <= (3 + (width - 1) * 2) - 1; x++, vi++, vii--)
 
+        //B2
+        for (int vi = (vertice.Length - 1) - (3 + (width - 1) * 2) * 2 + 1,vii = vertice.Length-1,   x = 1; x <= (3 + (width - 1) * 2) - 1; x++ ,vi++) 
+        {     
+            t = SetQuad(triangles, t, vi,vi + 1, vii , vii-1);    
+        }
+        //Bottom
         for (int vi = 0, x = 1; x <= Pointlen - 1; x++, vi += 6 + (2 * (width - 1))) 
         {
-            t = SetQuad(triangles, t, vi, vi + 6 + (width - 1) * 4, vi - 1, vi + 5 + (width - 1) * 4);
+            t = SetQuad(triangles, t, vi, vi + 6 , vi + 5, vi + 10);
+            //t = SetQuad(triangles, t, vi, vi + 6 + (width - 1) * 4, vi - 1, vi + 5 + (width - 1) * 4);
         }
 
         mesh.triangles = triangles;
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
 
-       
         /*for (int vi = 0, x = 1; x <= point; x++, vi += k)
         {
             t = SetQuad(triangles, t, vi, vi + 1, vi + 3 + (2 * (width - 1)), vi + 4 + (2 * (width - 1)));
