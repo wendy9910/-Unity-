@@ -9,7 +9,7 @@ public class modelthickness : MonoBehaviour
     Vector3 newPos, oldPos;
 
     float length = 0.5f;
-    int width = 2;
+    int width = 1;
     float thickness = 0.5f;
     int down = 0;
 
@@ -75,19 +75,22 @@ public class modelthickness : MonoBehaviour
             Vector3 temp = new Vector3(oldPos.x + Vec1.x, oldPos.y + Vec1.y, oldPos.z + Vec1.z);
             PointPos.Add(temp);
         }
-        for (int i = 0, j = 1; i < width; i++, j++)
+
+        for (int i = 0, j = width; i < width; i++, j--)
         {
             Vector3 Vec1 = new Vector3((-Vec.y) * j, (Vec.x) * j, Vec.z * j);
             Vector3 temp = new Vector3(oldPos.x + Vec1.x, oldPos.y + Vec1.y, oldPos.z + Vec1.z + thickness);
             PointPos.Add(temp);
         }
-        PointPos.Add(new Vector3(oldPos.x, oldPos.y, oldPos.z + thickness)); ;
-        for (int i = 0, j = width; i < width; i++, j--)
+        PointPos.Add(new Vector3(oldPos.x, oldPos.y, oldPos.z + thickness));
+        
+        for (int i = 0, j = 1; i < width; i++, j++)
         {
             Vector3 Vec1 = new Vector3((Vec.y) * j, (-Vec.x) * j, Vec.z * j);
             Vector3 temp = new Vector3(oldPos.x + Vec1.x, oldPos.y + Vec1.y, oldPos.z + Vec1.z + thickness);
             PointPos.Add(temp);
         }
+       
 
     }
 
@@ -120,16 +123,13 @@ public class modelthickness : MonoBehaviour
         mesh.tangents = tangents;
 
         int Pointlen = PointPos.Count / (((3 + (width - 1) * 2) - 1) * 2 + 2);
-   
         int totalPoint = (((3 + (width - 1) * 2) - 1) * 2 + 2) * (Pointlen - 1) + ((3 + (width - 1) * 2) - 1) * 2;
 
         triangles = new int[totalPoint * 6];
 
         int t = 0;//初始三角形
-
-        //Debug.Log(totalPoint*6);
-
         int Block1 = ((3+(width-1)*2)-1)*(Pointlen-1); // 前or後兩面區塊
+
         //A1 K
         for (int vi = 0, x = 1, k = 0; x <= Block1; x++, vi += k) 
         {
@@ -149,12 +149,11 @@ public class modelthickness : MonoBehaviour
         {
             t = SetQuad(triangles, t, vi, vi - 1, vii , vii + 1);
         }
- 
-        //Top
-        for (int vi = 3 + (width - 1) * 2, x = 1; x <= Pointlen - 1; x++, vi+= 6+(width-1)*4) 
-        {
 
-            t = SetQuad(triangles, t, vi, vi + 6 + (width - 1) * 4, vi - 1, vi + 5 + (width - 1) * 4);        
+        //Top K
+        for (int vi = 3 + (width - 1) * 2, x = 1; x <= Pointlen - 1; x++, vi += (6 + (width - 1) * 4))
+        {
+            t = SetQuad(triangles, t, vi, vi + 6 + (width - 1) * 4, vi-1, vi + 5 + (width - 1) * 4);        
         }
 
         //B2
@@ -162,31 +161,15 @@ public class modelthickness : MonoBehaviour
         {     
             t = SetQuad(triangles, t, vi,vi + 1, vii , vii-1);    
         }
-        //Bottom
-        for (int vi = 0, x = 1; x <= Pointlen - 1; x++, vi += (6 + (width - 1) * 4) ) 
+        //Bottom k
+        for (int vi = 0, vii = 5 + (width - 1) * 4, x = 1; x <= Pointlen - 1; x++, vi += (6 + (width - 1) * 4),vii += (6 + (width - 1) * 4)) 
         {
-            t = SetQuad(triangles, t, vi, vi + 6 + (width - 1) * 4, vi + 5 + (width - 1) * 4, vi + 11 + (width - 1) * 4);
-            //t = SetQuad(triangles, t, vi, vi + 6 + (width - 1) * 4,vi + 5 + (width - 1) * 4, vi + 11 + (width - 1) * 4); 
-            //t = SetQuad(triangles, t, vi, vi + 6 + (width - 1) * 4, vi - 1, vi + 5 + (width - 1) * 4);
+            t = SetQuad(triangles, t, vi, vi + 6 + (width - 1) * 4, vii, vii + 6 + (width - 1) * 4);
         }
-
-        /*for (int i = 0; i < triangles.Length; i++) 
-        {
-            Debug.Log(triangles[i]);        
-        }*/
 
         mesh.triangles = triangles;
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
-
-        /*for (int vi = 0, x = 1; x <= point; x++, vi += k)
-        {
-            t = SetQuad(triangles, t, vi, vi + 1, vi + 3 + (2 * (width - 1)), vi + 4 + (2 * (width - 1)));
-
-            if (x % (width * 2) != point % (width * 2)) k = 1;
-            else k = 2;
-
-        }*/
 
     }
 
@@ -204,12 +187,12 @@ public class modelthickness : MonoBehaviour
 
  
 
-    private void OnDrawGizmos()
+    /*private void OnDrawGizmos()
     {
         Gizmos.color = Color.black;
         for (int i = 0; i < PointPos.Count; i++)
         {
             Gizmos.DrawSphere(PointPos[i], 0.1f);
         }
-    }
+    }*/
 }

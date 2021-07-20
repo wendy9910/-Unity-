@@ -18,7 +18,7 @@ public class MeshGenerate : MonoBehaviour
     {
        
         GetHairColor = GetComponent<Renderer>().material;
-        GetHairColor.color = Color.red;
+        GetHairColor.color = Color.blue;
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();//指定Mesh到MeshFilter
         GetComponent<MeshRenderer>().material = GetHairColor;
         mesh.name = "HairMesh";
@@ -41,17 +41,51 @@ public class MeshGenerate : MonoBehaviour
         mesh.uv = uv;
         mesh.tangents = tangents;
 
-        int point = ((GetPointPos.Count / (3 + (Getwidth - 1) * 2) - 1)) * 2 * Getwidth;
+        int Pointlen = GetPointPos.Count / (((3 + (Getwidth - 1) * 2) - 1) * 2 + 2);
+        int totalPoint = (((3 + (Getwidth - 1) * 2) - 1) * 2 + 2) * (Pointlen - 1) + ((3 + (Getwidth - 1) * 2) - 1) * 2;
 
-        triangle = new int[point * 6];
+        triangle = new int[totalPoint * 6];
 
-        int t=0;//triangle index起始點
-        for (int vi = 0, k = 0, x = 1; x <= point; x++, vi += k)
+        int t = 0;//初始三角形
+        int Block1 = ((3 + (Getwidth - 1) * 2) - 1) * (Pointlen - 1); // 前or後兩面區塊
+
+        //A1 K
+        for (int vi = 0, x = 1, k = 0; x <= Block1; x++, vi += k)
         {
-            t = SetQuad(triangle, t, vi, vi + 1, vi + 3 + (2 * (Getwidth - 1)), vi + 4 + (2 * (Getwidth - 1)));
-            if (x % (Getwidth * 2) != point % (Getwidth * 2)) k = 1;  //在同一行
-            else k = 2;  //對vi的累加  (需換行時)
+            t = SetQuad(triangle, t, vi, vi + 1, vi + 6 + (Getwidth - 1) * 4, vi + 7 + (Getwidth - 1) * 4);
+            if (x % ((3 + (Getwidth - 1) * 2) - 1) != 0) k = 1;
+            else k = 5 + (Getwidth - 1) * 2;
         }
+        //A2 K
+        for (int vi = vertice.Length - 1, x = 1, k = 0; x <= Block1; x++, vi -= k)
+        {
+            t = SetQuad(triangle, t, vi, vi - 1, vi - (6 + (Getwidth - 1) * 4), vi - (7 + (Getwidth - 1) * 4));
+            if (x % ((3 + (Getwidth - 1) * 2) - 1) != 0) k = 1;
+            else k = 5 + (Getwidth - 1) * 2;
+        }
+        //B1 K
+        for (int vi = 5 + (Getwidth - 1) * 4, vii = 0, x = 1; x <= (3 + (Getwidth - 1) * 2) - 1; x++, vi--, vii++)
+        {
+            t = SetQuad(triangle, t, vi, vi - 1, vii, vii + 1);
+        }
+
+        //Top K
+        for (int vi = 3 + (Getwidth - 1) * 2, x = 1; x <= Pointlen - 1; x++, vi += (6 + (Getwidth - 1) * 4))
+        {
+            t = SetQuad(triangle, t, vi, vi + 6 + (Getwidth - 1) * 4, vi - 1, vi + 5 + (Getwidth - 1) * 4);
+        }
+
+        //B2
+        for (int vi = (vertice.Length - 1) - (3 + (Getwidth - 1) * 2) * 2 + 1, vii = vertice.Length - 1, x = 1; x <= (3 + (Getwidth - 1) * 2) - 1; x++, vi++, vii--)
+        {
+            t = SetQuad(triangle, t, vi, vi + 1, vii, vii - 1);
+        }
+        //Bottom k
+        for (int vi = 0, vii = 5 + (Getwidth - 1) * 4, x = 1; x <= Pointlen - 1; x++, vi += (6 + (Getwidth - 1) * 4), vii += (6 + (Getwidth - 1) * 4))
+        {
+            t = SetQuad(triangle, t, vi, vi + 6 + (Getwidth - 1) * 4, vii, vii + 6 + (Getwidth - 1) * 4);
+        }
+
         mesh.triangles = triangle;
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
