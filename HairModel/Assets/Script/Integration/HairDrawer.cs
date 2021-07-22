@@ -6,11 +6,13 @@ public class HairDrawer : MonoBehaviour
 {
     int ControllerDown = 0; //按下滑鼠
     int count = 0;//髮片數量
-    int HairWidth = 1;//髮片寬度
+    int HairWidth = 2;//髮片寬度
+    public static int HairStyleState = 1;//髮片風格選擇
     float length = 0.5f;//New & Old間距
-    
+    public static float WidthLimit = 0.5f;
 
     public static List<Vector3> PointPos = new List<Vector3>();//儲存座標
+    public static List<Vector3> UpdatePointPos = new List<Vector3>();//變形更新點座標
     public List<GameObject> HairModel = new List<GameObject>();//儲存髮片
 
     Vector3 NewPos, OldPos;
@@ -27,6 +29,7 @@ public class HairDrawer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        WidthControl();
         if (ControllerDown == 0) 
         {
             if (Input.GetMouseButtonDown(0))
@@ -55,7 +58,7 @@ public class HairDrawer : MonoBehaviour
             {
                 if (HairModel[count].GetComponent<MeshGenerate>() == null) CreateHair = HairModel[count].AddComponent<MeshGenerate>();
                 else CreateHair = HairModel[count].GetComponent<MeshGenerate>();
-                CreateHair.GenerateMesh(PointPos,HairWidth);
+                CreateHair.GenerateMesh(UpdatePointPos,HairWidth);
             }
         }
         if (Input.GetMouseButtonUp(0)) 
@@ -65,17 +68,16 @@ public class HairDrawer : MonoBehaviour
             ControllerDown = 0;
         }
 
-        if (Input.GetKeyDown("up")) //消除物件的方法
-        {
-            if (HairModel.Count > 1) 
-            {
-                int leastObject = HairModel.Count - 1;
-                Destroy(HairModel[leastObject]);
-                HairModel.RemoveAt(leastObject);
-                
-            }
-        }
     }
 
-    
+    void WidthControl()
+    {
+        if (Input.GetKeyDown("down") && WidthLimit > 0.3f) WidthLimit -= 0.1f; 
+        if (Input.GetKeyDown("up") && WidthLimit < 0.7f) WidthLimit += 0.1f;
+        if (Input.GetKeyDown("1")) HairStyleState = 1;
+        if (Input.GetKeyDown("2")) HairStyleState = 2;
+
+
+
+    }
 }
