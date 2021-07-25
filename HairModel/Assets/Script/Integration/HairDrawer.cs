@@ -9,7 +9,7 @@ public class HairDrawer : MonoBehaviour
     int HairWidth = 2;//髮片寬度
     public static int HairStyleState = 1;//髮片風格選擇
     float length = 0.5f;//New & Old間距
-    public static float WidthLimit = 0.5f;
+    public static float WidthLimit = 0.8f;
 
     public static List<Vector3> PointPos = new List<Vector3>();//儲存座標
     public static List<Vector3> UpdatePointPos = new List<Vector3>();//變形更新點座標
@@ -20,10 +20,14 @@ public class HairDrawer : MonoBehaviour
     public MeshGenerate CreateHair;
     public PositionGenerate CreatePosition;
 
+    public Texture HairTexture, hairnormal;
+
+   
+
     // Start is called before the first frame update
     void Start()
     {
-        
+        CreatePosition = gameObject.AddComponent<PositionGenerate>();
     }
 
     // Update is called once per frame
@@ -48,17 +52,19 @@ public class HairDrawer : MonoBehaviour
             float Distance = Vector3.Distance(OldPos,NewPos);
             if (Distance > length) 
             {
-                if (HairModel[count].GetComponent<PositionGenerate>() == null) CreatePosition = HairModel[count].AddComponent<PositionGenerate>();
-                else CreatePosition = HairModel[count].GetComponent<PositionGenerate>();
-                CreatePosition.GeneratePosition(OldPos,NewPos,HairWidth);
+                CreatePosition = gameObject.GetComponent<PositionGenerate>();
+                CreatePosition.GeneratePosition(OldPos,NewPos,HairWidth,WidthLimit);
 
                 NewPos = OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                
             }
             if (PointPos.Count >= (3 + (HairWidth - 1) * 2) * 2) 
             {
                 if (HairModel[count].GetComponent<MeshGenerate>() == null) CreateHair = HairModel[count].AddComponent<MeshGenerate>();
                 else CreateHair = HairModel[count].GetComponent<MeshGenerate>();
                 CreateHair.GenerateMesh(UpdatePointPos,HairWidth);
+                MeshGenerate.GethairColor.SetTexture("_MainTex", HairTexture);
+                MeshGenerate.GethairColor.SetTexture("_BumpMap", hairnormal);
             }
         }
         if (Input.GetMouseButtonUp(0)) 

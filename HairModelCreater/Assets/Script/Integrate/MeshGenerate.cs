@@ -6,7 +6,7 @@ using UnityEngine;
 public class MeshGenerate : MonoBehaviour
 {
     private Mesh mesh;
-    public Material GetHairColor;
+    public static Material GetHairColor;
     MeshCollider HairCollider;
 
     Vector3[] vertice;
@@ -18,7 +18,7 @@ public class MeshGenerate : MonoBehaviour
     {
        
         GetHairColor = GetComponent<Renderer>().material;
-        GetHairColor.color = Color.blue;
+       // GetHairColor.color = Color.blue;
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();//指定Mesh到MeshFilter
         GetComponent<MeshRenderer>().material = GetHairColor;
         mesh.name = "HairMesh";
@@ -33,10 +33,21 @@ public class MeshGenerate : MonoBehaviour
         for (int i=0;i<GetPointPos.Count;i++) 
         {
             vertice[i] = GetPointPos[i];
-            uv[i].x = GetPointPos[i].x;
-            uv[i].y = GetPointPos[i].y;
+           // uv[i].x = GetPointPos[i].x;
+            //uv[i].y = GetPointPos[i].y;
             tangents[i] = new Vector4(1f, 0f, 0f, -1f);
         }
+        int len = GetPointPos.Count / (3+(Getwidth - 1)*2);
+        Debug.Log(len);
+        for (int i = 0, x = 0; i < len; i++)
+        {
+            for (int j = 1; j <= (3 + (Getwidth - 1)*2); j++)
+            {
+                uv[x] = new Vector2(1.0f / (3 + (Getwidth - 1)*2) * j, 1.0f / len * i);//Vector3轉Vector2
+                x++;
+            }
+        }
+
         mesh.vertices = vertice;
         mesh.uv = uv;
         mesh.tangents = tangents;

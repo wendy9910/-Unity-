@@ -6,7 +6,7 @@ using UnityEngine;
 public class MeshGenerate : MonoBehaviour
 {
     private Mesh mesh;
-    public Material GethairColor;
+    public static Material GethairColor;
 
     Vector3[] vertice;
     Vector2[] uv;
@@ -19,7 +19,7 @@ public class MeshGenerate : MonoBehaviour
     public void GenerateMesh(List<Vector3> GetPointPos,int Getwidth) 
     {
         GethairColor = GetComponent<Renderer>().material;
-        GethairColor.color = Color.yellow;
+        GethairColor.color = Color.red;
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         GetComponent<MeshRenderer>().material = GethairColor;
         mesh.name = "HairModel";
@@ -28,16 +28,27 @@ public class MeshGenerate : MonoBehaviour
         uv = new Vector2[GetPointPos.Count + OldVerticeCount];
         tangents = new Vector4[GetPointPos.Count + OldVerticeCount];
 
+        
+
         for (int i = OldVerticeCount,j=0;i<GetPointPos.Count;i++,j++) 
         {
             vertice[i] = GetPointPos[j];
-            uv[i].x = GetPointPos[j].x;//Vector3轉Vector2
-            uv[i].y = GetPointPos[j].y;
             tangents[i] = new Vector4(1f, 0f, 0f, -1f);
         }
+
+        int len = GetPointPos.Count/(3+(Getwidth-1)*2);
+
+        for (int i = 0,x = 0; i < len; i++) {
+            for (int j = 1; j <= (3 + (Getwidth - 1) * 2); j++) {
+                uv[x] = new Vector2(1.0f/(3+(Getwidth-1)/2)*j,1.0f/len*i);//Vector3轉Vector2
+                x++;
+            }
+        }
+        //Debug.Log(GetPointPos.Count);
+
         mesh.vertices = vertice;//mesh網格點生成
         mesh.uv = uv;
-        mesh.tangents = tangents;
+        // mesh.tangents = tangents;
 
         int point;
         if (GetPointPos.Count < 1) point = 0;//計算網格數

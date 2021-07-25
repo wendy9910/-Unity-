@@ -6,7 +6,7 @@ public class CreateHair : MonoBehaviour
 {
     int Controllerdown = 0;//判定手把動作
     int count = 0;//紀錄髮片片數
-    int HairWidth = 1;//髮片寬度
+    int HairWidth = 2;//髮片寬度
     float length = 0.5f;//算點距
 
     Vector3 NewPos, OldPos;
@@ -15,6 +15,8 @@ public class CreateHair : MonoBehaviour
 
     public MeshGenerate HairCreater;
     public PositionGenerate PositionCreater;
+
+    public Texture HairTexture, hairnormal;
 
     // Start is called before the first frame update
     void Start()
@@ -53,6 +55,8 @@ public class CreateHair : MonoBehaviour
                 if (HairModel[count].GetComponent<MeshGenerate>() == null) HairCreater = HairModel[count].AddComponent<MeshGenerate>();
                 else HairCreater = HairModel[count].GetComponent<MeshGenerate>();
                 HairCreater.GenerateMesh(PointPos,HairWidth);
+                MeshGenerate.GetHairColor.SetTexture("_MainTex", HairTexture);
+                MeshGenerate.GetHairColor.SetTexture("_BumpMap", hairnormal);
             }
             if (Input.GetMouseButtonUp(0))
             {
