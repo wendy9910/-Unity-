@@ -7,6 +7,9 @@ public class MeshGenerate : MonoBehaviour
 {
     private Mesh mesh;
     public static Material GethairColor;
+    Shader HairShader;
+
+
 
     Vector3[] vertice;
     Vector2[] uv;
@@ -19,7 +22,10 @@ public class MeshGenerate : MonoBehaviour
     public void GenerateMesh(List<Vector3> GetPointPos,int Getwidth) 
     {
         GethairColor = GetComponent<Renderer>().material;
-        GethairColor.color = Color.red;
+        HairShader = Shader.Find("Diffuse Fast");
+        GethairColor.shader = HairShader;
+
+        GethairColor.color = new Color(222f/255,184f/255,135f/255);
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();
         GetComponent<MeshRenderer>().material = GethairColor;
         mesh.name = "HairModel";
@@ -28,7 +34,7 @@ public class MeshGenerate : MonoBehaviour
         uv = new Vector2[GetPointPos.Count + OldVerticeCount];
         tangents = new Vector4[GetPointPos.Count + OldVerticeCount];
 
-        
+  
 
         for (int i = OldVerticeCount,j=0;i<GetPointPos.Count;i++,j++) 
         {
@@ -37,13 +43,31 @@ public class MeshGenerate : MonoBehaviour
         }
 
         int len = GetPointPos.Count/(3+(Getwidth-1)*2);
+        float TexWidth = 0.03f + 0.022f * HairDrawer.add;
 
-        for (int i = 0,x = 0; i < len; i++) {
+        /*for (int i = 0,x = 0; i < len; i++) {
             for (int j = 1; j <= (3 + (Getwidth - 1) * 2); j++) {
-                uv[x] = new Vector2(1.0f/(3+(Getwidth-1)/2)*j,1.0f/len*i);//Vector3轉Vector2
+                uv[x] = new Vector2(TexWidth / (3+(Getwidth-1)/2) * j, 0.5f / len * i);//小:0.03 大:0.25   0.022f
+                x++;
+            }
+        }*/
+        for (int i = 0, x = 0; i < len; i++)
+        {
+            for (int j = 1; j <= (3 + (Getwidth - 1) * 2); j++)
+            {
+                if(i==0) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 0f);
+                //else if (i == len - 1) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 1f);
+                else if(i > len-6) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j,0.4f + 0.6f / len * i);
+                else if(i==1 || i%2 == 1) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 0.4f);
+                else if(i%2 == 0 || i == len-2) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 0.6f);
+               //i > len-6 y= 0.6 + 0.6f/ len*i
                 x++;
             }
         }
+
+        //i=0 ...y=0,i=1...y=0.2
+        //i%2==1 y=0.2f,i%2==0 y=0.8
+        //i=len-2 y=0.8, i=len-1 y=1;
         //Debug.Log(GetPointPos.Count);
 
         mesh.vertices = vertice;//mesh網格點生成

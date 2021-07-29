@@ -15,8 +15,8 @@ public class PositionGenerate : MonoBehaviour
 
         Debug.Log(GetWidthLimit);
         for (int i = 0; i < 3 + (width - 1) * 2; i++) GetPointPos.Add(oldPos);
-        /*Vector3 Vec0 = newPos - oldPos;
-        for (int i = 0, j = width; i < width; i++, j--)
+        Vector3 Vec0 = newPos - oldPos;
+        /*for (int i = 0, j = width; i < width; i++, j--)
         {
             float n = j * GetWidthLimit;
             Vector3 Vec1 = new Vector3((Vec0.y) * n, (-Vec0.x) * n, Vec0.z * n);
@@ -28,11 +28,11 @@ public class PositionGenerate : MonoBehaviour
         {
             float n = j * GetWidthLimit;
             Vector3 Vec1 = new Vector3((-Vec0.y) * n, (Vec0.x) * n, Vec0.z * n);
-            Vector3 temp = new Vector3(oldPos.x + Vec1.x, oldPos.y + Vec1.y, oldPos.z + Vec1.z);
+            Vector3 temp = new Vector3(oldPos.x + Vec1.x, oldPos.y + Vec1.y, oldPos.z + Vec1.z);0
             GetPointPos.Add(temp);
         }*/
-        if (HairDrawer.HairStyleState == 1) StraightHairStyle(width,Vec,GetWidthLimit);
-        if (HairDrawer.HairStyleState == 2) DiamodHairStyle(width,Vec,GetWidthLimit);
+        if (HairDrawer.HairStyleState == 1) StraightHairStyle(width,Vec0,GetWidthLimit);
+        if (HairDrawer.HairStyleState == 2) DiamodHairStyle(width,Vec0,GetWidthLimit);
 
     }
     Vector3 Vec = new Vector3();
@@ -52,7 +52,6 @@ public class PositionGenerate : MonoBehaviour
             else Vec = Vec0;
             if (k == 0)
             {
-
                 for (int i = 0; i < 3 + (width - 1) * 2; i++)
                 {
                     TempPoint.Add(GetPointPos[(3+(width-1)*2)/2]);
@@ -64,7 +63,7 @@ public class PositionGenerate : MonoBehaviour
                 Debug.Log("dist"+dist);
                 for (int i = 0, j = width; i < width; i++, j--)
                 {
-                    float n = j * GetWidthLimit * w;
+                    float n = j * 0.05f * w + GetWidthLimit ;
                     Debug.Log(n);
                     Vector3 Vec1 = new Vector3((Vec.y) * j * n, (-Vec.x) * j * n, Vec.z * j);
                     Vector3 temp = new Vector3(GetPointPos[x].x + Vec1.x, GetPointPos[x].y + Vec1.y, GetPointPos[x].z + Vec1.z);
@@ -75,7 +74,7 @@ public class PositionGenerate : MonoBehaviour
                 x++;
                 for (int i = 0, j = 1; i < width; i++, j++)
                 {
-                    float n = j * GetWidthLimit * w;
+                    float n = j * 0.05f * w + GetWidthLimit;
                     Vector3 Vec1 = new Vector3((-Vec.y) * j * n, (+Vec.x) * j * n, Vec.z * j);
                     Vector3 temp = new Vector3(GetPointPos[x].x + Vec1.x, GetPointPos[x].y + Vec1.y, GetPointPos[x].z + Vec1.z);
                     TempPoint.Add(temp);

@@ -18,7 +18,7 @@ public class MeshGenerate : MonoBehaviour
     {
        
         GetHairColor = GetComponent<Renderer>().material;
-       // GetHairColor.color = Color.blue;
+        GetHairColor.color = Color.blue;
         GetComponent<MeshFilter>().mesh = mesh = new Mesh();//指定Mesh到MeshFilter
         GetComponent<MeshRenderer>().material = GetHairColor;
         mesh.name = "HairMesh";
@@ -33,8 +33,6 @@ public class MeshGenerate : MonoBehaviour
         for (int i=0;i<GetPointPos.Count;i++) 
         {
             vertice[i] = GetPointPos[i];
-           // uv[i].x = GetPointPos[i].x;
-            //uv[i].y = GetPointPos[i].y;
             tangents[i] = new Vector4(1f, 0f, 0f, -1f);
         }
         int len = GetPointPos.Count / (3+(Getwidth - 1)*2);
