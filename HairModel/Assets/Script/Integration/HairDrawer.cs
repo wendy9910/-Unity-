@@ -6,7 +6,7 @@ public class HairDrawer : MonoBehaviour
 {
     int ControllerDown = 0; //按下滑鼠
     int count = 0;//髮片數量
-    int HairWidth = 3;//髮片寬度
+    public static int HairWidth = 3;//髮片寬度
     public static int HairStyleState = 1;//髮片風格選擇
     float length = 0.5f;//New & Old間距
     public static float WidthLimit = 0.05f;//最小0.05,最大0.55
@@ -54,8 +54,7 @@ public class HairDrawer : MonoBehaviour
             if (Distance > length) 
             {
                 CreatePosition = gameObject.GetComponent<PositionGenerate>();
-                CreatePosition.GeneratePosition(OldPos,NewPos,HairWidth,WidthLimit);
-
+                CreatePosition.GeneratePosition(OldPos,NewPos,WidthLimit,add);
                 NewPos = OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
                 
             }

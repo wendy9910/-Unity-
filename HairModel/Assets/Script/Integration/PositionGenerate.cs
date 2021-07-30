@@ -7,13 +7,14 @@ public class PositionGenerate : MonoBehaviour
     public List<Vector3> GetPointPos = HairDrawer.PointPos;
     public List<Vector3> GetUpdatePointPos = HairDrawer.UpdatePointPos;
     List<Vector3> TempPoint = new List<Vector3>();
+    int width = HairDrawer.HairWidth;
 
     //float GetWidthLimit = HairDrawer.WidthLimit;
 
-    public void GeneratePosition(Vector3 oldPos,Vector3 newPos,int width,float GetWidthLimit)
+    public void GeneratePosition(Vector3 oldPos,Vector3 newPos,float GetWidthLimit,int add)
     {
 
-        Debug.Log(GetWidthLimit);
+        Debug.Log("Limit:"+ GetWidthLimit);
         for (int i = 0; i < 3 + (width - 1) * 2; i++) GetPointPos.Add(oldPos);
         Vector3 Vec0 = newPos - oldPos;
         /*for (int i = 0, j = width; i < width; i++, j--)
@@ -31,21 +32,18 @@ public class PositionGenerate : MonoBehaviour
             Vector3 temp = new Vector3(oldPos.x + Vec1.x, oldPos.y + Vec1.y, oldPos.z + Vec1.z);0
             GetPointPos.Add(temp);
         }*/
-        if (HairDrawer.HairStyleState == 1) StraightHairStyle(width,Vec0,GetWidthLimit);
+        if (HairDrawer.HairStyleState == 1) StraightHairStyle(width,Vec0,GetWidthLimit,add);
         if (HairDrawer.HairStyleState == 2) DiamodHairStyle(width,Vec0,GetWidthLimit);
 
     }
     Vector3 Vec = new Vector3();
-    public void StraightHairStyle(int width, Vector3 Vec0,float GetWidthLimit) 
+    public void StraightHairStyle(int width, Vector3 Vec0,float GetWidthLimit,int add) 
     {
         TempPoint.Clear();
-        float w = 0.2f;
+        float w = 0.0001f;
         float PointLen = GetPointPos.Count/(3+(width-1)*2);
- 
-        Debug.Log("StraightHairStyle");
 
-
-        float dist = 0;
+        float dist=0.02f;
         for (int k = 0, x = 0; k < PointLen; k++) {
 
             if (k != 0) Vec = GetPointPos[x + (3+(width-1)*2)/2] - GetPointPos[x + (3 + (width - 1) * 2) / 2 - (3 + (width - 1) * 2)];
@@ -60,10 +58,10 @@ public class PositionGenerate : MonoBehaviour
             }
             else
             {
-                Debug.Log("dist"+dist);
                 for (int i = 0, j = width; i < width; i++, j--)
                 {
-                    float n = j * 0.05f * w + GetWidthLimit ;
+                    float n = j * add * 0.001f + GetWidthLimit + w ;
+                    
                     Debug.Log(n);
                     Vector3 Vec1 = new Vector3((Vec.y) * j * n, (-Vec.x) * j * n, Vec.z * j);
                     Vector3 temp = new Vector3(GetPointPos[x].x + Vec1.x, GetPointPos[x].y + Vec1.y, GetPointPos[x].z + Vec1.z);
@@ -74,15 +72,16 @@ public class PositionGenerate : MonoBehaviour
                 x++;
                 for (int i = 0, j = 1; i < width; i++, j++)
                 {
-                    float n = j * 0.05f * w + GetWidthLimit;
+                    float n = j * add * 0.001f + GetWidthLimit;
                     Vector3 Vec1 = new Vector3((-Vec.y) * j * n, (+Vec.x) * j * n, Vec.z * j);
                     Vector3 temp = new Vector3(GetPointPos[x].x + Vec1.x, GetPointPos[x].y + Vec1.y, GetPointPos[x].z + Vec1.z);
                     TempPoint.Add(temp);
                     x++;
                 }
-                dist = Vector3.Distance(TempPoint[3+(width-1)*2], TempPoint[3 + (width - 1) * 2 + width]);
+                dist = Vector3.Distance(TempPoint[x-1],TempPoint[x-width*2-1]);
+                if (dist < GetWidthLimit*2) w += GetWidthLimit*0.1f;
+                Debug.Log("dist" + dist);
             }
-            if (w < dist) w += 0.05f;
         }
         GetUpdatePointPos.Clear();
         GetUpdatePointPos.AddRange(TempPoint);

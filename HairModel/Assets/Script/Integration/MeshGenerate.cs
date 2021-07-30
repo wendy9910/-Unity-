@@ -34,8 +34,6 @@ public class MeshGenerate : MonoBehaviour
         uv = new Vector2[GetPointPos.Count + OldVerticeCount];
         tangents = new Vector4[GetPointPos.Count + OldVerticeCount];
 
-  
-
         for (int i = OldVerticeCount,j=0;i<GetPointPos.Count;i++,j++) 
         {
             vertice[i] = GetPointPos[j];
@@ -56,11 +54,9 @@ public class MeshGenerate : MonoBehaviour
             for (int j = 1; j <= (3 + (Getwidth - 1) * 2); j++)
             {
                 if(i==0) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 0f);
-                //else if (i == len - 1) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 1f);
-                else if(i > len-6) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j,0.4f + 0.6f / len * i);
+                else if(i > len-6) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j,0.2f + 0.8f / len * i);
                 else if(i==1 || i%2 == 1) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 0.4f);
                 else if(i%2 == 0 || i == len-2) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 0.6f);
-               //i > len-6 y= 0.6 + 0.6f/ len*i
                 x++;
             }
         }
