@@ -9,8 +9,8 @@ public class HairDrawer : MonoBehaviour
     public static int HairWidth = 3;//髮片寬度
     public static int HairStyleState = 1;//髮片風格選擇
     float length = 0.5f;//New & Old間距
-    public static float WidthLimit = 0.05f;//最小0.05,最大0.55
-    public static int add = 0;
+    public float WidthLimit = 0.5f;//最小0.05,最大0.5
+    public static int add = 9;
 
     public static List<Vector3> PointPos = new List<Vector3>();//儲存座標
     public static List<Vector3> UpdatePointPos = new List<Vector3>();//變形更新點座標
@@ -20,11 +20,9 @@ public class HairDrawer : MonoBehaviour
 
     public MeshGenerate CreateHair;
     public PositionGenerate CreatePosition;
-
     public Texture HairTexture, hairnormal;
 
-   
-
+  
     // Start is called before the first frame update
     void Start()
     {
@@ -54,11 +52,13 @@ public class HairDrawer : MonoBehaviour
             if (Distance > length) 
             {
                 CreatePosition = gameObject.GetComponent<PositionGenerate>();
-                CreatePosition.GeneratePosition(OldPos,NewPos,WidthLimit,add);
+                PointPos.Add(OldPos);
+                if (HairStyleState==1) CreatePosition.StraightHairtyle(PointPos,WidthLimit,add);
+                if(HairStyleState==2) CreatePosition.DimandHiarStyle(PointPos,WidthLimit, add);
                 NewPos = OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
                 
             }
-            if (PointPos.Count >= (3 + (HairWidth - 1) * 2) * 2) 
+            if (PointPos.Count >= 1) 
             {
                 if (HairModel[count].GetComponent<MeshGenerate>() == null) CreateHair = HairModel[count].AddComponent<MeshGenerate>();
                 else CreateHair = HairModel[count].GetComponent<MeshGenerate>();
@@ -69,8 +69,15 @@ public class HairDrawer : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0)) 
         {
+            
+            if (PointPos.Count >= 2) count++;
+            else
+            {//清除建立失敗的髮片GameObject
+                int least = HairModel.Count - 1;
+                Destroy(HairModel[least]);
+                HairModel.RemoveAt(least);
+            }
             PointPos.Clear();
-            count++;
             ControllerDown = 0;
         }
 
@@ -90,8 +97,5 @@ public class HairDrawer : MonoBehaviour
         }
         if (Input.GetKeyDown("1")) HairStyleState = 1;
         if (Input.GetKeyDown("2")) HairStyleState = 2;
-
-
-
     }
 }

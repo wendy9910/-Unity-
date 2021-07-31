@@ -9,8 +9,6 @@ public class MeshGenerate : MonoBehaviour
     public static Material GethairColor;
     Shader HairShader;
 
-
-
     Vector3[] vertice;
     Vector2[] uv;
     Vector4[] tangents;
