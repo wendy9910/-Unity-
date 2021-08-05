@@ -52,10 +52,14 @@ public class HairSpring : MonoBehaviour
             float dist = Vector3.Distance(LastPos, MousePos);
             if (dist > 0.05f)
             {//更新座標
-                MousePos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1.0f));
+
+                Vector3 Vec1 = MousePos - LastPos;
+                Vec1 = Vector3.Normalize(Vec1);
+                Vec1 = new Vector3(Vec1.x*0.05f,Vec1.y*0.05f,Vec1.z*0.05f);
+                MousePos = Vec1 + LastPos;
                 MousePointPos.Add(MousePos);
-                Vec.Add(new Vector3(0f, 0f, 0f));
-                LastPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1.0f));
+                LastPos = MousePos;
+
                 player.positionCount = MousePointPos.Count;
                 player.SetPositions(MousePointPos.ToArray());
                 GameObject sphere;
@@ -64,12 +68,9 @@ public class HairSpring : MonoBehaviour
                 sphere.transform.position = MousePos;
             }
 
-            //Debug.Log(dist);
-
         }
         if (Input.GetMouseButtonUp(0))
         {
-            Spring();
             Down = false;
             MousePointPos.Clear();
             player = null;
@@ -85,51 +86,5 @@ public class HairSpring : MonoBehaviour
         }
         
     }
-    void Spring() 
-    {
-        for (int i = 1; i < MousePointPos.Count; i++)
-        {
-            Vector3 Vec1 = Vec[i];
-            Vector3 pt1 = MousePointPos[i];
-            Vector3 d = new Vector3(0.0f, 0.045f, 0.0f);
-
-            Vec1 += g;
-            pt1 += Vec1;
-
-            if (i != MousePointPos.Count - 1)
-            {
-                Vector3 pt0 = MousePointPos[i + 1];
-                float d2 = Vector3.Distance(pt1, pt0);
-                Vector3 dist2 = new Vector3(d2, d2, 0);
-                if (d2 > 0.045f)
-                {
-                    n1 = (pt0 - pt1).normalized;
-                    dist2 -= d;
-                    n1.y *= dist2.y;
-                    n1.x *= dist2.x;
-                    pt1.y += n1.y;
-                    pt1.x += n1.x;
-
-                }
-                Debug.Log(d2);
-                MousePointPos[i] = pt1;
-            }
-
-            Vector3 pt2 = MousePointPos[i - 1];
-            float d1 = Vector3.Distance(pt1, pt2);
-            Vector3 dist1 = new Vector3(d1, d1, 0);
-            if (d1 > 0.045f)
-            {
-                n = (pt2 - pt1).normalized;
-                dist1 -= d;
-                n.y *= dist1.y;
-                n.x *= dist1.x;
-                pt1.y += n.y;
-                pt1.x += n.x;
-            }
-            MousePointPos[i] = pt1;
-
-        }
-
-    }
+    
 }

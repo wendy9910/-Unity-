@@ -8,9 +8,10 @@ public class HairDrawer : MonoBehaviour
     int count = 0;//髮片數量
     public static int HairWidth = 3;//髮片寬度
     public static int HairStyleState = 1;//髮片風格選擇
-    float length = 0.5f;//New & Old間距
-    public float WidthLimit = 0.5f;//最小0.05,最大0.5
-    public static int add = 9;
+    float length = 0.05f;//New & Old間距
+    public float WidthLimit = 0.05f;//最小0.05,最大0.5
+    public static int add = 10;
+    public int InputRange = 10;//(1~10)
 
     public static List<Vector3> PointPos = new List<Vector3>();//儲存座標
     public static List<Vector3> UpdatePointPos = new List<Vector3>();//變形更新點座標
@@ -24,7 +25,7 @@ public class HairDrawer : MonoBehaviour
 
   
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
         CreatePosition = gameObject.AddComponent<PositionGenerate>();
     }
@@ -41,28 +42,32 @@ public class HairDrawer : MonoBehaviour
                 HairModel.Add(Model);
                 HairModel[count].name = "FreeHair" + count;
 
-                NewPos = OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                NewPos = OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1f));
                 ControllerDown = 1;
             }
         }
         if (ControllerDown == 1)
         {
-            NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+            NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1f));
             float Distance = Vector3.Distance(OldPos,NewPos);
             if (Distance > length) 
             {
+                Vector3 NormaizelVec = NewPos - OldPos;
+                NormaizelVec = Vector3.Normalize(NormaizelVec);
+                NormaizelVec = new Vector3(NormaizelVec.x * 0.05f, NormaizelVec.y * 0.05f, NormaizelVec.z * 0.05f);
+                NewPos = NormaizelVec + OldPos;
                 CreatePosition = gameObject.GetComponent<PositionGenerate>();
-                PointPos.Add(OldPos);
-                if (HairStyleState==1) CreatePosition.StraightHairtyle(PointPos,WidthLimit,add);
-                if(HairStyleState==2) CreatePosition.DimandHiarStyle(PointPos,WidthLimit, add);
-                NewPos = OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 10.0f));
+                CreatePosition.PosGenerate(OldPos,NewPos, InputRange);
+                //if (HairStyleState==1) CreatePosition.StraightHairtyle(PointPos,WidthLimit,add);
+                //if(HairStyleState==2) CreatePosition.DimandHiarStyle(PointPos,WidthLimit, add);
+                OldPos = NewPos;
                 
             }
             if (PointPos.Count >= 1) 
             {
                 if (HairModel[count].GetComponent<MeshGenerate>() == null) CreateHair = HairModel[count].AddComponent<MeshGenerate>();
                 else CreateHair = HairModel[count].GetComponent<MeshGenerate>();
-                CreateHair.GenerateMesh(UpdatePointPos,HairWidth);
+                CreateHair.GenerateMesh(PointPos,HairWidth);
                 MeshGenerate.GethairColor.SetTexture("_MainTex", HairTexture);
                 MeshGenerate.GethairColor.SetTexture("_BumpMap", hairnormal);
             }
@@ -85,15 +90,16 @@ public class HairDrawer : MonoBehaviour
 
     void WidthControl()
     {
-        if (Input.GetKeyDown("down") && WidthLimit > 0.055f)
+        if (Input.GetKeyDown("down") && InputRange > 1)
         {
             add--;
-            WidthLimit -= 0.05f;
+            InputRange--;
         }
-        if (Input.GetKeyDown("up") && WidthLimit < 0.5f)
+        if (Input.GetKeyDown("up") && InputRange < 10)
         {
+            
             add++;
-            WidthLimit += 0.05f;
+            InputRange++;
         }
         if (Input.GetKeyDown("1")) HairStyleState = 1;
         if (Input.GetKeyDown("2")) HairStyleState = 2;
