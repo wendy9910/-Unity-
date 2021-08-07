@@ -8,27 +8,36 @@ public class PositionGenerate : MonoBehaviour
     public List<Vector3> GetPointPos = HairDrawer.PointPos;
     List<Vector3> TempPoint = new List<Vector3>();
     int width = HairDrawer.HairWidth;
-    float w = 0;
+    //float w = 0;
 
     public void PosGenerate(Vector3 OldPos, Vector3 NewPos, int range)
     {
-        Vector3 Vec = NewPos - OldPos;
-        for (int i = 0, j = width; i < width; i++, j--)
+        if (GetPointPos == null)
         {
-            float n = (j / 3.0f) * 0.7f * 0.1f * range;
+            Vector3 Vec = OldPos - NewPos;
+            float n = 1.2f * 0.1f * range;//每段長度
             Vector3 Vec1 = new Vector3((Vec.y) * n, (-Vec.x) * n, (Vec.z) * n);
             Vector3 temp = new Vector3(OldPos.x + Vec1.x, OldPos.y + Vec1.y, OldPos.z + Vec1.z);
             GetPointPos.Add(temp);
+            GetPointPos.Add(OldPos);
+            Vec1 = new Vector3((-Vec.y) * n, (Vec.x) * n, (-Vec.z) * n);
+            temp = new Vector3(OldPos.x + Vec1.x, OldPos.y + Vec1.y, OldPos.z + Vec1.z);
+            GetPointPos.Add(temp);
+
         }
-        GetPointPos.Add(OldPos);
-        for (int i = 0, j = 1; i < width; i++, j++)
+        else 
         {
-            float n = (j / 3.0f) * 0.7f * 0.1f * range;
-            Vector3 Vec1 = new Vector3((-Vec.y) * n, (Vec.x) * n, (-Vec.z) * n);
-            Vector3 temp = new Vector3(OldPos.x + Vec1.x, OldPos.y + Vec1.y, OldPos.z + Vec1.z);
+            Vector3 Vec = NewPos - OldPos;
+            float n = 1.2f * 0.1f * range;//每段長度
+            Vector3 Vec1 = new Vector3((Vec.y) * n, (-Vec.x) * n, (Vec.z) * n);
+            Vector3 temp = new Vector3(NewPos.x + Vec1.x, NewPos.y + Vec1.y, NewPos.z + Vec1.z);
+            GetPointPos.Add(temp);
+            GetPointPos.Add(NewPos);
+            Vec1 = new Vector3((-Vec.y) * n, (Vec.x) * n, (-Vec.z) * n);
+            temp = new Vector3(NewPos.x + Vec1.x, NewPos.y + Vec1.y, NewPos.z + Vec1.z);
             GetPointPos.Add(temp);
         }
-
+        
     }
     public void StraightHairtyle(List<Vector3> GetPointPos, float GetWidthLimit, int add) 
     {
@@ -89,4 +98,47 @@ public class PositionGenerate : MonoBehaviour
             Gizmos.DrawSphere(GetPointPos[i], 0.005f);
         }
     }
+
+    /*
+     float w = (float)width;
+        if (GetPointPos == null)
+        {
+            Vector3 Vec = OldPos - NewPos;
+            for (int i = 0, j = width; i < width; i++, j--)
+            {
+                float n = (j / w) * 1.8f * 0.1f * range;//每段長度
+                Vector3 Vec1 = new Vector3((Vec.y) * n, (-Vec.x) * n, (Vec.z) * n);
+                Vector3 temp = new Vector3(OldPos.x + Vec1.x, OldPos.y + Vec1.y, OldPos.z + Vec1.z);
+                GetPointPos.Add(temp);
+            }
+            GetPointPos.Add(OldPos);
+            for (int i = 0, j = 1; i < width; i++, j++)
+            {
+                float n = (j / w) * 1.8f * 0.1f * range;
+                Vector3 Vec1 = new Vector3((-Vec.y) * n, (Vec.x) * n, (-Vec.z) * n);
+                Vector3 temp = new Vector3(OldPos.x + Vec1.x, OldPos.y + Vec1.y, OldPos.z + Vec1.z);
+                GetPointPos.Add(temp);
+            }
+
+        }
+        else 
+        {
+            Vector3 Vec = NewPos - OldPos;
+            for (int i = 0, j = width; i < width; i++, j--)
+            {
+                float n = (j / w) * 1.8f * 0.1f * range;
+                Vector3 Vec1 = new Vector3((Vec.y) * n, (-Vec.x) * n, (Vec.z) * n);
+                Vector3 temp = new Vector3(NewPos.x + Vec1.x, NewPos.y + Vec1.y, NewPos.z + Vec1.z);
+                GetPointPos.Add(temp);
+            }
+            GetPointPos.Add(NewPos);
+            for (int i = 0, j = 1; i < width; i++, j++)
+            {
+                float n = (j / w) * 1.8f * 0.1f * range;
+                Vector3 Vec1 = new Vector3((-Vec.y) * n, (Vec.x) * n, (-Vec.z) * n);
+                Vector3 temp = new Vector3(NewPos.x + Vec1.x, NewPos.y + Vec1.y, NewPos.z + Vec1.z);
+                GetPointPos.Add(temp);
+            }
+        }
+    */
 }

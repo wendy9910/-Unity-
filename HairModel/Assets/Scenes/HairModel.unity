@@ -326,7 +326,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WidthLimit: 0.05
-  InputRange: 10
+  InputRange: 12
   HairModel: []
   CreateHair: {fileID: 0}
   CreatePosition: {fileID: 0}

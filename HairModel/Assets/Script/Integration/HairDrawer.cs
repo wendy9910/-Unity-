@@ -6,12 +6,12 @@ public class HairDrawer : MonoBehaviour
 {
     int ControllerDown = 0; //按下滑鼠
     int count = 0;//髮片數量
-    public static int HairWidth = 3;//髮片寬度
+    public static int HairWidth = 1;//髮片寬度
     public static int HairStyleState = 1;//髮片風格選擇
-    float length = 0.05f;//New & Old間距
+    float length = 0.04f;//New & Old間距 0.05f --- 0.7f  0.02f --- 2.5f 0.04f --- 1.8f
     public float WidthLimit = 0.05f;//最小0.05,最大0.5
     public static int add = 10;
-    public int InputRange = 10;//(1~10)
+    public int InputRange = 10;//(1~12)
 
     public static List<Vector3> PointPos = new List<Vector3>();//儲存座標
     public static List<Vector3> UpdatePointPos = new List<Vector3>();//變形更新點座標
@@ -54,7 +54,7 @@ public class HairDrawer : MonoBehaviour
             {
                 Vector3 NormaizelVec = NewPos - OldPos;
                 NormaizelVec = Vector3.Normalize(NormaizelVec);
-                NormaizelVec = new Vector3(NormaizelVec.x * 0.05f, NormaizelVec.y * 0.05f, NormaizelVec.z * 0.05f);
+                NormaizelVec = new Vector3(NormaizelVec.x * length, NormaizelVec.y * length, NormaizelVec.z * length);
                 NewPos = NormaizelVec + OldPos;
                 CreatePosition = gameObject.GetComponent<PositionGenerate>();
                 CreatePosition.PosGenerate(OldPos,NewPos, InputRange);
@@ -74,7 +74,8 @@ public class HairDrawer : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0)) 
         {
-            
+            Debug.Log(InputRange);
+            if(PointPos != null)Debug.Log(Vector3.Distance(PointPos[0],PointPos[2]));
             if (PointPos.Count >= 2) count++;
             else
             {//清除建立失敗的髮片GameObject
