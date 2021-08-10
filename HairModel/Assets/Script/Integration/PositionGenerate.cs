@@ -39,55 +39,95 @@ public class PositionGenerate : MonoBehaviour
         }
         
     }
-    public void StraightHairtyle(List<Vector3> GetPointPos, float GetWidthLimit, int add) 
+    public void StraightHairtyle(List<Vector3> GetPointPos, int range) 
     {
-        TempPoint.Clear();
-        //w = (0.015f - add * 0.0001f) * add;
+        float w1;
+        float w2 = 0.5f;
+        if (GetPointPos.Count <= 6) w1 = 1.2f / GetPointPos.Count;
+        else w1 = 1.2f / range;
 
-        for (int k = 0, x = 0; k < GetPointPos.Count; k++)
+        TempPoint.Clear();
+        for (int i = 0; i < GetPointPos.Count; i++) 
         {
-            if (k == 0)
+            if (i == 0)
             {
-                for (int i = 0; i < 3 + (width - 1) * 2; i++)
-                {
-                    TempPoint.Add(GetPointPos[0]);
-                    x++;
-                }
+                Vector3 Vec = GetPointPos[i + 1] - GetPointPos[i];
+                float n = w2 * 0.1f * range;//每段長度
+                Vector3 Vec1 = new Vector3((Vec.y) * n, (-Vec.x) * n, (Vec.z) * n);
+                Vector3 temp = new Vector3(GetPointPos[i].x + Vec1.x, GetPointPos[i].y + Vec1.y, GetPointPos[i].z + Vec1.z);
+                TempPoint.Add(temp);
+                TempPoint.Add(GetPointPos[i]);
+                Vec1 = new Vector3((-Vec.y) * n, (Vec.x) * n, (-Vec.z) * n);
+                temp = new Vector3(GetPointPos[i].x + Vec1.x, GetPointPos[i].y + Vec1.y, GetPointPos[i].z + Vec1.z);
+                TempPoint.Add(temp);
+
             }
             else
             {
-                Vector3 Vec = GetPointPos[k]- GetPointPos[k-1];
-                for (int i = 0, j = width; i < width; i++, j--)
-                {
-                    float n = j * 0.1f; //* w + GetWidthLimit;
-                    Vector3 Vec1 = new Vector3((Vec.y) * n, (-Vec.x)*n, (Vec.y) * n);
-                    Vector3 temp = new Vector3(GetPointPos[k].x + Vec1.x, GetPointPos[k].y + Vec1.y, GetPointPos[k].z + Vec1.z);
-                    TempPoint.Add(temp);
-                    x++;
-                }
-                TempPoint.Add(GetPointPos[k]);
-                x++;
-                for (int i = 0, j = 1; i < width; i++, j++)
-                {
-                    float n = j * 0.1f;//* w + GetWidthLimit;
-                    Vector3 Vec1 = new Vector3((-Vec.y) * n, (Vec.x)*n, (-Vec.y) * n);
-                    //Vector3 Vec1 = new Vector3((-Vec.y) * n, (Vec.x) * n, Vec.z);
-                    Vector3 temp = new Vector3(GetPointPos[k].x + Vec1.x, GetPointPos[k].y + Vec1.y, GetPointPos[k].z + Vec1.z);
-                    TempPoint.Add(temp);
-                    x++;
-                }
-                float dist  = Vector3.Distance(TempPoint[x - 1], TempPoint[x - width * 2 - 1]);
-                //if (dist < GetWidthLimit * 2) w += w;
+                Vector3 Vec = GetPointPos[i] - GetPointPos[i - 1];
+                //Vector3 Vec = GetPointPos[i - 1] - GetPointPos[i];
+                float n = w2 * 0.1f * range;//每段長度
+                Vector3 Vec1 = new Vector3((Vec.y) * n, (-Vec.x) * n, (Vec.z) * n);
+                Vector3 temp = new Vector3(GetPointPos[i].x + Vec1.x, GetPointPos[i].y + Vec1.y, GetPointPos[i].z + Vec1.z);
+                TempPoint.Add(temp);
+                TempPoint.Add(GetPointPos[i]);
+                Vec1 = new Vector3((-Vec.y) * n, (Vec.x) * n, (-Vec.z) * n);
+                temp = new Vector3(GetPointPos[i].x + Vec1.x, GetPointPos[i].y + Vec1.y, GetPointPos[i].z + Vec1.z);
+                TempPoint.Add(temp);
             }
+            if (w2 < 1.2f) w2 += w1;
         }
         GetUpdatePointPos.Clear();
         GetUpdatePointPos.AddRange(TempPoint);
     }
 
-    public void DimandHiarStyle(List<Vector3> GetPointPos, float GetWidthLimit, int add)
-    { 
-    
-    
+    public void DimandHiarStyle(List<Vector3> GetPointPos, int range)
+    {
+        Debug.Log("DimandHiarStyle");
+        float w1;
+        float w2 = 0.5f;
+        if (GetPointPos.Count <= 6) w1 = 1.2f / GetPointPos.Count;
+        else w1 = 1.2f / range;
+
+        TempPoint.Clear();
+        for (int i = 0; i < GetPointPos.Count; i++)
+        {
+            if (i == 0)
+            {
+                Vector3 Vec = GetPointPos[i + 1] - GetPointPos[i];
+                float n = w2 * 0.1f * range;//每段長度
+                Vector3 Vec1 = new Vector3((Vec.y) * n, (-Vec.x) * n, (Vec.z) * n);
+                Vector3 temp = new Vector3(GetPointPos[i].x + Vec1.x, GetPointPos[i].y + Vec1.y, GetPointPos[i].z + Vec1.z);
+                TempPoint.Add(temp);
+                TempPoint.Add(GetPointPos[i]);
+                Vec1 = new Vector3((-Vec.y) * n, (Vec.x) * n, (-Vec.z) * n);
+                temp = new Vector3(GetPointPos[i].x + Vec1.x, GetPointPos[i].y + Vec1.y, GetPointPos[i].z + Vec1.z);
+                TempPoint.Add(temp);
+
+            }
+            else if (i == GetPointPos.Count - 1 && GetPointPos.Count > 2)
+            {
+                for (int j = 0; j < 3; j++) TempPoint.Add(GetPointPos[i]);
+            }
+            else
+            {
+                Vector3 Vec = GetPointPos[i] - GetPointPos[i - 1];
+                //Vector3 Vec = GetPointPos[i - 1] - GetPointPos[i];
+                float n = w2 * 0.1f * range;//每段長度
+                Vector3 Vec1 = new Vector3((Vec.y) * n, (-Vec.x) * n, (Vec.z) * n);
+                Vector3 temp = new Vector3(GetPointPos[i].x + Vec1.x, GetPointPos[i].y + Vec1.y, GetPointPos[i].z + Vec1.z);
+                TempPoint.Add(temp);
+                TempPoint.Add(GetPointPos[i]);
+                Vec1 = new Vector3((-Vec.y) * n, (Vec.x) * n, (-Vec.z) * n);
+                temp = new Vector3(GetPointPos[i].x + Vec1.x, GetPointPos[i].y + Vec1.y, GetPointPos[i].z + Vec1.z);
+                TempPoint.Add(temp);
+            }
+            if (w2 < 1.2f) w2 += w1;
+            else if (i > GetPointPos.Count / 2 + 2 ) w2 -= w1;
+        }
+        GetUpdatePointPos.Clear();
+        GetUpdatePointPos.AddRange(TempPoint);
+
     }
 
     private void OnDrawGizmos()

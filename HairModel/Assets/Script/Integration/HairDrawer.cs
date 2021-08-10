@@ -41,8 +41,8 @@ public class HairDrawer : MonoBehaviour
                 GameObject Model = new GameObject();
                 HairModel.Add(Model);
                 HairModel[count].name = "FreeHair" + count;
-
                 NewPos = OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1f));
+                PointPos.Add(OldPos);
                 ControllerDown = 1;
             }
         }
@@ -56,10 +56,11 @@ public class HairDrawer : MonoBehaviour
                 NormaizelVec = Vector3.Normalize(NormaizelVec);
                 NormaizelVec = new Vector3(NormaizelVec.x * length, NormaizelVec.y * length, NormaizelVec.z * length);
                 NewPos = NormaizelVec + OldPos;
+                PointPos.Add(NewPos);
                 CreatePosition = gameObject.GetComponent<PositionGenerate>();
-                CreatePosition.PosGenerate(OldPos,NewPos, InputRange);
-                //if (HairStyleState==1) CreatePosition.StraightHairtyle(PointPos,WidthLimit,add);
-                //if(HairStyleState==2) CreatePosition.DimandHiarStyle(PointPos,WidthLimit, add);
+                //CreatePosition.PosGenerate(OldPos,NewPos, InputRange);
+                if (HairStyleState==1) CreatePosition.StraightHairtyle(PointPos, InputRange);
+                if(HairStyleState==2) CreatePosition.DimandHiarStyle(PointPos, InputRange);
                 OldPos = NewPos;
                 
             }
@@ -67,7 +68,7 @@ public class HairDrawer : MonoBehaviour
             {
                 if (HairModel[count].GetComponent<MeshGenerate>() == null) CreateHair = HairModel[count].AddComponent<MeshGenerate>();
                 else CreateHair = HairModel[count].GetComponent<MeshGenerate>();
-                CreateHair.GenerateMesh(PointPos,HairWidth);
+                CreateHair.GenerateMesh(UpdatePointPos,HairWidth);
                 MeshGenerate.GethairColor.SetTexture("_MainTex", HairTexture);
                 MeshGenerate.GethairColor.SetTexture("_BumpMap", hairnormal);
             }
