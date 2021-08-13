@@ -15,7 +15,13 @@ public class PositionGenerate : MonoBehaviour
             Vector3 temp = new Vector3(oldPos.x + Vec1.x, oldPos.y + Vec1.y, oldPos.z + Vec1.z);
             GetPointPos.Add(temp);
         }
-        GetPointPos.Add(oldPos);
+        for (int i = 0, j = 1; i < width; i++, j++)
+        {
+            Vector3 Vec1 = new Vector3(Vec.z * j * 0.5f, (-Vec.y) * j * 0.5f, (-Vec.x) * j * 0.5f);
+            //Vector3 Vec1 = new Vector3((Vec.x) * j, Vec.z * j, (-Vec.y) * j);
+            Vector3 temp = new Vector3(oldPos.x + Vec1.x, oldPos.y + Vec1.y, oldPos.z + Vec1.z);
+            GetPointPos.Add(temp);
+        }
         for (int i = 0, j = 1; i < width; i++, j++)
         {
             
@@ -25,21 +31,20 @@ public class PositionGenerate : MonoBehaviour
         }
         for (int i = 0, j = width; i < width; i++, j--)
         {
-            Vector3 Vec1 = new Vector3((-Vec.y) * j, (Vec.x) * j, Vec.z * j);
-            Vector3 temp = new Vector3(oldPos.x + Vec1.x, oldPos.y + Vec1.y, oldPos.z + Vec1.z + thickness);
+            Vector3 Vec1 = new Vector3((-Vec.z) * j, (Vec.y) * j, Vec.x * j);
+            //Vector3 Vec1 = new Vector3((Vec.x) * j, (-Vec.z) * j, Vec.y * j);
+            Vector3 temp = new Vector3(oldPos.x + Vec1.x, oldPos.y + Vec1.y, oldPos.z + Vec1.z);
             GetPointPos.Add(temp);
-            thickness += 0.3f;
         }
 
-        GetPointPos.Add(new Vector3(oldPos.x, oldPos.y, oldPos.z + thickness));
-        for (int i = 0, j = 1; i < width; i++, j++)
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.black;
+        for (int i = 0; i < GetPointPos.Count; i++)
         {
-            thickness -= 0.3f;
-            Vector3 Vec1 = new Vector3((Vec.y) * j, (-Vec.x) * j, Vec.z * j);
-            Vector3 temp = new Vector3(oldPos.x + Vec1.x, oldPos.y + Vec1.y, oldPos.z + Vec1.z + thickness);
-            GetPointPos.Add(temp);
+            Gizmos.DrawSphere(GetPointPos[i], 0.1f);
         }
-
-
     }
 }

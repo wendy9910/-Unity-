@@ -64,7 +64,7 @@ public class HairDrawer : MonoBehaviour
                 OldPos = NewPos;
                 
             }
-            if (PointPos.Count >= 1) 
+            if (PointPos.Count >= 2) 
             {
                 if (HairModel[count].GetComponent<MeshGenerate>() == null) CreateHair = HairModel[count].AddComponent<MeshGenerate>();
                 else CreateHair = HairModel[count].GetComponent<MeshGenerate>();
@@ -75,8 +75,6 @@ public class HairDrawer : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0)) 
         {
-            Debug.Log(InputRange);
-            if(PointPos != null)Debug.Log(Vector3.Distance(PointPos[0],PointPos[2]));
             if (PointPos.Count >= 2) count++;
             else
             {//清除建立失敗的髮片GameObject

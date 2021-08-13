@@ -50,7 +50,44 @@ public class MeshGenerate : MonoBehaviour
         mesh.uv = uv;
         mesh.tangents = tangents;
 
-        int Pointlen = GetPointPos.Count / (((3 + (Getwidth - 1) * 2) - 1) * 2 + 2);
+        int point = GetPointPos.Count-4;
+        triangle = new int[point*6];
+
+        int t = 0;
+        for (int i = 1,vi = 0; i <= point;i++,vi++)
+        {
+            if (i % 4 != 0)
+            {
+                t = SetQuad(triangle, t, vi, vi + 1, vi + 4, vi + 5);
+            }
+            else 
+            {
+                t = SetQuad(triangle, t, vi, vi - 3, vi + 4, vi + 1);
+            }
+        }
+        /*int vii = 0;
+        t = SetQuad(triangle, t, vii + 1, vii + 2, vii, vii + 3);
+        vii = GetPointPos.Count - 1;
+        t = SetQuad(triangle, t, vii -2, vii - 1, vii - 3, vii);*/
+
+        mesh.triangles = triangle;
+        mesh.RecalculateBounds();
+        mesh.RecalculateNormals();
+    }
+    private static int SetQuad(int[] triangles, int i, int v0, int v1, int v2, int v3)
+    {
+        triangles[i] = v0;
+        triangles[i + 1] = v1;
+        triangles[i + 2] = v2;
+        triangles[i + 3] = v2;
+        triangles[i + 4] = v1;
+        triangles[i + 5] = v3;
+        return i + 6;
+    }
+}
+
+/*
+  int Pointlen = GetPointPos.Count / (((3 + (Getwidth - 1) * 2) - 1) * 2 + 2);
         int totalPoint = (((3 + (Getwidth - 1) * 2) - 1) * 2 + 2) * (Pointlen - 1) + ((3 + (Getwidth - 1) * 2) - 1) * 2;
 
         triangle = new int[totalPoint * 6];
@@ -94,19 +131,5 @@ public class MeshGenerate : MonoBehaviour
         {
             t = SetQuad(triangle, t, vi, vi + 6 + (Getwidth - 1) * 4, vii, vii + 6 + (Getwidth - 1) * 4);
         }
-
-        mesh.triangles = triangle;
-        mesh.RecalculateBounds();
-        mesh.RecalculateNormals();
-    }
-    private static int SetQuad(int[] triangles, int i, int v0, int v1, int v2, int v3)
-    {
-        triangles[i] = v0;
-        triangles[i + 1] = v1;
-        triangles[i + 2] = v2;
-        triangles[i + 3] = v2;
-        triangles[i + 4] = v1;
-        triangles[i + 5] = v3;
-        return i + 6;
-    }
-}
+ 
+ */

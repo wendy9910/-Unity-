@@ -39,7 +39,7 @@ public class MeshGenerate : MonoBehaviour
         }
 
         int len = GetPointPos.Count/(3+(Getwidth-1)*2);
-        float TexWidth = 0.03f + 0.022f * HairDrawer.add;
+        float TexWidth = 0.5f;
 
         /*for (int i = 0,x = 0; i < len; i++) {
             for (int j = 1; j <= (3 + (Getwidth - 1) * 2); j++) {
@@ -51,10 +51,7 @@ public class MeshGenerate : MonoBehaviour
         {
             for (int j = 1; j <= (3 + (Getwidth - 1) * 2); j++)
             {
-                if(i==0) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 0f);
-                else if(i > len-6) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j,0.2f + 0.8f / len * i);
-                else if(i==1 || i%2 == 1) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 0.4f);
-                else if(i%2 == 0 || i == len-2) uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 0.6f);
+                uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 1.0f / len * i);//Vector3轉Vector2
                 x++;
             }
         }
