@@ -50,25 +50,21 @@ public class MeshGenerate : MonoBehaviour
         mesh.uv = uv;
         mesh.tangents = tangents;
 
-        int point = GetPointPos.Count-4;
-        triangle = new int[point*6];
+
+        int point = GetPointPos.Count - 2;
+        triangle = new int[point * 6];
 
         int t = 0;
-        for (int i = 1,vi = 0; i <= point;i++,vi++)
+        for (int i = 1, vi = 0; i <= point - 2; i++, vi++)
         {
-            if (i % 4 != 0)
-            {
-                t = SetQuad(triangle, t, vi, vi + 1, vi + 4, vi + 5);
-            }
-            else 
-            {
-                t = SetQuad(triangle, t, vi, vi - 3, vi + 4, vi + 1);
-            }
+            if (i % 4 != 0) t = SetQuad(triangle, t, vi, vi + 1, vi + 4, vi + 5);
+            else t = SetQuad(triangle, t, vi, vi - 3, vi + 4, vi + 1);
         }
-        /*int vii = 0;
-        t = SetQuad(triangle, t, vii + 1, vii + 2, vii, vii + 3);
+        int vii = 0;
+        t = SetQuad(triangle, t, vii + 2, vii + 1, vii + 3, vii);
         vii = GetPointPos.Count - 1;
-        t = SetQuad(triangle, t, vii -2, vii - 1, vii - 3, vii);*/
+        t = SetQuad(triangle, t, vii - 1, vii, vii - 2, vii - 3);
+
 
         mesh.triangles = triangle;
         mesh.RecalculateBounds();
