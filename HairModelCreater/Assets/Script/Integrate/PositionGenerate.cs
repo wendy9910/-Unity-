@@ -17,7 +17,7 @@ public class PositionGenerate : MonoBehaviour
         }
         for (int i = 0, j = 1; i < width; i++, j++)
         {
-            Vector3 Vec1 = new Vector3(Vec.z * j * 0.5f, (-Vec.y) * j * 0.5f, (-Vec.x) * j * 0.5f);
+            Vector3 Vec1 = new Vector3(Vec.z * j * 0.5f, (-Vec.y) * j, (-Vec.x) * j);
             //Vector3 Vec1 = new Vector3((Vec.x) * j, Vec.z * j, (-Vec.y) * j);
             Vector3 temp = new Vector3(oldPos.x + Vec1.x, oldPos.y + Vec1.y, oldPos.z + Vec1.z);
             GetPointPos.Add(temp);

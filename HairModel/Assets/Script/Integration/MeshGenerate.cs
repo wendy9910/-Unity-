@@ -14,9 +14,6 @@ public class MeshGenerate : MonoBehaviour
     Vector4[] tangents;
     int[] triangle;
 
-    int OldVerticeCount = 0;
-    int OldTriangleCount = 0;
-
     public void GenerateMesh(List<Vector3> GetPointPos,int Getwidth) 
     {
         GethairColor = GetComponent<Renderer>().material;
@@ -28,25 +25,20 @@ public class MeshGenerate : MonoBehaviour
         GetComponent<MeshRenderer>().material = GethairColor;
         mesh.name = "HairModel";
 
-        vertice = new Vector3[GetPointPos.Count + OldVerticeCount];
-        uv = new Vector2[GetPointPos.Count + OldVerticeCount];
-        tangents = new Vector4[GetPointPos.Count + OldVerticeCount];
+        vertice = new Vector3[GetPointPos.Count];
+        uv = new Vector2[GetPointPos.Count];
+        tangents = new Vector4[GetPointPos.Count];
 
-        for (int i = OldVerticeCount,j=0;i<GetPointPos.Count;i++,j++) 
+        for (int i = 0,j=0;i<GetPointPos.Count;i++,j++) 
         {
             vertice[i] = GetPointPos[j];
             tangents[i] = new Vector4(1f, 0f, 0f, -1f);
         }
 
-        int len = GetPointPos.Count/(3+(Getwidth-1)*2);
+        //For 沒有厚度
+        /*
+         * int len = GetPointPos.Count/(3+(Getwidth-1)*2);
         float TexWidth = 0.5f;
-
-        /*for (int i = 0,x = 0; i < len; i++) {
-            for (int j = 1; j <= (3 + (Getwidth - 1) * 2); j++) {
-                uv[x] = new Vector2(TexWidth / (3+(Getwidth-1)/2) * j, 0.5f / len * i);//小:0.03 大:0.25   0.022f
-                x++;
-            }
-        }*/
         for (int i = 0, x = 0; i < len; i++)
         {
             for (int j = 1; j <= (3 + (Getwidth - 1) * 2); j++)
@@ -54,32 +46,53 @@ public class MeshGenerate : MonoBehaviour
                 uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 1.0f / len * i);//Vector3轉Vector2
                 x++;
             }
-        }
+        }*/
 
-        //i=0 ...y=0,i=1...y=0.2
-        //i%2==1 y=0.2f,i%2==0 y=0.8
-        //i=len-2 y=0.8, i=len-1 y=1;
-        //Debug.Log(GetPointPos.Count);
+        //加厚度
+        int len = GetPointPos.Count / 4;
+        float TexWidth = 0.8f;
+        for (int i = 0, x = 0; i < len; i++)
+        {
+            for (int j = 1; j <= 4; j++)
+            {
+                uv[x] = new Vector2(TexWidth / 4 * j, 1.0f / len * i);
+                x++;
+            }
+        }
 
         mesh.vertices = vertice;//mesh網格點生成
         mesh.uv = uv;
-        // mesh.tangents = tangents;
-
+        mesh.tangents = tangents;
+        /*
         int point;
         if (GetPointPos.Count < 1) point = 0;//計算網格數
         else point = ((GetPointPos.Count / (3 + (Getwidth - 1) * 2) - 1)) * 2 * Getwidth;
 
-        triangle = new int[point * 6 + OldTriangleCount];//計算需要多少三角形點座標
+        triangle = new int[point * 6];//計算需要多少三角形點座標
 
-        int t = OldTriangleCount;
+        int t = 0;
         int k = 0;
 
-        for (int vi = OldVerticeCount, x = 1; x <= point; x++, vi += k)
+        for (int vi = 0, x = 1; x <= point; x++, vi += k)
         {
             t = SetQuad(triangle, t, vi, vi + 1, vi + 3 + (2 * (Getwidth - 1)), vi + 4 + (2 * (Getwidth - 1)));
             if (x % (Getwidth * 2) != point % (Getwidth * 2)) k = 1;  //在同一行
             else k = 2;  //對vi的累加  (需換行時)
+        }*/
+
+        int point = GetPointPos.Count - 2;
+        triangle = new int[point * 6];
+
+        int t = 0;
+        for (int i = 1, vi = 0; i <= point - 2; i++, vi++)
+        {
+            if (i % 4 != 0) t = SetQuad(triangle, t, vi, vi + 1, vi + 4, vi + 5);
+            else t = SetQuad(triangle, t, vi, vi - 3, vi + 4, vi + 1);
         }
+        int vii = 0;
+        t = SetQuad(triangle, t, vii + 2, vii + 1, vii + 3, vii);
+        vii = GetPointPos.Count - 1;
+        t = SetQuad(triangle, t, vii - 1, vii, vii - 2, vii - 3);
 
         mesh.triangles = triangle;
         mesh.RecalculateBounds();

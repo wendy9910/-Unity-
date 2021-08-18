@@ -114,10 +114,10 @@ MonoBehaviour:
     y: 30
     width: 1536
     height: 731
-  m_MinSize: {x: 911, y: 442}
+  m_MinSize: {x: 911, y: 421}
   m_MaxSize: {x: 22006, y: 10021}
   vertical: 0
-  controlID: 35
+  controlID: 144
 --- !u!114 &6
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -139,8 +139,8 @@ MonoBehaviour:
     y: 0
     width: 816
     height: 731
-  m_MinSize: {x: 201, y: 442}
-  m_MaxSize: {x: 4001, y: 8042}
+  m_MinSize: {x: 201, y: 421}
+  m_MaxSize: {x: 4001, y: 8021}
   vertical: 1
   controlID: 36
 --- !u!114 &7
@@ -191,8 +191,8 @@ MonoBehaviour:
     y: 343
     width: 816
     height: 388
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 12}
   m_Panes:
   - {fileID: 12}
@@ -348,7 +348,7 @@ MonoBehaviour:
       y: 21
       width: 815
       height: 346
-    m_Scale: {x: 1.6534628, y: 1.6534629}
+    m_Scale: {x: 1.6534629, y: 1.6534629}
     m_Translation: {x: 407.5, y: 167.86809}
     m_MarginLeft: 0
     m_MarginRight: 0
@@ -356,9 +356,9 @@ MonoBehaviour:
     m_MarginBottom: 0
     m_LastShownAreaInsideMargins:
       serializedVersion: 2
-      x: -246.45248
+      x: -246.45247
       y: -101.52516
-      width: 492.90497
+      width: 492.90494
       height: 209.2578
     m_MinimalGUI: 1
   m_defaultScale: 1
@@ -404,9 +404,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -0.30275345, y: -0.9775888, z: 0}
+    m_Target: {x: 0.86202455, y: 0.27785277, z: 0.89851797}
     speed: 2
-    m_Value: {x: -0.30275345, y: -0.9775888, z: 0}
+    m_Value: {x: 0.86202455, y: 0.27785277, z: 0.89851797}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -452,13 +452,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: 0.46981663, y: -0.4713214, z: 0.3303098, w: 0.6694555}
+    m_Target: {x: 0.32623512, y: -0.10789487, z: 0.037043914, w: 0.93846226}
     speed: 2
-    m_Value: {x: 0.46828276, y: -0.4727865, z: 0.33028096, w: 0.6694019}
+    m_Value: {x: 0.32620996, y: -0.107886545, z: 0.037041057, w: 0.9383899}
   m_Size:
-    m_Target: 5.200313
+    m_Target: 2.8003125
     speed: 2
-    m_Value: 5.200313
+    m_Value: 2.8003125
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -628,9 +628,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 84afffff
-      m_LastClickedID: 0
-      m_ExpandedIDs: 6afbffff
+      m_SelectedIDs: 24efffff
+      m_LastClickedID: -4316
+      m_ExpandedIDs: 30fbffff
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -693,20 +693,20 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Script/Integrate
+    - Assets/Texture
   m_ViewMode: 1
   m_StartGridSize: 80
   m_LastFolders:
-  - Assets/Script/Integrate
+  - Assets/Texture
   m_LastFoldersGridSize: 80
-  m_LastProjectPath: "C:\\Users\\88691\\Desktop\\Unity_Project(\u5C08\u7814)\\HairModelCreater"
+  m_LastProjectPath: C:\Users\88691\Desktop\Unity_Project\HairModelCreater
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 04340000
-    m_LastClickedID: 13316
-    m_ExpandedIDs: 00000000f83300000034000000ca9a3b
+    m_SelectedIDs: 34340000
+    m_LastClickedID: 13364
+    m_ExpandedIDs: 000000002a3400003234000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 
@@ -734,7 +734,7 @@ MonoBehaviour:
     scrollPos: {x: 0, y: 0}
     m_SelectedIDs: 
     m_LastClickedID: 0
-    m_ExpandedIDs: 00000000f8330000
+    m_ExpandedIDs: 000000002a340000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
       m_Name: 

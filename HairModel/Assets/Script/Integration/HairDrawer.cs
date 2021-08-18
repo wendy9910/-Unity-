@@ -10,8 +10,8 @@ public class HairDrawer : MonoBehaviour
     public static int HairStyleState = 1;//髮片風格選擇
     float length = 0.04f;//New & Old間距 0.05f --- 0.7f  0.02f --- 2.5f 0.04f --- 1.8f
     public float WidthLimit = 0.05f;//最小0.05,最大0.5
-    public static int add = 10;
     public int InputRange = 10;//(1~12)
+    public int InputRangeThickness = 10;
 
     public static List<Vector3> PointPos = new List<Vector3>();//儲存座標
     public static List<Vector3> UpdatePointPos = new List<Vector3>();//變形更新點座標
@@ -59,8 +59,8 @@ public class HairDrawer : MonoBehaviour
                 PointPos.Add(NewPos);
                 CreatePosition = gameObject.GetComponent<PositionGenerate>();
                 //CreatePosition.PosGenerate(OldPos,NewPos, InputRange);
-                if (HairStyleState==1) CreatePosition.StraightHairtyle(PointPos, InputRange);
-                if(HairStyleState==2) CreatePosition.DimandHiarStyle(PointPos, InputRange);
+                if (HairStyleState==1) CreatePosition.StraightHairtyle(PointPos, InputRange, InputRangeThickness);
+                if(HairStyleState==2) CreatePosition.DimandHiarStyle(PointPos, InputRange, InputRangeThickness);
                 OldPos = NewPos;
                 
             }
@@ -90,17 +90,12 @@ public class HairDrawer : MonoBehaviour
 
     void WidthControl()
     {
-        if (Input.GetKeyDown("down") && InputRange > 1)
-        {
-            add--;
-            InputRange--;
-        }
-        if (Input.GetKeyDown("up") && InputRange < 10)
-        {
-            
-            add++;
-            InputRange++;
-        }
+        if (Input.GetKeyDown("down") && InputRange > 1) InputRange--;
+        if (Input.GetKeyDown("up") && InputRange < 10) InputRange++;
+
+        if (Input.GetKeyDown("right") && InputRangeThickness > 1) InputRangeThickness--;
+        if (Input.GetKeyDown("left") && InputRangeThickness < 10) InputRangeThickness++;
+
         if (Input.GetKeyDown("1")) HairStyleState = 1;
         if (Input.GetKeyDown("2")) HairStyleState = 2;
     }
