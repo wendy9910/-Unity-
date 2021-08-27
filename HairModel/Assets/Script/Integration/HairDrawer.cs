@@ -23,22 +23,31 @@ public class HairDrawer : MonoBehaviour
     public PositionGenerate CreatePosition;
     public Texture HairTexture, hairnormal;
 
+    //player位移
+    public GameObject playerMove;
+
   
     // Start is called before the first frame update
     private void Start()
     {
         CreatePosition = gameObject.AddComponent<PositionGenerate>();
+        gameObject.transform.position = playerMove.transform.position;
+
+        
     }
 
     // Update is called once per frame
     void Update()
     {
+        PlayerMove();
         WidthControl();
         if (ControllerDown == 0) 
         {
             if (Input.GetMouseButtonDown(0))
             {
+
                 GameObject Model = new GameObject();
+                Model.transform.SetParent(gameObject.transform);
                 HairModel.Add(Model);
                 HairModel[count].name = "FreeHair" + count;
                 NewPos = OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1f));
@@ -98,5 +107,15 @@ public class HairDrawer : MonoBehaviour
 
         if (Input.GetKeyDown("1")) HairStyleState = 1;
         if (Input.GetKeyDown("2")) HairStyleState = 2;
+    }
+
+    public void PlayerMove()
+    {
+        if (gameObject.transform.position != playerMove.transform.position) 
+        {
+            Vector3 Move = playerMove.transform.position - gameObject.transform.position;
+            gameObject.transform.position += Move;
+        }
+
     }
 }
