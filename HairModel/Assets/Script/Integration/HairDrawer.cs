@@ -25,7 +25,7 @@ public class HairDrawer : MonoBehaviour
 
     //player位移
     public GameObject playerMove;
-
+    public GameObject ball;
   
     // Start is called before the first frame update
     private void Start()
@@ -41,23 +41,25 @@ public class HairDrawer : MonoBehaviour
     {
         PlayerMove();
         WidthControl();
+        ball.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1));
         if (ControllerDown == 0) 
         {
             if (Input.GetMouseButtonDown(0))
             {
-
+                ball.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1));
                 GameObject Model = new GameObject();
                 Model.transform.SetParent(gameObject.transform);
                 HairModel.Add(Model);
                 HairModel[count].name = "FreeHair" + count;
-                NewPos = OldPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1f));
+                NewPos = OldPos = ball.transform.position;
                 PointPos.Add(OldPos);
                 ControllerDown = 1;
             }
         }
         if (ControllerDown == 1)
         {
-            NewPos = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1f));
+            ball.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1));
+            NewPos = ball.transform.position;
             float Distance = Vector3.Distance(OldPos,NewPos);
             if (Distance > length) 
             {
@@ -68,8 +70,10 @@ public class HairDrawer : MonoBehaviour
                 PointPos.Add(NewPos);
                 CreatePosition = gameObject.GetComponent<PositionGenerate>();
                 //CreatePosition.PosGenerate(OldPos,NewPos, InputRange);
+                CreatePosition.VectorCross(ball.transform.up, ball.transform.forward, ball.transform.right);
                 if (HairStyleState==1) CreatePosition.StraightHairtyle(PointPos, InputRange, InputRangeThickness);
                 if(HairStyleState==2) CreatePosition.DimandHiarStyle(PointPos, InputRange, InputRangeThickness);
+                if (HairStyleState == 3) CreatePosition.WaveHairStyle(PointPos, InputRange, InputRangeThickness);
                 OldPos = NewPos;
                 
             }
@@ -107,6 +111,7 @@ public class HairDrawer : MonoBehaviour
 
         if (Input.GetKeyDown("1")) HairStyleState = 1;
         if (Input.GetKeyDown("2")) HairStyleState = 2;
+        if (Input.GetKeyDown("3")) HairStyleState = 3;
     }
 
     public void PlayerMove()

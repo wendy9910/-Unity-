@@ -141,8 +141,7 @@ public class meshmodel3 : MonoBehaviour
         triangles[i + 4] = v10;
         triangles[i + 5] = v11;
 
-       
-
+  
         return i + 6;
     }
  

@@ -32,7 +32,64 @@ public class wavehair : MonoBehaviour
             angle1 += 0.2f;
 
         }*/
+        /*float angle = Mathf.PI * 2f;
+        for (int i = -10; i < 10; i++)
+        {
+            float x = i , y = Mathf.Sin(angle);
+            Vector3 Position = new Vector3(x, y + 4f , 0);
+            PointPos.Add(Position);
+            angle += Mathf.PI * 0.2f;
+        }*/
 
+        /*for (float angle = -Mathf.PI*6; angle < Mathf.PI*6; angle+= 0.9f) 
+        {
+            float x = angle * 0.9f, y = Mathf.Sin(angle);
+            Vector3 Position = new Vector3(x, y + 1f , 0);
+            PointPos.Add(Position);
+        }*/
+        /*float a = Mathf.PI;
+        for (int i = 0,x=-10; i < 20; i++,x++) 
+        {
+            float y = Mathf.Sin(a);
+            Vector3 Position = new Vector3(x, y + 1f, 0);
+            PointPos.Add(Position);
+
+            a -= 0.9f;
+        }*/
+        /*
+        float t = Mathf.PI * 1.5f;
+        float a = 0;
+        for (float i = 0.1f; i < 10;i+=0.3f) 
+        {
+            float b = i;
+
+            float r = a + b * t;
+            float x = r * Mathf.Cos(t);
+            float y = r * Mathf.Sin(t);
+
+            Vector3 pos = new Vector3(x,y,0);
+            PointPos.Add(pos);
+            t += 0.2f;
+        }
+         /*
+        阿基米德螺旋波
+        float t = Mathf.PI * 1.5f;
+        float a = 0;
+        for (float i = 0.1f; i < 10;i+=0.3f) 
+        {
+            float b = i;
+
+            float r = a + b * t;
+            float x = r * Mathf.Cos(t);
+            float y = r * Mathf.Sin(t);
+
+            Vector3 pos = new Vector3(x,y,0);
+            PointPos.Add(pos);
+            t += 0.2f;
+        }*/
+
+       
+        
     }
 
     // Update is called once per frame
@@ -67,7 +124,7 @@ public class wavehair : MonoBehaviour
     {
         temp.Clear();
         int i = 0,n = 0;
-        for (float angle = -Mathf.PI * PointPos.Count; angle < Mathf.PI * PointPos.Count; angle += 0.2f)
+        for (float angle = Mathf.PI * PointPos.Count; angle > -Mathf.PI * PointPos.Count; angle -= 0.5f)
         {
             float x = PointPos[i].x + angle * 0.9f, y = Mathf.Sin(angle);
             Vector3 Position = new Vector3(x, y + 0.5f, 0);
