@@ -12,6 +12,9 @@ public class HairDrawer : MonoBehaviour
     public float WidthLimit = 0.05f;//最小0.05,最大0.5
     public int InputRange = 10;//(1~12)
     public int InputRangeThickness = 10;
+    public float TwistCurve = 0.5f;
+    public float WaveCurve = 0.9f;
+
 
     public static List<Vector3> PointPos = new List<Vector3>();//儲存座標
     public static List<Vector3> UpdatePointPos = new List<Vector3>();//變形更新點座標
@@ -33,7 +36,6 @@ public class HairDrawer : MonoBehaviour
         CreatePosition = gameObject.AddComponent<PositionGenerate>();
         gameObject.transform.position = playerMove.transform.position;
 
-        
     }
 
     // Update is called once per frame
@@ -71,9 +73,10 @@ public class HairDrawer : MonoBehaviour
                 CreatePosition = gameObject.GetComponent<PositionGenerate>();
                 //CreatePosition.PosGenerate(OldPos,NewPos, InputRange);
                 CreatePosition.VectorCross(ball.transform.up, ball.transform.forward, ball.transform.right);
-                if (HairStyleState==1) CreatePosition.StraightHairtyle(PointPos, InputRange, InputRangeThickness);
-                if(HairStyleState==2) CreatePosition.DimandHiarStyle(PointPos, InputRange, InputRangeThickness);
-                if (HairStyleState == 3) CreatePosition.WaveHairStyle(PointPos, InputRange, InputRangeThickness);
+                if (HairStyleState == 1) CreatePosition.StraightHairtyle(PointPos, InputRange, InputRangeThickness);
+                if (HairStyleState == 2) CreatePosition.DimandHiarStyle(PointPos, InputRange, InputRangeThickness);
+                if (HairStyleState == 3) CreatePosition.WaveHairStyle(PointPos, InputRange, InputRangeThickness, WaveCurve);
+                if (HairStyleState == 4) CreatePosition.TwistHairStyle(PointPos, InputRange, InputRangeThickness,TwistCurve);
                 OldPos = NewPos;
                 
             }
@@ -112,6 +115,13 @@ public class HairDrawer : MonoBehaviour
         if (Input.GetKeyDown("1")) HairStyleState = 1;
         if (Input.GetKeyDown("2")) HairStyleState = 2;
         if (Input.GetKeyDown("3")) HairStyleState = 3;
+        if (Input.GetKeyDown("4")) HairStyleState = 4;
+
+        if (Input.GetKeyDown("s") && WaveCurve > 0.2f) WaveCurve -= 0.1f ;
+        if (Input.GetKeyDown("w") && WaveCurve < 0.8f) WaveCurve += 0.1f;
+
+        if (Input.GetKeyDown("a") && TwistCurve > 0.5f) TwistCurve -= 0.1f;
+        if (Input.GetKeyDown("d") && TwistCurve < 0.8f) TwistCurve += 0.1f;//越大越捲
     }
 
     public void PlayerMove()
