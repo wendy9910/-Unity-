@@ -18,6 +18,7 @@ public class HairDrawer : MonoBehaviour
 
     public static List<Vector3> PointPos = new List<Vector3>();//儲存座標
     public static List<Vector3> UpdatePointPos = new List<Vector3>();//變形更新點座標
+    public static List<Vector3> direction = new List<Vector3>();
     public List<GameObject> HairModel = new List<GameObject>();//儲存髮片
 
     Vector3 NewPos, OldPos;
@@ -29,6 +30,8 @@ public class HairDrawer : MonoBehaviour
     //player位移
     public GameObject playerMove;
     public GameObject ball;
+
+    
   
     // Start is called before the first frame update
     private void Start()
@@ -54,6 +57,7 @@ public class HairDrawer : MonoBehaviour
                 HairModel.Add(Model);
                 HairModel[count].name = "FreeHair" + count;
                 NewPos = OldPos = ball.transform.position;
+                CreatePosition.VectorCross(ball.transform.up, ball.transform.forward, ball.transform.right);
                 PointPos.Add(OldPos);
                 ControllerDown = 1;
             }
@@ -71,7 +75,7 @@ public class HairDrawer : MonoBehaviour
                 NewPos = NormaizelVec + OldPos;
                 PointPos.Add(NewPos);
                 CreatePosition = gameObject.GetComponent<PositionGenerate>();
-                //CreatePosition.PosGenerate(OldPos,NewPos, InputRange);
+
                 CreatePosition.VectorCross(ball.transform.up, ball.transform.forward, ball.transform.right);
                 if (HairStyleState == 1) CreatePosition.StraightHairtyle(PointPos, InputRange, InputRangeThickness);
                 if (HairStyleState == 2) CreatePosition.DimandHiarStyle(PointPos, InputRange, InputRangeThickness);
@@ -120,8 +124,8 @@ public class HairDrawer : MonoBehaviour
         if (Input.GetKeyDown("s") && WaveCurve > 0.2f) WaveCurve -= 0.1f ;
         if (Input.GetKeyDown("w") && WaveCurve < 0.8f) WaveCurve += 0.1f;
 
-        if (Input.GetKeyDown("a") && TwistCurve > 0.5f) TwistCurve -= 0.1f;
-        if (Input.GetKeyDown("d") && TwistCurve < 0.8f) TwistCurve += 0.1f;//越大越捲
+        if (Input.GetKeyDown("a") && TwistCurve > 0.8f) TwistCurve -= 0.1f;
+        if (Input.GetKeyDown("d") && TwistCurve < 1.2f) TwistCurve += 0.1f;//越大越捲
     }
 
     public void PlayerMove()

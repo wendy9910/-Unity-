@@ -9,28 +9,11 @@ public class PositionGenerate : MonoBehaviour
     List<Vector3> TempPoint = new List<Vector3>();
     int width = HairDrawer.HairWidth;
     Vector3 cross1, cross2, crossWave, crossTwist;
-    
+
+    public List<Vector3> directionA = HairDrawer.direction;
     //float w = 0;
 
-    public void PosGenerate(Vector3 OldPos, Vector3 NewPos, int range)
-    {
-
-        Vector3 Vec = NewPos - OldPos;
-        float n = 1.2f * 0.1f * range;//每段長度
-        Vector3 Vec1 = new Vector3((Vec.y) * n, (-Vec.x) * n, Vec.z * n);
-        Vector3 temp = new Vector3(OldPos.x + Vec1.x, OldPos.y + Vec1.y, OldPos.z + Vec1.z);
-        GetPointPos.Add(temp);
-        Vec1 = new Vector3(Vec.z * n , (-Vec.y) * n, (-Vec.x) * n);
-        temp = new Vector3(OldPos.x + Vec1.x, OldPos.y + Vec1.y, OldPos.z + Vec1.z);
-        GetPointPos.Add(temp);
-        Vec1 = new Vector3((-Vec.y) * n, (Vec.x) * n, Vec.z * n);
-        temp = new Vector3(OldPos.x + Vec1.x, OldPos.y + Vec1.y, OldPos.z + Vec1.z);
-        GetPointPos.Add(temp);
-        Vec1 = new Vector3((-Vec.z) * n, (Vec.y) * n, Vec.x * n);
-        temp = new Vector3(OldPos.x + Vec1.x, OldPos.y + Vec1.y, OldPos.z + Vec1.z);
-        GetPointPos.Add(temp);
-        
-    }
+ 
     public void VectorCross(Vector3 up, Vector3 forward, Vector3 right)
     {
         cross1 = Vector3.Cross(up, forward);//x
@@ -39,6 +22,10 @@ public class PositionGenerate : MonoBehaviour
         cross2.Normalize();
         crossWave = Vector3.Cross(up, right);
         crossWave.Normalize();
+        Debug.Log(cross1);
+        Debug.Log(cross2);
+        directionA.Add(cross1);
+        directionA.Add(cross2);
     }
 
     public void StraightHairtyle(List<Vector3> GetPointPos, int range,int thickness) 
@@ -48,24 +35,16 @@ public class PositionGenerate : MonoBehaviour
         float t = thickness * 0.002f;
         if (GetPointPos.Count <= 6) w1 = (range * 0.005f) / GetPointPos.Count;
         else w1 = (range * 0.005f) / range;
-
+        
         TempPoint.Clear();
-        for (int i = 0; i < GetPointPos.Count; i++)
+        for (int i = 0,n = 0; i < GetPointPos.Count; i++, n+=2)
         {
-            if (i == 0)
-            {
-                TempPoint.Add(GetPointPos[i] - cross1 * w);
-                TempPoint.Add(GetPointPos[i] + cross2 * t);
-                TempPoint.Add(GetPointPos[i] + cross1 * w);
-                TempPoint.Add(GetPointPos[i] - cross2 * t);
-            }
-            else
-            {
-                TempPoint.Add(GetPointPos[i] - cross1 * w);
-                TempPoint.Add(GetPointPos[i] + cross2 * t);
-                TempPoint.Add(GetPointPos[i] + cross1 * w);
-                TempPoint.Add(GetPointPos[i] - cross2 * t);
-            }
+            
+            TempPoint.Add(GetPointPos[i] - directionA[n] * w);
+            TempPoint.Add(GetPointPos[i] + directionA[n + 1] * t);
+            TempPoint.Add(GetPointPos[i] + directionA[n] * w);
+            TempPoint.Add(GetPointPos[i] - directionA[n + 1] * t);
+
             if (w < range * 0.005f) w += w1;
         }
         GetUpdatePointPos.Clear();
@@ -80,7 +59,7 @@ public class PositionGenerate : MonoBehaviour
         float t = thickness * 0.002f;
 
         TempPoint.Clear();
-        for (int i = 0; i < GetPointPos.Count; i++)
+        for (int i = 0, n = 0; i < GetPointPos.Count; i++ , n+=2)
         {
             if (i == GetPointPos.Count - 1 && GetPointPos.Count > 2)
             {
@@ -88,17 +67,16 @@ public class PositionGenerate : MonoBehaviour
             }
             else
             {
-                TempPoint.Add(GetPointPos[i] - cross1 * w);
-                TempPoint.Add(GetPointPos[i] + cross2 * t);
-                TempPoint.Add(GetPointPos[i] + cross1 * w);
-                TempPoint.Add(GetPointPos[i] - cross2 * t);
+                TempPoint.Add(GetPointPos[i] - directionA[n] * w);
+                TempPoint.Add(GetPointPos[i] + directionA[n + 1] * t);
+                TempPoint.Add(GetPointPos[i] + directionA[n] * w);
+                TempPoint.Add(GetPointPos[i] - directionA[n + 1] * t);
             }
             if (w < range * 0.005f && i < GetPointPos.Count / 2) w += w1;
             else if (i > GetPointPos.Count / 2) w -= w1;
         }
         GetUpdatePointPos.Clear();
         GetUpdatePointPos.AddRange(TempPoint);
-
     }
 
     public void WaveHairStyle(List<Vector3> GetPointPos, int range, int thickness, float WaveCurve) 
@@ -110,7 +88,7 @@ public class PositionGenerate : MonoBehaviour
         float waveSize = 0.001f;
         float angle = -Mathf.PI;
 
-        for (int i = 0; i < GetPointPos.Count; i++)
+        for (int i = 0, n = 0; i < GetPointPos.Count; i++,n+=2)
         {
             float y = -Mathf.Sin(angle);//正負的影響
             if (i == 0)
@@ -123,11 +101,11 @@ public class PositionGenerate : MonoBehaviour
             {
                 Vector3 temp = crossWave * waveSize * y;
                 Vector3 Vec = GetPointPos[i] + temp;
-                TempPoint.Add(Vec - cross1 * w);
-                TempPoint.Add(Vec + cross2 * t);
-                TempPoint.Add(Vec + cross1 * w);
-                TempPoint.Add(Vec - cross2 * t);
-                
+                TempPoint.Add(Vec - directionA[n] * w);
+                TempPoint.Add(Vec + directionA[n + 1] * t);
+                TempPoint.Add(Vec + directionA[n] * w);
+                TempPoint.Add(Vec - directionA[n + 1] * t);
+
             }
             //if (w < range * 0.005f) w += w1;
             if (w < range * 0.005f && i < GetPointPos.Count / 2) w += w1;
@@ -147,10 +125,10 @@ public class PositionGenerate : MonoBehaviour
         float w = range * 0.005f * 0.2f;
         float t1 = thickness * 0.005f / (GetPointPos.Count / 2);
         float t = thickness * 0.005f * 0.2f;
-        float d = Mathf.PI * 10f;
-        float a = 0.03f;
+        float d = Mathf.PI;
+        float a = 0.01f;//0.01f~0.08f
 
-        for (int i = 0; i < GetPointPos.Count; i++)
+        for (int i = 0, n = 0; i < GetPointPos.Count; i++ , n += 2)
         {
             float x = a * Mathf.Sin(d);
             float y = a * Mathf.Cos(d);
@@ -160,13 +138,13 @@ public class PositionGenerate : MonoBehaviour
             if (i == 0) Vec = new Vector3(GetPointPos[i].x, GetPointPos[i].y, GetPointPos[i].z);
             else
             {
-                Vector3 temp1 = cross1 * x, temp2 = cross2 * y;
+                Vector3 temp1 = directionA[n] * x, temp2 = directionA[n+2] * y;
                 Vec = GetPointPos[i] + temp1 + temp2;
             }
-            TempPoint.Add(Vec - cross1 * w);
-            TempPoint.Add(Vec + cross2 * t);
-            TempPoint.Add(Vec + cross1 * w);
-            TempPoint.Add(Vec - cross2 * t);
+            TempPoint.Add(Vec - directionA[n] * w);
+            TempPoint.Add(Vec + directionA[n + 1] * t);
+            TempPoint.Add(Vec + directionA[n] * w);
+            TempPoint.Add(Vec - directionA[n + 1] * t);
 
             d += TwistCurve;//原:0.5f
             //if (a < 2 && i % 10 == 0) a += 0.5f;
