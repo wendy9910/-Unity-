@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class MeshGenerate : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class MeshGenerate : MonoBehaviour
     Vector2[] uv;
     Vector4[] tangents;
     int[] triangle;
+
+    
+
 
     public void GenerateMesh(List<Vector3> GetPointPos,int Getwidth) 
     {
@@ -35,19 +39,6 @@ public class MeshGenerate : MonoBehaviour
             tangents[i] = new Vector4(1f, 0f, 0f, -1f);
         }
 
-        //For 沒有厚度
-        /*
-         * int len = GetPointPos.Count/(3+(Getwidth-1)*2);
-        float TexWidth = 0.5f;
-        for (int i = 0, x = 0; i < len; i++)
-        {
-            for (int j = 1; j <= (3 + (Getwidth - 1) * 2); j++)
-            {
-                uv[x] = new Vector2(TexWidth / (3 + (Getwidth - 1) / 2) * j, 1.0f / len * i);//Vector3轉Vector2
-                x++;
-            }
-        }*/
-
         //加厚度
         int len = GetPointPos.Count / 4;
         float TexWidth = 0.8f;
@@ -63,23 +54,7 @@ public class MeshGenerate : MonoBehaviour
         mesh.vertices = vertice;//mesh網格點生成
         mesh.uv = uv;
         mesh.tangents = tangents;
-        /*
-        int point;
-        if (GetPointPos.Count < 1) point = 0;//計算網格數
-        else point = ((GetPointPos.Count / (3 + (Getwidth - 1) * 2) - 1)) * 2 * Getwidth;
-
-        triangle = new int[point * 6];//計算需要多少三角形點座標
-
-        int t = 0;
-        int k = 0;
-
-        for (int vi = 0, x = 1; x <= point; x++, vi += k)
-        {
-            t = SetQuad(triangle, t, vi, vi + 1, vi + 3 + (2 * (Getwidth - 1)), vi + 4 + (2 * (Getwidth - 1)));
-            if (x % (Getwidth * 2) != point % (Getwidth * 2)) k = 1;  //在同一行
-            else k = 2;  //對vi的累加  (需換行時)
-        }*/
-
+     
         int point = GetPointPos.Count - 2;
         triangle = new int[point * 6];
 
@@ -97,7 +72,11 @@ public class MeshGenerate : MonoBehaviour
         mesh.triangles = triangle;
         mesh.RecalculateBounds();
         mesh.RecalculateNormals();
+
+
     }
+
+    
 
     private static int SetQuad(int[] triangles, int i, int v0, int v1, int v2, int v3)
     {
