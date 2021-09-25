@@ -14,24 +14,27 @@ public class HairDrawer : MonoBehaviour
     public int InputRangeThickness = 10;
     public float TwistCurve = 0.5f;
     public float WaveCurve = 0.9f;
-
+    int n = 0;
+    public int BallCount = 0;
 
     public static List<Vector3> PointPos = new List<Vector3>();//儲存座標
     public static List<Vector3> UpdatePointPos = new List<Vector3>();//變形更新點座標
     public List<GameObject> HairModel = new List<GameObject>();//儲存髮片
+    public List<GameObject> BallGroup = new List<GameObject>();
 
     Vector3 NewPos, OldPos;
 
     public MeshGenerate CreateHair;
     public PositionGenerate CreatePosition;
+    public Joint DynamicHair;
     public Texture HairTexture, hairnormal;
 
     //player位移
     public GameObject playerMove;
     public GameObject ball;
+    GameObject HairGroup;
+    public static GameObject Ball;
 
-    
-  
     // Start is called before the first frame update
     private void Start()
     {
@@ -50,9 +53,12 @@ public class HairDrawer : MonoBehaviour
         {
             if (Input.GetMouseButtonDown(0))
             {
+                HairGroup = new GameObject();
+                HairGroup.name = "HairGroup";
+                HairGroup.transform.SetParent(gameObject.transform);
                 ball.transform.position = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 1));
                 GameObject Model = new GameObject();
-                Model.transform.SetParent(gameObject.transform);
+                Model.transform.SetParent(HairGroup.transform);
                 HairModel.Add(Model);
                 HairModel[count].name = "FreeHair" + count;
                 NewPos = OldPos = ball.transform.position;
@@ -102,9 +108,17 @@ public class HairDrawer : MonoBehaviour
                 Destroy(HairModel[least]);
                 HairModel.RemoveAt(least);
             }
+            Ball = new GameObject();
+            Ball.name = "BallGroup" + BallCount;
+            Ball.transform.SetParent(HairGroup.transform);
+            //DynamicHair = HairGroup.AddComponent<Joint>();
             AddSphere();
+            DynamicHair = HairGroup.AddComponent<Joint>();
+            DynamicHair.Set(BallCount);
             PointPos.Clear();
+            BallCount++;
             ControllerDown = 0;
+            
         }
 
     }
@@ -129,12 +143,25 @@ public class HairDrawer : MonoBehaviour
         if (Input.GetKeyDown("d") && TwistCurve < 0.8f) TwistCurve += 0.1f;//越大越捲
     }
 
-    void AddSphere() 
+
+    void AddSphere()
     {
-        for (int i=0;i<PointPos.Count;i+=2) {
+        for (int i = 0; i < PointPos.Count; i += 2, n++)
+        {
             GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            sphere.name = "sphere" + i / 2;
             sphere.transform.position = PointPos[i];
-            sphere.transform.localScale = new Vector3(length,length,length);
+            sphere.transform.localScale = new Vector3(length, length, length);
+            sphere.transform.SetParent(Ball.transform);
+            sphere.GetComponent<MeshRenderer>().enabled = false;
+            HingeJoint joint;
+            joint = sphere.AddComponent<HingeJoint>();
+            joint.anchor = new Vector3(0f,2f,0f);
+            BallGroup.Add(sphere);
+            if (i > 0) joint.connectedBody = BallGroup[n - 1].GetComponent<Rigidbody>();
+            Rigidbody sphererig;
+            sphererig = sphere.GetComponent<Rigidbody>();
+            sphererig.mass *=0.5f;
         }
     }
 
