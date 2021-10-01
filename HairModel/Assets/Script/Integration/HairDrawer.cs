@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 using System.Text;
+using System.IO;
 
 public class HairDrawer : MonoBehaviour
 {
@@ -14,9 +15,8 @@ public class HairDrawer : MonoBehaviour
     public float WidthLimit = 0.05f;//最小0.05,最大0.5
     public int InputRange = 10;//(1~12)
     public int InputRangeThickness = 10;
-    public float TwistCurve = 0.5f;
+    public float TwistCurve = 0.9f;
     public float WaveCurve = 0.9f;
-
 
     public static List<Vector3> PointPos = new List<Vector3>();//儲存座標
     public static List<Vector3> UpdatePointPos = new List<Vector3>();//變形更新點座標
@@ -27,6 +27,7 @@ public class HairDrawer : MonoBehaviour
 
     public MeshGenerate CreateHair;
     public PositionGenerate CreatePosition;
+    public SaveModel CreateModel;
     public Texture HairTexture, hairnormal;
 
     //player位移
@@ -39,6 +40,7 @@ public class HairDrawer : MonoBehaviour
     private void Start()
     {
         CreatePosition = gameObject.AddComponent<PositionGenerate>();
+        CreateModel = gameObject.AddComponent<SaveModel>();
         gameObject.transform.position = playerMove.transform.position;
 
     }
@@ -97,30 +99,30 @@ public class HairDrawer : MonoBehaviour
         }
         if (Input.GetMouseButtonUp(0)) 
         {
-            if (PointPos.Count >= 2) count++;
+
+            /*Mesh Newmesh = AssetDatabase.LoadAssetAtPath<Mesh>(string.Format("{0}{1}.obj",mf2.mesh.name, count));
+            PrefabUtility.CreatePrefab(string.Format("{0}{1}.prefab", mf2.mesh.name, count), HairModel[count]);
+            AssetDatabase.Refresh();*/
+            if (PointPos.Count >= 2) 
+            {
+                CreateModel = gameObject.GetComponent<SaveModel>();
+                CreateModel.BulidModel(HairModel[count],count);
+                count++; 
+            }
             else
             {//清除建立失敗的髮片GameObject
                 int least = HairModel.Count - 1;
                 Destroy(HairModel[least]);
                 HairModel.RemoveAt(least);
             }
+            //MeshToString(mesh, )
+            
             PointPos.Clear();
             ControllerDown = 0;
         }
 
     }
 
-    public void SaveModel()
-    {
-        Model = "Model";
-        for (int i = 0; i < HairModel.Count; i++) 
-        {
-            Mesh mesh = HairModel[i].GetComponent<MeshFilter>().mesh;
-            AssetDatabase.CreateAsset(mesh, "Assets/Model/" + Model + i + ".asset");
-        }
-        
-
-    }
 
     void WidthControl()
     {
@@ -141,7 +143,6 @@ public class HairDrawer : MonoBehaviour
         if (Input.GetKeyDown("a") && TwistCurve > 0.8f) TwistCurve -= 0.1f;
         if (Input.GetKeyDown("d") && TwistCurve < 1.2f) TwistCurve += 0.1f;//越大越捲
 
-        if (Input.GetKeyDown("t")) SaveModel();
     }
 
     public void PlayerMove()
@@ -153,85 +154,8 @@ public class HairDrawer : MonoBehaviour
         }
 
     }
-    private string MeshToString(MeshFilter mf, Vector3 scale)
-    {
-        Mesh mesh = mf.mesh;
-        Material[] haredMaterials = mf.GetComponent<Renderer>().sharedMaterials;
-        Vector2 textureOffset = mf.GetComponent<Renderer>().material.GetTextureOffset("_MainTex");
-        Vector2 textureScale = mf.GetComponent<Renderer>().material.GetTextureScale("_MainTex");
+    
 
-        StringBuilder stringBuilder = new StringBuilder().Append("mtllib design.mtl").Append("\n").Append("g ").Append(mf.name).Append("\n");
+    
 
-        Vector3[] vertices = mesh.vertices;
-        for (int i = 0; i < vertices.Length; i++)
-        {
-            Vector3 vector = vertices[i];
-            stringBuilder.Append(string.Format("v {0} {1} {2}\n", vector.x * scale.x, vector.y * scale.y, vector.z * scale.z));
-        }
-
-        stringBuilder.Append("\n");
-
-        Dictionary<int, int> dictionary = new Dictionary<int, int>();
-
-        if (mesh.subMeshCount > 1)
-        {
-            int[] triangles = mesh.GetTriangles(1);
-
-            for (int j = 0; j < triangles.Length; j += 3)
-            {
-                if (!dictionary.ContainsKey(triangles[j]))
-                {
-                    dictionary.Add(triangles[j], 1);
-                }
-
-                if (!dictionary.ContainsKey(triangles[j + 1]))
-                {
-                    dictionary.Add(triangles[j + 1], 1);
-                }
-
-                if (!dictionary.ContainsKey(triangles[j + 2]))
-                {
-                    dictionary.Add(triangles[j + 2], 1);
-                }
-            }
-        }
-
-        for (int num = 0; num != mesh.uv.Length; num++)
-        {
-            Vector2 vector2 = Vector2.Scale(mesh.uv[num], textureScale) + textureOffset;
-
-            if (dictionary.ContainsKey(num))
-            {
-                stringBuilder.Append(string.Format("vt {0} {1}\n", mesh.uv[num].x, mesh.uv[num].y));
-            }
-            else
-            {
-                stringBuilder.Append(string.Format("vt {0} {1}\n", vector2.x, vector2.y));
-            }
-        }
-
-        for (int k = 0; k < mesh.subMeshCount; k++)
-        {
-            stringBuilder.Append("\n");
-
-            if (k == 0)
-            {
-                stringBuilder.Append("usemtl ").Append("Material_design").Append("\n");
-            }
-
-            if (k == 1)
-            {
-                stringBuilder.Append("usemtl ").Append("Material_logo").Append("\n");
-            }
-
-            int[] triangles2 = mesh.GetTriangles(k);
-
-            for (int l = 0; l < triangles2.Length; l += 3)
-            {
-                stringBuilder.Append(string.Format("f {0}/{0} {1}/{1} {2}/{2}\n", triangles2[l] + 1, triangles2[l + 2] + 1, triangles2[l + 1] + 1));
-            }
-        }
-
-        return stringBuilder.ToString();
-    }
 }

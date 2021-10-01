@@ -138,7 +138,7 @@ public class PositionGenerate : MonoBehaviour
             if (i == 0) Vec = new Vector3(GetPointPos[i].x, GetPointPos[i].y, GetPointPos[i].z);
             else
             {
-                Vector3 temp1 = directionA[n] * x, temp2 = directionA[n+2] * y;
+                Vector3 temp1 = directionA[n] * x, temp2 = directionA[n+1] * y;
                 Vec = GetPointPos[i] + temp1 + temp2;
             }
             TempPoint.Add(Vec - directionA[n] * w);

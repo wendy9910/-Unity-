@@ -6,16 +6,15 @@ using UnityEngine;
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class MeshGenerate : MonoBehaviour
 {
-    private Mesh mesh;
+    public static Mesh mesh;
     public static Material GethairColor;
+    public static MeshFilter mf;
     Shader HairShader;
 
     Vector3[] vertice;
     Vector2[] uv;
     Vector4[] tangents;
     int[] triangle;
-
-    
 
 
     public void GenerateMesh(List<Vector3> GetPointPos,int Getwidth) 
@@ -25,7 +24,9 @@ public class MeshGenerate : MonoBehaviour
         GethairColor.shader = HairShader;
 
         GethairColor.color = new Color(222f/255,184f/255,135f/255);
-        GetComponent<MeshFilter>().mesh = mesh = new Mesh();
+        //GetComponent<MeshFilter>().mesh = mesh = new Mesh();
+        mf = gameObject.GetComponent<MeshFilter>();
+        mf.mesh = mesh = new Mesh();
         GetComponent<MeshRenderer>().material = GethairColor;
         mesh.name = "HairModel";
 
