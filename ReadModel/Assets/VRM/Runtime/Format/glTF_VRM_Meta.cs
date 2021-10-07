@@ -40,19 +40,19 @@ namespace VRM
         }
 
         [JsonSchema(Description = "Title of VRM model")]
-        public string title;
+        public string title = "123";
 
         [JsonSchema(Description = "Version of VRM model")]
-        public string version;
+        public string version ="123 ";
 
         [JsonSchema(Description = "Author of VRM model")]
-        public string author;
+        public string author = "Hi";
 
         [JsonSchema(Description = "Contact Information of VRM model author")]
-        public string contactInformation;
+        public string contactInformation = "123";
 
         [JsonSchema(Description = "Reference of VRM model")]
-        public string reference;
+        public string reference = "Hi";
 
         // When the value is -1, it means that texture is not specified.
         [JsonSchema(Description = "Thumbnail of VRM model", Minimum = 0, ExplicitIgnorableValue = -1)]

@@ -35,7 +35,7 @@ namespace UniHumanoid
         HumanPoseHandler m_handler;
         public static HumanPoseHandler GetHandler(Animator animator)
         {
-            if (animator == null)
+            /*if (animator == null)
             {
                 return null;
             }
@@ -47,7 +47,7 @@ namespace UniHumanoid
                 || !animator.avatar.isHuman)
             {
                 return null;
-            }
+            }*/
             return new HumanPoseHandler(animator.avatar, animator.transform);
         }
 
@@ -56,11 +56,11 @@ namespace UniHumanoid
         private void Awake()
         {
             m_handler = GetHandler(m_animator);
-            if (m_handler == null)
+            /*if (m_handler == null)
             {
                 enabled = false;
                 return;
-            }
+            }*/
             m_updater = new HandPoseModifier();
         }
 

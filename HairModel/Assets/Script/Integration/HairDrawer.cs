@@ -40,7 +40,7 @@ public class HairDrawer : MonoBehaviour
     private void Start()
     {
         CreatePosition = gameObject.AddComponent<PositionGenerate>();
-        CreateModel = gameObject.AddComponent<SaveModel>();
+        
         gameObject.transform.position = playerMove.transform.position;
 
     }
@@ -106,7 +106,6 @@ public class HairDrawer : MonoBehaviour
             if (PointPos.Count >= 2) 
             {
                 CreateModel = gameObject.GetComponent<SaveModel>();
-                CreateModel.BulidModel(HairModel[count],count);
                 count++; 
             }
             else
@@ -142,7 +141,14 @@ public class HairDrawer : MonoBehaviour
 
         if (Input.GetKeyDown("a") && TwistCurve > 0.8f) TwistCurve -= 0.1f;
         if (Input.GetKeyDown("d") && TwistCurve < 1.2f) TwistCurve += 0.1f;//越大越捲
-
+        if (Input.GetKeyDown("t"))
+        {
+            
+            GameObject Finalobject = new GameObject();
+            Finalobject.name = "FinalModel";
+            CreateModel = Finalobject.AddComponent<SaveModel>();
+            CreateModel.CombineMesh(HairModel, count, Finalobject);
+        }
     }
 
     public void PlayerMove()

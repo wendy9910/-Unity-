@@ -5,10 +5,74 @@ using UnityEditor;
 using System.Text;
 using System.IO;
 
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class SaveModel : MonoBehaviour
 {
+    public Mesh ComMesh,OldMesh;
+    public MeshFilter ComMf;
+    Vector3[] vertice;
+    Vector2[] uv;
+    Vector4[] tangents;
+    int[] triangle;
 
-    public void BulidModel(GameObject HairModel,int count) 
+    public void CombineMesh(List<GameObject> HairModel, int count,GameObject Finalobject) 
+    {
+
+        ComMf = Finalobject.GetComponent<MeshFilter>();
+        ComMf.mesh = ComMesh = new Mesh();
+        ComMesh.name = "HairModel";
+
+        int VCount=0, TCount=0;
+
+        for (int i = 0; i < HairModel.Count; i++) 
+        {
+            OldMesh = HairModel[i].GetComponent<MeshFilter>().mesh;
+            VCount += OldMesh.vertices.Length;
+            TCount += OldMesh.triangles.Length;
+            Debug.Log("VC" + VCount);
+        }
+        vertice = new Vector3[VCount];
+        uv = new Vector2[VCount];
+        tangents = new Vector4[VCount];
+        triangle = new int[TCount];
+
+        for (int i = 0, x1 = 0, x2 = 0; i < HairModel.Count; i++)
+        {
+            OldMesh = HairModel[i].GetComponent<MeshFilter>().mesh;
+            for (int j = 0; j < OldMesh.vertices.Length; j++)
+            {
+                vertice[x1] = OldMesh.vertices[j];
+                uv[x1] = OldMesh.uv[j];
+                tangents[x1] = OldMesh.tangents[j];
+                x1++;
+            }
+
+            for (int k = 0; k < OldMesh.triangles.Length;k++) 
+            {
+                triangle[x2] = OldMesh.triangles[k];
+                x2++;
+            }       
+        }
+
+        Debug.Log(vertice.Length);
+
+        ComMesh.vertices = vertice;
+        ComMesh.uv = uv;
+        ComMesh.tangents = tangents;
+        ComMesh.triangles = triangle;
+
+        using (StreamWriter streamWriter = new StreamWriter(string.Format("Assets/Model/{0}{1}.obj", ComMf.mesh.name, count)))
+        {
+
+            streamWriter.Write(MeshToString(ComMf, new Vector3(-1f, 1f, 1f)));
+            streamWriter.Close();
+        }
+        AssetDatabase.Refresh();
+
+
+    }
+
+    /*public void BulidModel(GameObject HairModel,int count) 
     {
         MeshFilter mf2 = HairModel.GetComponent<MeshFilter>();
         Material ma2 = HairModel.GetComponent<Material>();
@@ -19,8 +83,8 @@ public class SaveModel : MonoBehaviour
             streamWriter.Close();
         }
         AssetDatabase.Refresh();
-    }
-    private string MeshToString(MeshFilter mf, Vector3 scale, GameObject HairModel)
+    }*/
+    private string MeshToString(MeshFilter mf, Vector3 scale)
     {
         Mesh mesh = mf.mesh;
         Material[] haredMaterials = mf.GetComponent<MeshRenderer>().materials;
